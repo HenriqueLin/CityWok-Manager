@@ -1,0 +1,87 @@
+{% extends 'layout.html' %}
+{% set active_page = "account" %}
+{% block content %}
+<div class="px-2 px-md-5 pb-5">
+    <h1>{{title}}</h1>
+    <hr class="mb-4">
+    <h3 class="ml-2">添加职务</h3>
+    <form action="" method="post" class="px-3" novalidate>
+        {{ add_job_form.hidden_tag() }}
+        <fieldset>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    {% with field=add_job_form.job %}
+                    {% include 'field.html' %}
+                    {% endwith %}
+                    <input type="submit" value="添加" name="add_job" class="btn btn-info">
+                </div>
+                <div class="col-md-6">
+                    <label>已有职务</label>
+                    <div class="table-responsive" style="max-height: 300px;overflow-y:auto;">
+                        <table class="table table-striped table-bordered text-nowrap text-center">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">职务名称</th>
+                                    <th scope="col">删除</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for j in jobs %}
+                                <tr>
+                                    <th>{{ j.name }}</th>
+                                    <td>
+                                        <a href="{{ j.get_delete_link() }}">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <hr class="my-5">
+    <h3 class="ml-2">添加国家</h3>
+    <form action="" method="post" class="px-3" novalidate>
+        {{ add_country_form.hidden_tag() }}
+        <fieldset>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    {% with field=add_country_form.country %}
+                    {% include 'field.html' %}
+                    {% endwith %}
+                    <input type="submit" value="添加" name="add_country" class="btn btn-info">
+                </div>
+                <div class="col-md-6">
+                    <label>已有国家</label>
+                    <div class="table-responsive" style="max-height: 300px;overflow-y:auto;">
+                        <table class="table table-striped table-bordered text-nowrap text-center">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">国家名称</th>
+                                    <th scope="col">删除</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for c in countries %}
+                                <tr>
+                                    <th>{{ c.zh }}</th>
+                                    <td>
+                                        <a href="{{ c.get_delete_link() }}">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+{% endblock content %}

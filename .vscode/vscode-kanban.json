@@ -1,0 +1,134 @@
+{
+  "done": [
+    {
+      "assignedTo": {
+        "name": "Henrique"
+      },
+      "category": "Employee",
+      "creation_time": "2020-05-25T14:05:43.772Z",
+      "description": {
+        "content": "Use xlsxwriter to export excel/pdf",
+        "mime": "text/markdown"
+      },
+      "details": {
+        "content": "Use xlsxwriter to export excel/pdf",
+        "mime": "text/markdown"
+      },
+      "id": "5",
+      "prio": 2,
+      "references": [],
+      "title": "Export employee info to EXCEL/PDF"
+    }
+  ],
+  "in-progress": [
+    {
+      "assignedTo": {
+        "name": "Henrique"
+      },
+      "category": "suppliers",
+      "creation_time": "2020-06-05T18:29:57.139Z",
+      "id": "7",
+      "prio": 2,
+      "references": [],
+      "title": "Supplier models and main page"
+    }
+  ],
+  "testing": [],
+  "todo": [
+    {
+      "assignedTo": {
+        "name": "Henrique"
+      },
+      "category": "employee",
+      "creation_time": "2020-06-05T18:30:27.416Z",
+      "id": "8",
+      "prio": 1,
+      "references": [],
+      "title": "Add IBAN in employee info"
+    },
+    {
+      "assignedTo": {
+        "name": "Henrique"
+      },
+      "category": "Main",
+      "creation_time": "2020-05-25T14:00:49.435Z",
+      "description": {
+        "content": "Create a gmail address for flask-email",
+        "mime": "text/markdown"
+      },
+      "details": {
+        "content": "Create a gmail address for flask-email",
+        "mime": "text/markdown"
+      },
+      "id": "2",
+      "prio": 1,
+      "references": [
+        "1"
+      ],
+      "title": "Creat a email address"
+    },
+    {
+      "assignedTo": {
+        "name": "Henrique"
+      },
+      "category": "Employee",
+      "creation_time": "2020-05-26T11:09:19.544Z",
+      "description": {
+        "content": "auto name for pp, cc, tr",
+        "mime": "text/markdown"
+      },
+      "id": "6",
+      "prio": 1,
+      "references": [],
+      "title": "Improve File upload"
+    },
+    {
+      "assignedTo": {
+        "name": "Henrique"
+      },
+      "category": "User",
+      "creation_time": "2020-05-25T13:59:03.740Z",
+      "description": {
+        "content": "User Flask-Email to send invite email",
+        "mime": "text/markdown"
+      },
+      "details": {
+        "content": "User Flask-Email to send invite email",
+        "mime": "text/markdown"
+      },
+      "id": "1",
+      "references": [],
+      "title": "Send email for inviting"
+    },
+    {
+      "assignedTo": {
+        "name": "Henrique"
+      },
+      "category": "Main",
+      "creation_time": "2020-05-25T14:04:09.849Z",
+      "id": "4",
+      "prio": -1,
+      "references": [],
+      "title": "Better Premission System"
+    },
+    {
+      "assignedTo": {
+        "name": "Henrique"
+      },
+      "category": "Main",
+      "creation_time": "2020-05-25T14:02:57.563Z",
+      "description": {
+        "content": "User Flask-Babel for multri-language function ",
+        "mime": "text/markdown"
+      },
+      "details": {
+        "content": "User Flask-Babel for multri-language function ",
+        "mime": "text/markdown"
+      },
+      "id": "3",
+      "prio": -1,
+      "references": [],
+      "title": "i18n"
+    }
+  ]
+}

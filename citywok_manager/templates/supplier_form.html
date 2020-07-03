@@ -1,0 +1,79 @@
+<form action="" method="post" id="employee_form" class="px-3" novalidate>
+    {{ form.hidden_tag() }}
+    <fieldset>
+        <!-- First Row -->
+        <div class="form-row">
+            <!-- Name -->
+            <div class="form-group col-md-6">
+                {% with field=form.name %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <!-- Principal -->
+            <div class="form-group col-md-6">
+                {% with field=form.principal %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+        </div>
+        <!-- Second Row -->
+        <div class="form-row">
+            <!-- NIF -->
+            <div class="form-group col-md-6">
+                {% with field=form.nif %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <!-- IBAN -->
+            <div class="form-group col-md-6">
+                {% with field=form.iban %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+        </div>
+        <!-- Third Row -->
+        <div class="form-row">
+            <!-- Contact -->
+            <div class="form-group col-md-5">
+                {% with field=form.contact %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <!-- Email -->
+            <div class="form-group col-md-7">
+                {% with field=form.email %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+        </div>
+        <!-- Forth Row -->
+        <div class="form-row">
+            <!-- Address -->
+            <div class="form-group col-md-6">
+                {% with field=form.address %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <!-- Post Code -->
+            <div class="form-group col-md-3">
+                {% with field=form.postcode %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <!-- City -->
+            <div class="form-group col-md-3">
+                {% with field=form.city %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+        </div>
+        <!-- Submit Button -->
+        <div class="form-group">
+            {% if request.endpoint == 'suppliers.new_supplier' %}
+            <input type="submit" value="添加" name="add" class="btn btn-success col-12">
+            {% elif request.endpoint == 'suppliers.supplier_detail' %}
+            <input type="submit" value="更新" name="update" class="btn btn-info col-12">
+            {% endif %}
+        </div>
+    </fieldset>
+</form>

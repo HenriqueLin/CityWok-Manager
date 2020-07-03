@@ -1,0 +1,135 @@
+<form action="" method="post" id="employee_form" class="px-3" novalidate>
+    {{ form.hidden_tag() }}
+    <fieldset {% if not state %} disabled {% endif %}>
+        <!-- First Row -->
+        <div class="form-row">
+            <!-- First Name -->
+            <div class="form-group col-md-6">
+                {% with field=form.first_name %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <!-- Last Name -->
+            <div class="form-group col-md-6">
+                {% with field=form.last_name %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+        </div>
+        <!-- Second Row -->
+        <div class="form-row">
+            <!-- ZH Name -->
+            <div class="form-group col-md-4">
+                {% with field=form.zh_name %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <!-- Sex -->
+            <div class="form-group col-md-4">
+                {% with field=form.sex %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <!-- Birthday -->
+            <div class="form-group col-md-4">
+                {% with field=form.birthday %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+        </div>
+        <!-- Third Row -->
+        <div class="form-row">
+            <!-- Contact -->
+            <div class="form-group col-md-5">
+                {% with field=form.contact %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <!-- Email -->
+            <div class="form-group col-md-7">
+                {% with field=form.email %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+        </div>
+        <hr>
+        <!-- Fourth Row -->
+        <div class="form-row">
+            <!-- ID Type -->
+            <div class="form-group col-sm-6 col-md-3">
+                {% with field=form.id_type %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <!-- ID Number -->
+            <div class="form-group col-sm-6 col-md-3">
+                {% with field=form.id_number %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <!-- ID Validity -->
+            <div class="form-group col-sm-6 col-md-3">
+                {% with field=form.id_validity %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <!-- ID Nationality -->
+            <div class="form-group col-sm-6 col-md-3">
+                {% with field=form.nationality %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+        </div>
+        <!-- Fifth Row -->
+        <div class="form-row">
+            <!-- NIF -->
+            <div class="form-group col-sm-6">
+                {% with field=form.nif %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <!-- NISS -->
+            <div class="form-group col-sm-6">
+                {% with field=form.niss %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+        </div>
+        <hr>
+        <!-- Sixth row -->
+        <div class="form-row">
+            <!-- Job -->
+            <div class="form-group col-sm-6 col-md-3">
+                {% with field=form.job %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <!-- Start Date -->
+            <div class="form-group col-sm-6 col-md-3">
+                {% with field=form.start_date %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <!-- Salary -->
+            <div class="form-group col-sm-6 col-md-3">
+                {% with field=form.total_salary %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <!-- Tax Salary -->
+            <div class="form-group col-sm-6 col-md-3">
+                {% with field=form.tax_salary %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+        </div>
+        <!-- Submit Button -->
+        <div class="form-group">
+            {% if request.endpoint == 'employees.new_employee' %}
+            <input type="submit" value="添加" form="employee_form" name="add" class="btn btn-success col-12">
+            {% elif request.endpoint == 'employees.employee_detail' %}
+            <input type="submit" value="更新" form="employee_form" name="update" class="btn btn-info col-12">
+            {% endif %}
+        </div>
+    </fieldset>
+</form>

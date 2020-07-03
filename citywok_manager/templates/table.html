@@ -1,0 +1,25 @@
+<div class="table-responsive">
+    <table class="table table-striped table-bordered text-nowrap text-center">
+        <thead class="thead-dark">
+            <tr>
+                {% for k in keys %}
+                <th scope="col">{{heads[k]}}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <th>
+                    <a href={{row.get_link()}} class="text-dark h5">
+                        <strong>{{ row.get_data()[keys[0]] }}</strong>
+                    </a>
+                </th>
+                {% for k in keys[1:] %}
+                <td>{{ row.get_data()[k] if row.get_data()[k] }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

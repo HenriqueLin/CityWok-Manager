@@ -1,0 +1,111 @@
+{% extends 'layout.html' %}
+{% set active_page = "employee" %}
+{% block content %}
+<div class="px-2 px-md-5 pb-5">
+    <!-- title -->
+    <h1>{{title}}</h1>
+    {% if not state %}
+    <small class="text-warning">已被删除员工</small>
+    {% endif %}
+    <hr class="mb-4">
+    <!-- information form -->
+    <h3 class="ml-2">个人信息</h3>
+    {% include 'employee_form.html' %}
+    <hr class="my-5">
+    <!-- file system -->
+    <h3 class="ml-2">文件档案</h3>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered text-nowrap text-center">
+            <thead class="thead-dark">
+                <tr>
+                    {% for head in heads %}
+                    <th scope="col">{{head}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    <th><strong>{{ row.data_list()[0] }}</strong></th>
+                    {% for cell in row.data_list()[1:] %}
+                    <td>{{ cell if cell }}</td>
+                    {% endfor %}
+                    <td>
+                        <a href='{{ row.get_download_link() }}' target="_blank">
+                            <i class="fa fa-download" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href='{{ row.get_delete_link() }}'>
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <form action="" method="post" enctype='multipart/form-data' class="px-3" novalidate>
+        {{ fileform.hidden_tag() }}
+        <fieldset>
+            <!-- First Row -->
+            <div class="form-row">
+                <!-- File Name -->
+                <div class="form-group col-md-4">
+                    {% with field=fileform.file_name %}
+                    {% include 'field.html' %}
+                    {% endwith %}
+                </div>
+                <div class="form-group col-md-4">
+                    {% with field=fileform.note %}
+                    {% include 'field.html' %}
+                    {% endwith %}
+                </div>
+                <div class="form-group col-md-4">
+                    <!-- File -->
+                    {{ fileform.file.label }}
+                    {{ fileform.file(class="form-control-file") }}
+                    {% if fileform.file.errors %}
+                    {% for error in fileform.file.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <input type="submit" value="添加" name="add_file" class="btn btn-success col-12">
+        </fieldset>
+    </form>
+    <hr class="my-5">
+    <!-- delete button -->
+    {% if state %}
+    <button type="button" class="btn btn-danger col-12" data-toggle="modal" data-target="#delete_modal">
+        删除
+    </button>
+    {% else %}
+    <input type="submit" value="激活" form="employee_form" name="active" class="btn btn-success col-12">
+    {% endif %}
+</div>
+
+
+<!-- modal -->
+<div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="delete_modalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="delete_modalLabel">警告</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                此员工将移至 ’非活跃员工‘ 中，若有需要可以重新激活。
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <input type="submit" value="删除" form="employee_form" name="delete" class="btn btn-danger">
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

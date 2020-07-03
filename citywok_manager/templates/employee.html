@@ -1,0 +1,61 @@
+{% extends 'layout.html' %}
+{% set active_page = "employee" %}
+{% block content %}
+<div class="px-2 px-md-5 pb-5">
+    <h1>{{title}}</h1>
+    <hr class="mb-4">
+    <h3 class="ml-2">在职员工</h3>
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <a href="{{url_for('employees.new_employee')}}" class="btn btn-success my-auto px-4 mr-auto">添加</a>
+            <a href="{{ url_for('employees.employee_export',filename='employee_info.xlsx') }}" target="_blank"
+                class="btn btn-info mr-1">
+                <i class="fas fa-file-export mr-1" aria-hidden="true"></i>导出
+            </a>
+            <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#filterForm"
+                aria-expanded="false" aria-controls="filterForm">
+                <i class="fa fa-filter" aria-hidden="true"></i>
+                筛选
+            </button>
+        </div>
+    </div>
+    <div class="collapse px-4 py-2 mb-2 card bg-light" id="filterForm">
+        <form action="" method="POST" novalidate>
+            {{ form.hidden_tag() }}
+            <fieldset>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        {{ form.name.label }}
+                        {{ form.name(class="form-control",type="search") }}
+                    </div>
+                    <div class="form-group col-md-3">
+                        {{ form.sex.label }}
+                        {{ form.sex(class="form-control") }}
+                    </div>
+                    <div class=" form-group col-md-3">
+                        {{ form.nationality.label }}
+                        {{ form.nationality(class="form-control") }}
+                    </div>
+                    <div class="form-group col-md-3">
+                        {{ form.job.label }}
+                        {{ form.job(class="form-control") }}
+                    </div>
+                </div>
+                <div class="row">
+                    <input type="submit" value="搜索" name="search" class="btn btn-info my-auto px-4 mr-2">
+                    <input type="submit" value="清除" name="reset" class="btn btn-info my-auto px-4 mr-auto">
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    {% with data = employees %}
+    {% include 'table.html' %}
+    {% endwith %}
+    <hr class="mb-4">
+    <h3 class="ml-2">离职员工</h3>
+    {% with data = pass_employees %}
+    {% include 'table.html' %}
+    {% endwith %}
+</div>
+
+{% endblock content %}

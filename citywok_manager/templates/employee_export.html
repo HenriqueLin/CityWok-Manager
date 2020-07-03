@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+{% set active_page = "employee" %}
+{% block content %}
+<div class="px-2 px-md-5 pb-5">
+    <h1>{{title}}</h1>
+    <hr class="mb-4">
+    <form action="" method="post" class="px-3" novalidate>
+        {{ form.hidden_tag() }}
+        <fieldset>
+            <div class="form-row">
+                <div class="col-6">
+                    <h5>导出内容</h5>
+                    {% for field in form %}
+                    {% if field.name!='csrf_token' and field.name!='language' %}
+                    <div class="custom-control custom-checkbox ml-1">
+                        {{ field(class="custom-control-input") }}
+                        {{ field.label(class="custom-control-label") }}
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="col-6">
+                    <h5>导出语言</h5>
+                    {% for subfield in form.language %}
+                    <div class="custom-control custom-radio ml-1">
+                        {{ subfield(class="custom-control-input") }}
+                        {{ subfield.label(class="custom-control-label") }}
+                    </div>
+                    {% endfor %}
+                    <input type="submit" value="导出" name="export" class="btn btn-info mt-2">
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+{% endblock content %}

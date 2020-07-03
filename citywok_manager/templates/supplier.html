@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+{% set active_page = "supplier" %}
+{% block content %}
+<div class="px-2 px-md-5 pb-5">
+    <h1>{{title}}</h1>
+    <hr class="mb-4">
+    <div class="container-fluid">
+        <div class="row">
+            <a href="{{url_for('suppliers.new_supplier')}}" class="btn btn-success mb-2 px-4 mr-auto">添加</a>
+            <form class="form-inline p-0 mb-2" action="" method="POST" novalidate>
+                {{ filterForm.hidden_tag() }}
+                {{ filterForm.order(class="custom-select mr-2",onchange="this.form.submit()") }}
+                {{ filterForm.context(class="form-control", type="search", placeholder="Search", onchange="this.form.submit()",autocomplete="off") }}
+            </form>
+        </div>
+
+    </div>
+    {% with data = suppliers %}
+    {% include 'table.html' %}
+    {% endwith %}
+</div>
+
+{% endblock content %}
