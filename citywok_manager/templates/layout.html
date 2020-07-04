@@ -21,8 +21,8 @@ margin: 0;height: 100%;">
 
 {% set navbar = [
     ('/', 'home', '首页'),
-    (url_for('employees.employee'), 'employee', '员工管理'),
-    (url_for('suppliers.supplier'),'supplier','供应商管理')
+    (url_for('employee.index'), 'employee', '员工管理'),
+    (url_for('supplier.index'),'supplier','供应商管理')
 ] -%}
 
 <body class="d-flex flex-column" style="min-height: 100vh;">
@@ -63,13 +63,13 @@ margin: 0;height: 100%;">
                             data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">{{ current_user.username }}</a>
                         <div class="dropdown-menu" aria-labelledby="accountMenu">
-                            <a class="dropdown-item" href="{{ url_for('users.account') }}">账户</a>
-                            <a class="dropdown-item" href="{{ url_for('users.invite') }}">邀请</a>
+                            <a class="dropdown-item" href="{{ url_for('user.account') }}">账户</a>
+                            <a class="dropdown-item" href="{{ url_for('user.invite') }}">邀请</a>
                             <a class="dropdown-item" href="{{ url_for('main.setting') }}">设置</a>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-danger" href="{{ url_for('users.logout') }}">登出</a>
+                        <a class="btn btn-danger" href="{{ url_for('user.logout') }}">登出</a>
                     </li>
                     {% endif %}
                 </ul>

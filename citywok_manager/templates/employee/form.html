@@ -125,9 +125,9 @@
         </div>
         <!-- Submit Button -->
         <div class="form-group">
-            {% if request.endpoint == 'employees.new_employee' %}
+            {% if request.endpoint == 'employee.new' %}
             <input type="submit" value="添加" form="employee_form" name="add" class="btn btn-success col-12">
-            {% elif request.endpoint == 'employees.employee_detail' %}
+            {% elif request.endpoint == 'employee.detail' %}
             <input type="submit" value="更新" form="employee_form" name="update" class="btn btn-info col-12">
             {% endif %}
         </div>

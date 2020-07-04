@@ -176,7 +176,7 @@ class Employee(db.Model, MyMixin):
                 }
 
     def get_link(self):
-        return url_for('employees.employee_detail', employee_id=self.id)
+        return url_for('employee.detail', employee_id=self.id)
 
     def get_folder(self):
         return os.path.join(current_app.root_path, 'employee', str(self.id))
@@ -285,10 +285,10 @@ class EmployeeFile(File):
                 self.note]
 
     def get_download_link(self):
-        return url_for('employees.employee_file', employee_id=str(self.owner_id), filename=self.file_name)
+        return url_for('employee.get_file', employee_id=str(self.owner_id), filename=self.file_name)
 
     def get_delete_link(self):
-        return url_for('employees.employee_delete_file', employee_id=str(self.owner_id), filename=self.file_name)
+        return url_for('employee.delete_file', employee_id=str(self.owner_id), filename=self.file_name)
 
 
 class SupplierFile(File):
@@ -308,10 +308,10 @@ class SupplierFile(File):
                 self.note]
 
     # def get_download_link(self):
-    #     return url_for('employees.employee_file', employee_id=str(self.owner_id), filename=self.file_name)
+    #     return url_for('employee.get_file', employee_id=str(self.owner_id), filename=self.file_name)
 
     # def get_delete_link(self):
-    #     return url_for('employees.employee_delete_file', employee_id=str(self.owner_id), filename=self.file_name)
+    #     return url_for('employee.delete_file', employee_id=str(self.owner_id), filename=self.file_name)
 
 
 class Supplier(db.Model, MyMixin):
@@ -344,7 +344,7 @@ class Supplier(db.Model, MyMixin):
                 }
 
     def get_link(self):
-        return url_for('suppliers.supplier_detail', supplier_id=self.id)
+        return url_for('supplier.detail', supplier_id=self.id)
 
     def get_folder(self):
         return os.path.join(current_app.root_path, 'supplier', str(self.id))

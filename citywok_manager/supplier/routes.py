@@ -5,14 +5,14 @@ from flask_login import login_required
 
 from citywok_manager import db
 from citywok_manager.models import Supplier
-from citywok_manager.suppliers.forms import SupplierForm, SupplierFilter
+from citywok_manager.supplier.forms import SupplierForm, SupplierFilter
 
-suppliers = Blueprint('suppliers', __name__)
+supplier = Blueprint('supplier', __name__, url_prefix="/supplier")
 
 
-@suppliers.route("/supplier", methods=['GET', 'POST'])
+@supplier.route("/", methods=['GET', 'POST'])
 @login_required
-def supplier():
+def index():
     filterForm = SupplierFilter()
     if filterForm.validate_on_submit():
         suppliers = Supplier.query.filter(
@@ -22,16 +22,16 @@ def supplier():
         suppliers = Supplier.query.all()
     keys = Supplier.get_keys()
     heads = Supplier.get_heads()
-    return render_template('supplier.html',
+    return render_template('supplier/index.html',
                            title='供应商管理',
                            suppliers=suppliers,
                            keys=keys, heads=heads,
                            filterForm=filterForm)
 
 
-@suppliers.route("/supplier/new", methods=['GET', 'POST'])
+@supplier.route("/new", methods=['GET', 'POST'])
 @login_required
-def new_supplier():
+def new():
     form = SupplierForm()
     if form.validate_on_submit():
         supplier = Supplier()
@@ -41,13 +41,13 @@ def new_supplier():
         os.mkdir(safe_join(current_app.root_path,
                            'download/supplier', str(supplier.id)))
         flash('成功添加新供应商', 'success')
-        return redirect(url_for('suppliers.supplier'))
-    return render_template('create_supplier.html', title='添加供应商', form=form)
+        return redirect(url_for('supplier.index'))
+    return render_template('supplier/new.html', title='添加供应商', form=form)
 
 
-@suppliers.route("/supplier/<int:supplier_id>", methods=['GET', 'POST'])
+@supplier.route("/<int:supplier_id>", methods=['GET', 'POST'])
 @login_required
-def supplier_detail(supplier_id):
+def detail(supplier_id):
     supplier = Supplier.query.get_or_404(supplier_id)
     form = SupplierForm()
     form.id.data = supplier_id
@@ -58,10 +58,10 @@ def supplier_detail(supplier_id):
             form.populate_obj(supplier)
             db.session.commit()
             flash('供应商信息已更新', 'success')
-            return redirect(url_for('suppliers.supplier_detail',
+            return redirect(url_for('supplier.detail',
                                     supplier_id=supplier_id))
 
     form.process(obj=supplier)
-    return render_template('supplier_detail.html',
+    return render_template('supplier/detail.html',
                            form=form,
                            title='供应商信息信息')

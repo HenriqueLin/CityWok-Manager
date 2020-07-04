@@ -6,15 +6,15 @@ from sqlalchemy import or_, and_
 
 from citywok_manager import db
 from citywok_manager.models import Employee, Sex, Id_type, EmployeeFile
-from citywok_manager.employees.forms import EmployeeForm, EmployeeFileForm, EmployeeFilterForm, EmployeeExportForm
-from citywok_manager.employees.utils import employee2excel
+from citywok_manager.employee.forms import EmployeeForm, EmployeeFileForm, EmployeeFilterForm, EmployeeExportForm
+from citywok_manager.employee.utils import employee2excel
 
-employees = Blueprint('employees', __name__)
+employee = Blueprint('employee', __name__, url_prefix="/employee")
 
 
-@employees.route("/employee", methods=['GET', 'POST'])
+@employee.route("/", methods=['GET', 'POST'])
 @login_required
-def employee():
+def index():
     form = EmployeeFilterForm()
     if request.method == "POST":
         if 'search' in request.form:
@@ -28,18 +28,18 @@ def employee():
                 filter(or_(not form.nationality.data,
                            Employee.nationality == form.nationality.data)).all()
         else:  # elif 'reset' in request.form:
-            return redirect(url_for('employees.employee'))
+            return redirect(url_for('employee.index'))
     else:
         employees = Employee.query.filter_by(is_active=True).all()
     pass_employees = Employee.query.filter_by(is_active=False).all()
     keys = Employee.get_keys()
     heads = Employee.get_heads()
-    return render_template('employee.html', title='员工管理', keys=keys, heads=heads, employees=employees, form=form, pass_employees=pass_employees)
+    return render_template('employee/index.html', title='员工管理', keys=keys, heads=heads, employees=employees, form=form, pass_employees=pass_employees)
 
 
-@employees.route("/employee/<int:employee_id>", methods=['GET', 'POST'])
+@employee.route("/<int:employee_id>", methods=['GET', 'POST'])
 @login_required
-def employee_detail(employee_id):
+def detail(employee_id):
     employee = Employee.query.get_or_404(employee_id)
     form = EmployeeForm()
     fileform = EmployeeFileForm()
@@ -51,19 +51,19 @@ def employee_detail(employee_id):
             employee.is_active = False
             db.session.commit()
             flash('员工成功删除', 'success')
-            return redirect(url_for('employees.employee'))
+            return redirect(url_for('employee.index'))
         # update employee
         elif 'update' in request.form and form.validate():
             form.populate_obj(employee)
             db.session.commit()
             flash('员工信息已更新', 'success')
-            return redirect(url_for('employees.employee'))
+            return redirect(url_for('employee.index'))
         # active employee
         elif 'active' in request.form:
             employee.is_active = True
             db.session.commit()
             flash('员工已重新激活', 'success')
-            return redirect(url_for('employees.employee'))
+            return redirect(url_for('employee.index'))
         # add file
         elif 'add_file' in request.form and fileform.validate():
             file = fileform.file.data
@@ -79,14 +79,14 @@ def employee_detail(employee_id):
                 flash('文件添加成功', 'success')
             else:
                 flash('文件名已存在，请删除原文件后/更改文件名后 重试', 'danger')
-            return redirect(url_for('employees.employee_detail',
+            return redirect(url_for('employee.detail',
                                     employee_id=employee_id))
 
     form.process(obj=employee)
     form.sex.data = employee.sex.name
     form.id_type.data = employee.id_type.name
 
-    return render_template('employee_detail.html',
+    return render_template('employee/detail.html',
                            form=form,
                            fileform=fileform,
                            title='员工信息',
@@ -95,20 +95,20 @@ def employee_detail(employee_id):
                            data=employee.files)
 
 
-@employees.route('/employee/<int:employee_id>/<path:filename>/delete', methods=['GET'])
+@employee.route('/<int:employee_id>/<path:filename>/delete', methods=['GET'])
 @login_required
-def employee_delete_file(employee_id, filename):
+def delete_file(employee_id, filename):
     file = EmployeeFile.query.filter_by(
         owner_id=employee_id, file_name=filename).first()
     db.session.delete(file)
     db.session.commit()
     flash('文件成功删除', 'success')
-    return redirect(url_for('employees.employee_detail', employee_id=employee_id))
+    return redirect(url_for('employee.detail', employee_id=employee_id))
 
 
-@employees.route("/employee/new", methods=['GET', 'POST'])
+@employee.route("/employee/new", methods=['GET', 'POST'])
 @login_required
-def new_employee():
+def new():
     form = EmployeeForm()
     if form.validate_on_submit():
         employee = Employee()
@@ -118,20 +118,20 @@ def new_employee():
         os.mkdir(safe_join(
             current_app.root_path, 'download/employee', str(employee.id)))
         flash('成功添加新员工', 'success')
-        return redirect(url_for('employees.employee'))
-    return render_template('create_employee.html', title='添加员工', form=form, state=True)
+        return redirect(url_for('employee.index'))
+    return render_template('employee/new.html', title='添加员工', form=form, state=True)
 
 
-@employees.route("/employee/<int:employee_id>/<path:filename>", methods=['GET'])
-def employee_file(employee_id, filename):
+@employee.route("/<int:employee_id>/<path:filename>", methods=['GET'])
+def get_file(employee_id, filename):
     folder = safe_join(current_app.root_path, 'download',
                        'employee', str(employee_id))
     return send_from_directory(folder, filename=filename)
 
 
-@employees.route("/employee/<path:filename>", methods=['GET'])
+@employee.route("/employee/<path:filename>", methods=['GET'])
 @login_required
-def employee_export(filename):
+def export(filename):
     employee2excel()
     folder = safe_join(current_app.root_path, 'download', 'employee')
     return send_from_directory(folder, filename=filename, cache_timeout=0)

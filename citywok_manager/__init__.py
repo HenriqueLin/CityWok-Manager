@@ -10,7 +10,7 @@ csrf = CSRFProtect()
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
-login_manager.login_view = 'users.login'
+login_manager.login_view = 'user.login'
 migrate = Migrate()
 
 
@@ -29,16 +29,16 @@ def create_app(config_class=Config):
 
     with app.app_context():
         # imports
-        from citywok_manager.users.routes import users
-        from citywok_manager.employees.routes import employees
+        from citywok_manager.user.routes import user
+        from citywok_manager.employee.routes import employee
         from citywok_manager.main.routes import main
-        from citywok_manager.suppliers.routes import suppliers
+        from citywok_manager.supplier.routes import supplier
 
         # blueprints
-        app.register_blueprint(users)
-        app.register_blueprint(employees)
+        app.register_blueprint(user)
+        app.register_blueprint(employee)
         app.register_blueprint(main)
-        app.register_blueprint(suppliers)
+        app.register_blueprint(supplier)
 
         # create_database
 
