@@ -3,6 +3,7 @@ from flask_login import UserMixin, current_user
 from flask import current_app, request, redirect, url_for, flash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from sqlalchemy.ext.declarative import declared_attr
+from sqlalchemy.ext.hybrid import hybrid_property
 import enum
 import os
 from datetime import datetime
@@ -149,7 +150,7 @@ class Employee(db.Model, MyMixin):
     total_salary = db.Column(db.Integer)
     tax_salary = db.Column(db.Integer)
     is_active = db.Column(db.Boolean, default=True)
-    files = db.relationship('EmployeeFile', backref="owner")
+    files = db.relationship('File', back_populates="employee")
 
     def __repr__(self):
         return f"Employee('{self.first_name}','{self.last_name}')"
@@ -259,59 +260,43 @@ class Job(db.Model):
 
 class File(db.Model, MyMixin):
     id = db.Column(db.Integer, primary_key=True)
-    file_name = db.Column(db.String(30))
-    note = db.Column(db.Text)
-    type = db.Column(db.String(20))
-    __mapper_args__ = {
-        'polymorphic_on': type,
-        'polymorphic_identity': 'file'
-    }
-
-
-class EmployeeFile(File):
+    file_name = db.Column(db.String(50), nullable=False)
+    file_ext = db.Column(db.String(5), nullable=False)
+    file_note = db.Column(db.Text, nullable=True)
     employee_id = db.Column(db.Integer, db.ForeignKey('employee.id'))
+    employee = db.relationship("Employee", back_populates="files")
 
-    __mapper_args__ = {
-        'polymorphic_identity': 'employee_file'
-    }
+    @hybrid_property
+    def full_name(self):
+        return self.file_name + self.file_ext
 
-    @staticmethod
-    def get_heads():
-        return ['#', '文件名', '备注', '下载', '删除']
+    @property
+    def file_size(self):
+        if self.employee_id:
+            return os.path.size(
+                os.path.join(current_app.config['EMPLOYEE_FILE'], self.employee_id, self.full_name))
 
-    def data_list(self):
-        return [self.id,
-                self.file_name,
-                self.note]
+    @property
+    def download_link(self):
+        if self.employee_id:
+            return url_for('employee.get_file',
+                           employee_id=self.employee_id,
+                           filename=self.full_name)
 
-    def get_download_link(self):
-        return url_for('employee.get_file', employee_id=str(self.owner_id), filename=self.file_name)
-
-    def get_delete_link(self):
-        return url_for('employee.delete_file', employee_id=str(self.owner_id), filename=self.file_name)
-
-
-class SupplierFile(File):
-    supplier_id = db.Column(db.Integer, db.ForeignKey('supplier.id'))
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'supplier_file'
-    }
+    @property
+    def delete_link(self):
+        if self.employee_id:
+            return url_for('employee.delete_file',
+                           employee_id=self.employee_id,
+                           filename=self.full_name)
 
     @staticmethod
     def get_heads():
-        return ['#', '文件名', '备注', '下载', '删除']
+        return ['文件名', '备注', '删除']
 
     def data_list(self):
-        return [self.id,
-                self.file_name,
-                self.note]
-
-    # def get_download_link(self):
-    #     return url_for('employee.get_file', employee_id=str(self.owner_id), filename=self.file_name)
-
-    # def get_delete_link(self):
-    #     return url_for('employee.delete_file', employee_id=str(self.owner_id), filename=self.file_name)
+        return [self.file_name,
+                self.file_note]
 
 
 class Supplier(db.Model, MyMixin):
@@ -325,7 +310,6 @@ class Supplier(db.Model, MyMixin):
     address = db.Column(db.String(100))
     postcode = db.Column(db.String(15))
     city = db.Column(db.String(15))
-    files = db.relationship('SupplierFile', backref="owner")
 
     def __repr__(self):
         return f"Supplier('{self.name}')"

@@ -6,3 +6,9 @@ class Config():
     SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAX_CONTENT_LENGTH = 5 * 1024 * 1024
+
+    FILE_FOLDER = os.path.join(
+        os.getcwd(), 'citywok_manager/static/file')
+
+    EMPLOYEE_FILE = os.path.join(
+        os.getcwd(), 'citywok_manager/static/file/employee')

@@ -1,4 +1,4 @@
-from flask import current_app
+from flask import current_app, g
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, SelectField, IntegerField, FileField, TextAreaField, BooleanField, RadioField
 from wtforms.fields.html5 import DateField
@@ -7,7 +7,7 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo, Optional, V
 from datetime import date
 import os
 
-from citywok_manager.models import Sex, Job, Id_type, Country, Employee, EmployeeFile
+from citywok_manager.models import Sex, Job, Id_type, Country, Employee, File
 from citywok_manager.main.utils import get_pk
 
 
@@ -53,13 +53,15 @@ class EmployeeForm(FlaskForm):
 
 class EmployeeFileForm(FlaskForm):
     file_name = StringField(
-        '文件名', validators=[DataRequired('必填'), Length(max=20)])
+        '文件名', validators=[Optional(), Length(max=20)])
     file = FileField('文件', validators=[DataRequired('请选择文件')])
-    note = TextAreaField('备注', validators=[Optional()])
+    file_note = TextAreaField('备注', validators=[Optional()])
 
     def validate_file_name(self, file_name):
-        if '/' in self.file_name.data or '\\' in self.file_name.data:
-            raise ValidationError('请问使用 \\ 或 /')
+        f = File.query.filter_by(
+            employee_id=g.id, file_name=file_name.data).first()
+        if file_name and f:
+            raise ValidationError('文件名已存在')
 
     def validate_file(self, file):
         file.data.seek(0, os.SEEK_END)
