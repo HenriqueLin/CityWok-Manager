@@ -12,3 +12,6 @@ class Config():
 
     EMPLOYEE_FILE = os.path.join(
         os.getcwd(), 'citywok_manager/static/file/employee')
+
+    SUPPLIER_FILE = os.path.join(
+        os.getcwd(), 'citywok_manager/static/file/supplier')

@@ -1,8 +1,12 @@
-from wtforms import IntegerField, StringField, SelectField
-from wtforms.validators import DataRequired, Optional, NumberRange, Email, ValidationError
+from wtforms import IntegerField, StringField, SelectField, FileField, TextAreaField
+from wtforms.validators import DataRequired, Optional, NumberRange, Email, ValidationError, Length
+from wtforms_sqlalchemy.fields import QuerySelectField
 from flask_wtf import FlaskForm
+from flask import g
 
-from citywok_manager.models import Supplier
+from citywok_manager.models import Supplier, File
+from citywok_manager.main.utils import get_pk
+import os
 
 
 class SupplierForm(FlaskForm):
@@ -32,3 +36,25 @@ class SupplierForm(FlaskForm):
 class SupplierFilter(FlaskForm):
     context = StringField()
     order = SelectField(choices=[('id', '排序: ID'), ('name', '排序: 名称')])
+
+
+class SupplierFileForm(FlaskForm):
+    file_name = StringField(
+        '文件名', validators=[Optional(), Length(max=30)])
+    file = FileField('文件')
+    file_note = TextAreaField('备注', validators=[Optional()])
+
+    def validate_file_name(self, file_name):
+        f = File.query.filter_by(
+            employee_id=g.id, file_name=file_name.data).first()
+        if file_name and f:
+            raise ValidationError('文件名已存在')
+
+    def validate_file(self, file):
+        if not self.file:
+            raise ValidationError('请选择文件')
+        file.data.seek(0, os.SEEK_END)
+        file_length = file.data.tell()
+        file.data.seek(0, 0)
+        if file_length > (5 * 1024 * 1024):
+            raise ValidationError('文件过大(5MB)')

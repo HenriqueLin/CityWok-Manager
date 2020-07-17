@@ -265,6 +265,8 @@ class File(db.Model, MyMixin):
     file_note = db.Column(db.Text, nullable=True)
     employee_id = db.Column(db.Integer, db.ForeignKey('employee.id'))
     employee = db.relationship("Employee", back_populates="files")
+    supplier_id = db.Column(db.Integer, db.ForeignKey('supplier.id'))
+    supplier = db.relationship("Supplier", back_populates="files")
 
     @hybrid_property
     def full_name(self):
@@ -275,6 +277,9 @@ class File(db.Model, MyMixin):
         if self.employee_id:
             return os.path.size(
                 os.path.join(current_app.config['EMPLOYEE_FILE'], self.employee_id, self.full_name))
+        elif self.supplier_id:
+            return os.path.size(
+                os.path.join(current_app.config['SUPPLIER_FILE'], self.supplier_id, self.full_name))
 
     @property
     def download_link(self):
@@ -282,12 +287,20 @@ class File(db.Model, MyMixin):
             return url_for('employee.get_file',
                            employee_id=self.employee_id,
                            filename=self.full_name)
+        elif self.supplier_id:
+            return url_for('supplier.get_file',
+                           supplier_id=self.supplier_id,
+                           filename=self.full_name)
 
     @property
     def delete_link(self):
         if self.employee_id:
             return url_for('employee.delete_file',
                            employee_id=self.employee_id,
+                           filename=self.full_name)
+        elif self.supplier_id:
+            return url_for('supplier.delete_file',
+                           supplier_id=self.supplier_id,
                            filename=self.full_name)
 
     @staticmethod
@@ -310,6 +323,7 @@ class Supplier(db.Model, MyMixin):
     address = db.Column(db.String(100))
     postcode = db.Column(db.String(15))
     city = db.Column(db.String(15))
+    files = db.relationship('File', back_populates="supplier")
 
     def __repr__(self):
         return f"Supplier('{self.name}')"

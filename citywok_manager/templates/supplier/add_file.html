@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+{% set active_page = "supplier" %}
+{% block content %}
+<div class="px-2 px-md-5 pb-5">
+    <h1>{{title}}</h1>
+    <hr class="mb-4">
+    <form action="" method="post" enctype='multipart/form-data' class="px-3 mx-5" novalidate>
+        {{ fileform.hidden_tag() }}
+        <fieldset>
+            <!-- File Name -->
+            <div class="form-group">
+                {% with field=fileform.file_name,placeholder='请在需要更改文件名时填写' %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <div class="form-group">
+                {% with field=fileform.file_note %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <div class="form-group">
+                <!-- File -->
+                {{ fileform.file.label }}
+                {{ fileform.file(class="form-control-file") }}
+                {% if fileform.file.errors %}
+                {% for error in fileform.file.errors %}
+                <small class="text-danger">{{ error }}</small>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <input type="submit" value="添加" name="add_file" class="btn btn-success col-12">
+        </fieldset>
+    </form>
+</div>
+{% endblock content %}
