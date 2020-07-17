@@ -53,8 +53,8 @@ class EmployeeForm(FlaskForm):
 
 class EmployeeFileForm(FlaskForm):
     file_name = StringField(
-        '文件名', validators=[Optional(), Length(max=20)])
-    file = FileField('文件', validators=[DataRequired('请选择文件')])
+        '文件名', validators=[Optional(), Length(max=30)])
+    file = FileField('文件')
     file_note = TextAreaField('备注', validators=[Optional()])
 
     def validate_file_name(self, file_name):
@@ -64,6 +64,8 @@ class EmployeeFileForm(FlaskForm):
             raise ValidationError('文件名已存在')
 
     def validate_file(self, file):
+        if not self.file.date:
+            raise ValidationError('请选择文件')
         file.data.seek(0, os.SEEK_END)
         file_length = file.data.tell()
         file.data.seek(0, 0)

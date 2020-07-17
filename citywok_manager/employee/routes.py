@@ -129,12 +129,7 @@ def add_file(employee_id):
     return render_template('employee/add_file.html', fileform=form, title='添加文件')
 
 
-@employee.route('/<int:employee_id>/<path:filename>', methods=['GET', 'POST'])
-def file(employee_id, filename):
-    pass
-
-
-@employee.route('/<int:employee_id>/<path:filename>/delete', methods=['GET'])
+@employee.route('/<int:employee_id>/delete_file/<path:filename>', methods=['POST'])
 @login_required
 def delete_file(employee_id, filename):
     db.session.delete(File.query.filter_by(
@@ -146,7 +141,7 @@ def delete_file(employee_id, filename):
     return redirect(url_for('employee.detail', employee_id=employee_id))
 
 
-@employee.route("/<int:employee_id>/<path:filename>/download", methods=['GET'])
+@employee.route("/<int:employee_id>/download_file/<path:filename>", methods=['GET'])
 @login_required
 def get_file(employee_id, filename):
     path = os.path.join(current_app.config['EMPLOYEE_FILE'], str(employee_id))
