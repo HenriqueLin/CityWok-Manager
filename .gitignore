@@ -3,6 +3,5 @@
 **/__pycache__/**
 *.db
 env
-*/download/employee/**
-*/download/supplier/**
+**/static/file/**
 !.gitkeep
