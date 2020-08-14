@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, SelectField, IntegerField, FileField, TextAreaField, BooleanField, RadioField
 from wtforms.fields.html5 import DateField
 from wtforms_sqlalchemy.fields import QuerySelectField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, Optional, ValidationError, NumberRange
+from wtforms.validators import InputRequired, Length, Email, EqualTo, Optional, ValidationError, NumberRange
 from datetime import date
 import os
 
@@ -13,16 +13,16 @@ from citywok_manager.main.utils import get_pk
 
 class EmployeeForm(FlaskForm):
     id = IntegerField('ID')
-    first_name = StringField('名字', validators=[DataRequired('必填')])
-    last_name = StringField('姓氏', validators=[DataRequired('必填')])
+    first_name = StringField('名字', validators=[InputRequired('必填')])
+    last_name = StringField('姓氏', validators=[InputRequired('必填')])
     zh_name = StringField('中文名')
     sex = SelectField('性别', choices=Sex.choices(),
-                      validators=[DataRequired('必填')])
+                      validators=[InputRequired('必填')])
     birthday = DateField('出生日期', validators=[Optional()])
     contact = IntegerField('联系电话', validators=[Optional()])
     email = StringField('邮箱地址', validators=[Optional(), Email('邮箱地址无效')])
     job = QuerySelectField('职务', query_factory=Job.get_query,
-                           get_pk=get_pk, get_label='name')
+                           get_pk=lambda x: x.id, get_label='name')
     id_type = SelectField('证件类型', choices=Id_type.choices())
     id_number = StringField('证件号码')
     id_validity = DateField('证件有效期', validators=[Optional()])

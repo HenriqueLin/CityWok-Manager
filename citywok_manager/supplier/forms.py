@@ -1,5 +1,5 @@
 from wtforms import IntegerField, StringField, SelectField, FileField, TextAreaField
-from wtforms.validators import DataRequired, Optional, NumberRange, Email, ValidationError, Length
+from wtforms.validators import InputRequired, Optional, NumberRange, Email, ValidationError, Length
 from wtforms_sqlalchemy.fields import QuerySelectField
 from flask_wtf import FlaskForm
 from flask import g
@@ -11,7 +11,7 @@ import os
 
 class SupplierForm(FlaskForm):
     id = IntegerField('ID')
-    name = StringField('公司名称', validators=[DataRequired('必填')])
+    name = StringField('公司名称', validators=[InputRequired('必填')])
     principal = StringField('负责人', validators=[Optional()])
     contact = IntegerField('联系电话', validators=[Optional()])
     email = StringField('邮箱地址', validators=[Optional(), Email('邮箱地址无效')])

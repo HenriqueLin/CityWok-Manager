@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, DateField, PasswordField, SelectField, SubmitField
-from wtforms.validators import DataRequired, Optional, Length, Email, EqualTo, ValidationError
+from wtforms.validators import InputRequired, Optional, Length, Email, EqualTo, ValidationError
 from flask_login import current_user
 
 from citywok_manager.models import User, Role
@@ -8,19 +8,19 @@ from citywok_manager.models import User, Role
 
 class LoginForm(FlaskForm):
     username = StringField('用户名', validators=[
-                           DataRequired(), Length(min=2, max=20)])
-    password = PasswordField('密码', validators=[DataRequired()])
+                           InputRequired(), Length(min=2, max=20)])
+    password = PasswordField('密码', validators=[InputRequired()])
 
 
 class RegistrationForm(FlaskForm):
     username = StringField('用户名', validators=[
-                           DataRequired(), Length(min=2, max=20)])
+                           InputRequired(), Length(min=2, max=20)])
     email = StringField('邮箱',
                         validators=[Optional(), Email(message='邮箱地址无效')],
                         filters=[lambda x: x or None])
-    password = PasswordField('密码', validators=[DataRequired()])
+    password = PasswordField('密码', validators=[InputRequired()])
     confirm_password = PasswordField('确认密码',
-                                     validators=[DataRequired(), EqualTo('password')])
+                                     validators=[InputRequired(), EqualTo('password')])
 
     def validate_username(self, username):
         if User.query.filter_by(username=username.data).first():
@@ -33,15 +33,15 @@ class RegistrationForm(FlaskForm):
 
 class InviteForm(FlaskForm):
     email = StringField('受邀人邮箱', validators=[
-                        DataRequired('请填写受邀人的邮箱地址'), Email('邮箱地址无效')])
-    link = StringField('邀请链接', validators=[DataRequired('请生成链接')])
+                        InputRequired('请填写受邀人的邮箱地址'), Email('邮箱地址无效')])
+    link = StringField('邀请链接', validators=[InputRequired('请生成链接')])
     role = SelectField('权限', validators=[
-                       DataRequired()], choices=Role.choices(), default='Visiter')
+                       InputRequired()], choices=Role.choices(), default='Visiter')
 
 
 class AccountUpdateForm(FlaskForm):
     username = StringField('用户名', validators=[
-                           DataRequired(), Length(min=2, max=20)])
+                           InputRequired(), Length(min=2, max=20)])
     email = StringField('邮箱',
                         validators=[Optional(), Email(message='邮箱地址无效')],
                         filters=[lambda x: x or None])
@@ -58,9 +58,9 @@ class AccountUpdateForm(FlaskForm):
 
 
 class PasswordChangeForm(FlaskForm):
-    old_pw = PasswordField('密码', validators=[DataRequired()])
-    new_pw = PasswordField('密码', validators=[DataRequired()])
-    confirm_new_pw = PasswordField('确认密码', validators=[DataRequired(),
+    old_pw = PasswordField('密码', validators=[InputRequired()])
+    new_pw = PasswordField('密码', validators=[InputRequired()])
+    confirm_new_pw = PasswordField('确认密码', validators=[InputRequired(),
                                                        EqualTo('new_pw')])
 
     def validate_old_pw(self, old_pw):
