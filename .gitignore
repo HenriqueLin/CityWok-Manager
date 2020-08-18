@@ -4,4 +4,5 @@
 *.db
 env
 **/static/file/**
+!**/static/file/movement
 !.gitkeep

@@ -15,3 +15,6 @@ class Config():
 
     SUPPLIER_FILE = os.path.join(
         os.getcwd(), 'citywok_manager/static/file/supplier')
+
+    MOVEMENT_FILE = os.path.join(
+        os.getcwd(), 'citywok_manager/static/file/movement')

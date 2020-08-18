@@ -1,0 +1,106 @@
+{% extends 'layout.html' %}
+{% set active_page = "registry" %}
+{% block content %}
+<div class="px-2 px-md-5 pb-5">
+    <h1>{{title}}</h1>
+    <hr class="mb-4">
+    <form action="" method="post" enctype='multipart/form-data' class="px-3" novalidate autocomplete="off">
+        {{ form.hidden_tag() }}
+        <fieldset>
+            <div class="form-group">
+                {% with field=form.date %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <div class="form-row">
+                <!-- theoretical -->
+                <div class="form-group col-md-6">
+                    {% with field=form.theoretical %}
+                    {% include 'field.html' %}
+                    {% endwith %}
+                </div>
+                <!-- cash -->
+                <div class="form-group col-md-6">
+                    {% with field=form.cash %}
+                    {% include 'field.html' %}
+                    {% endwith %}
+                </div>
+            </div>
+            <hr>
+            <!-- Second Row -->
+            <div class="form-row">
+                <div class="col-md mb-4 mb-md-0">
+                    <!-- NIF -->
+                    <div class="form-group">
+                        {% with field=form.mb_1_total %}
+                        {% include 'field.html' %}
+                        {% endwith %}
+                    </div>
+                    <!-- IBAN -->
+                    <div class="form-group">
+                        {% with field=form.mb_1_actual %}
+                        {% include 'field.html' %}
+                        {% endwith %}
+                    </div>
+                </div>
+                <div class="col-md mb-4 mb-md-0">
+                    <!-- NIF -->
+                    <div class="form-group">
+                        {% with field=form.mb_2_total %}
+                        {% include 'field.html' %}
+                        {% endwith %}
+                    </div>
+                    <!-- IBAN -->
+                    <div class="form-group">
+                        {% with field=form.mb_2_actual %}
+                        {% include 'field.html' %}
+                        {% endwith %}
+                    </div>
+                </div>
+                <div class="col-md">
+                    <!-- NIF -->
+                    <div class="form-group">
+                        {% with field=form.mb_3_total %}
+                        {% include 'field.html' %}
+                        {% endwith %}
+                    </div>
+                    <!-- IBAN -->
+                    <div class="form-group">
+                        {% with field=form.mb_3_actual %}
+                        {% include 'field.html' %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <!-- File -->
+                    {{ form.mb_file.label (class="font-weight-bold") }}
+                    {{ form.mb_file(class="form-control-file") }}
+                    {% if form.mb_file.errors %}
+                    {% for error in form.mb_file.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="form-group col-md-6">
+                    <!-- File -->
+                    {{ form.signature.label (class="font-weight-bold") }}
+                    {{ form.signature(class="form-control-file") }}
+                    {% if form.signature.errors %}
+                    {% for error in form.signature.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group">
+                <input type="submit" value="添加" name="add" class="btn btn-success col-12">
+            </div>
+        </fieldset>
+    </form>
+</div>
+{% endblock content %}

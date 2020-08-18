@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+{% set active_page = "registry" %}
+{% block content %}
+<div class="px-2 px-md-5 pb-5">
+    <h1>{{title}}</h1>
+    <hr class="mb-4">
+    <form action="" method="post" enctype='multipart/form-data' class="px-3" novalidate autocomplete="off">
+        {{ form.hidden_tag() }}
+        <fieldset>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    {% with field=form.date %}
+                    {% include 'field.html' %}
+                    {% endwith %}
+                </div>
+                <!-- theoretical -->
+                <div class="form-group col-md-6">
+                    {% with field=form.amount %}
+                    {% include 'field.html' %}
+                    {% endwith %}
+                </div>
+            </div>
+            <hr>
+            <!-- Second Row -->
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    {% with field=form.supplier %}
+                    {% include 'field.html' %}
+                    {% endwith %}
+                </div>
+                <!-- theoretical -->
+                <div class="form-group col-md-4">
+                    {% with field=form.expense_type %}
+                    {% include 'field.html' %}
+                    {% endwith %}
+                </div>
+                <!-- cash -->
+                <div class="form-group col-md-4">
+                    {% with field=form.method %}
+                    {% include 'field.html' %}
+                    {% endwith %}
+                </div>
+            </div>
+            <hr>
+            <div class="form-group">
+                <!-- File -->
+                {{ form.files.label (class="font-weight-bold") }}
+                {{ form.files(class="form-control-file") }}
+                {% if form.files.errors %}
+                {% for error in form.files.errors %}
+                <small class="text-danger">{{ error }}</small>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group">
+                <input type="submit" value="添加" name="add" class="btn btn-success col-12">
+            </div>
+        </fieldset>
+    </form>
+</div>
+{% endblock content %}

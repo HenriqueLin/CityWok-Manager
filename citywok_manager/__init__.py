@@ -33,12 +33,14 @@ def create_app(config_class=Config):
         from citywok_manager.employee.routes import employee
         from citywok_manager.main.routes import main
         from citywok_manager.supplier.routes import supplier
+        from citywok_manager.registry.routes import registry
 
         # blueprints
         app.register_blueprint(user)
         app.register_blueprint(employee)
         app.register_blueprint(main)
         app.register_blueprint(supplier)
+        app.register_blueprint(registry)
 
         # create_database
 

@@ -181,6 +181,10 @@ class Employee(db.Model, MyMixin):
     is_active = Column(Boolean, default=True)
     files = relationship('File', back_populates="employee")
 
+    @property
+    def full_name(self):
+        return self.first_name + ' ' + self.last_name
+
     def __repr__(self):
         return f"Employee('{self.first_name}','{self.last_name}')"
 
@@ -210,6 +214,13 @@ class Employee(db.Model, MyMixin):
 
     def get_folder(self):
         return os.path.join(current_app.root_path, 'employee', str(self.id))
+
+    def get_label(self):
+        return f'{self.id}: {self.full_name} ({self.zh_name})'
+
+    @classmethod
+    def get_query(cls):
+        return cls.query
 
     @staticmethod
     def get_heads():
@@ -285,6 +296,9 @@ class Job(db.Model):
 
     def __repr__(self):
         return f"Job('{self.name}')"
+
+    def __str__(self):
+        return f'{self.name}'
 
 
 class File(db.Model, MyMixin):
@@ -363,6 +377,13 @@ class Supplier(db.Model, MyMixin):
     def __repr__(self):
         return f"Supplier('{self.name}')"
 
+    @classmethod
+    def get_query(cls):
+        return cls.query
+
+    def get_label(self):
+        return f"{self.id}: {self.name}"
+
     def get_data(self):
         return {'id': self.id,
                 'name': self.name,
@@ -407,6 +428,8 @@ class Supplier(db.Model, MyMixin):
                'address',
                'postcode',
                'city')
+
+
 class PaymentMethod(MyEnum):
     Cash = '现金'
     Card = '刷卡'
