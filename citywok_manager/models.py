@@ -4,6 +4,8 @@ from flask import current_app, request, redirect, url_for, flash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy import not_, Column, String, Integer, ForeignKey, DateTime, Date, Enum, Boolean, Text
+from sqlalchemy.orm import relationship, backref
 import enum
 import os
 from datetime import datetime
@@ -17,30 +19,28 @@ def load_user(user_id):
 
 
 class MyMixin(object):
-    create_at = db.Column(db.DateTime, default=datetime.utcnow)
-    update_at = db.Column(
-        db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    create_at = Column(DateTime, default=datetime.utcnow)
+    update_at = Column(DateTime, default=datetime.utcnow,
+                       onupdate=datetime.utcnow)
 
     @declared_attr
     def create_by_id(self):
-        return db.Column(db.Integer, db.ForeignKey(
-            'user.id'), default=get_current_user_id)
+        return Column(Integer, ForeignKey('user.id'), default=get_current_user_id)
 
     @declared_attr
     def update_by_id(self):
-        return db.Column(db.Integer, db.ForeignKey(
-            'user.id'), default=get_current_user_id, onupdate=get_current_user_id)
+        return Column(Integer, ForeignKey('user.id'), default=get_current_user_id, onupdate=get_current_user_id)
 
     @declared_attr
     def create_by(self):
-        return db.relationship("User", foreign_keys=f'{self.__name__}.create_by_id')
+        return relationship("User", foreign_keys=f'{self.__name__}.create_by_id')
 
     @declared_attr
     def update_by(self):
-        return db.relationship("User", foreign_keys=f'{self.__name__}.update_by_id')
+        return relationship("User", foreign_keys=f'{self.__name__}.update_by_id')
 
 
-class Enum(enum.Enum):
+class MyEnum(enum.Enum):
     @classmethod
     def choices(cls, blank=False):
         res = [(e.name, e.value) for e in cls]
@@ -49,17 +49,17 @@ class Enum(enum.Enum):
         return res
 
 
-class Role(Enum):
+class Role(MyEnum):
     Admin = '编辑/查看'
     Visiter = '查看'
 
 
 class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=True)
-    password = db.Column(db.String(60), nullable=False)
-    role = db.Column(db.Enum(Role), nullable=False)
+    id = Column(Integer, primary_key=True)
+    username = Column(String, unique=True, nullable=False)
+    email = Column(String, unique=True, nullable=True)
+    password = Column(String, nullable=False)
+    role = Column(Enum(Role), nullable=False)
 
     def __repr__(self):
         return f"User('{self.role}','{self.username}','{self.email}')"
@@ -116,12 +116,12 @@ class User(db.Model, UserMixin):
             return user
 
 
-class Sex(Enum):
+class Sex(MyEnum):
     M = '男'
     F = '女'
 
 
-class Id_type(Enum):
+class Id_type(MyEnum):
     Passport = '护照'
     C_Cidadao = '身份证'
     T_Residencia = '居留证'
@@ -129,28 +129,28 @@ class Id_type(Enum):
 
 
 class Employee(db.Model, MyMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(30), nullable=False)
-    last_name = db.Column(db.String(30), nullable=False)
-    zh_name = db.Column(db.String(20))
-    sex = db.Column(db.Enum(Sex), nullable=False)
-    birthday = db.Column(db.Date)
-    contact = db.Column(db.Integer)
-    email = db.Column(db.String(120))
-    job_id = db.Column(db.Integer, db.ForeignKey('job.id'))
-    job = db.relationship("Job", uselist=False)
-    id_type = db.Column(db.Enum(Id_type))
-    id_number = db.Column(db.String(10))
-    id_validity = db.Column(db.Date)
-    nationality_id = db.Column(db.Integer, db.ForeignKey('country.id'))
-    nationality = db.relationship("Country", uselist=False)
-    nif = db.Column(db.Integer, unique=True)
-    niss = db.Column(db.Integer, unique=True)
-    start_date = db.Column(db.Date)
-    total_salary = db.Column(db.Integer)
-    tax_salary = db.Column(db.Integer)
-    is_active = db.Column(db.Boolean, default=True)
-    files = db.relationship('File', back_populates="employee")
+    id = Column(Integer, primary_key=True)
+    first_name = Column(String, nullable=False)
+    last_name = Column(String, nullable=False)
+    zh_name = Column(String, default='-')
+    sex = Column(Enum(Sex), nullable=False)
+    birthday = Column(Date)
+    contact = Column(Integer)
+    email = Column(String)
+    job_id = Column(Integer, ForeignKey('job.id'))
+    job = relationship("Job", uselist=False)
+    id_type = Column(Enum(Id_type))
+    id_number = Column(String)
+    id_validity = Column(Date)
+    nationality_id = Column(Integer, ForeignKey('country.id'))
+    nationality = relationship("Country", uselist=False)
+    nif = Column(Integer, unique=True)
+    niss = Column(Integer, unique=True)
+    start_date = Column(Date)
+    total_salary = Column(Integer)
+    tax_salary = Column(Integer)
+    is_active = Column(Boolean, default=True)
+    files = relationship('File', back_populates="employee")
 
     def __repr__(self):
         return f"Employee('{self.first_name}','{self.last_name}')"
@@ -226,8 +226,8 @@ class Employee(db.Model, MyMixin):
 
 
 class Country(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    zh = db.Column(db.String(30), nullable=False)
+    id = Column(Integer, primary_key=True)
+    zh = Column(String(30), nullable=False)
 
     @classmethod
     def get_query(cls):
@@ -244,8 +244,8 @@ class Country(db.Model):
 
 
 class Job(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(15), nullable=False)
+    id = Column(Integer, primary_key=True)
+    name = Column(String(15), nullable=False)
 
     @classmethod
     def get_query(cls):
@@ -259,14 +259,15 @@ class Job(db.Model):
 
 
 class File(db.Model, MyMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    file_name = db.Column(db.String(50), nullable=False)
-    file_ext = db.Column(db.String(5), nullable=False)
-    file_note = db.Column(db.Text, nullable=True)
-    employee_id = db.Column(db.Integer, db.ForeignKey('employee.id'))
-    employee = db.relationship("Employee", back_populates="files")
-    supplier_id = db.Column(db.Integer, db.ForeignKey('supplier.id'))
-    supplier = db.relationship("Supplier", back_populates="files")
+    id = Column(Integer, primary_key=True)
+    file_name = Column(String, nullable=False)
+    file_ext = Column(String, nullable=False)
+    file_note = Column(Text, nullable=True)
+
+    employee_id = Column(Integer, ForeignKey('employee.id'))
+    employee = relationship("Employee", back_populates="files")
+    supplier_id = Column(Integer, ForeignKey('supplier.id'))
+    supplier = relationship("Supplier", back_populates="files")
 
     @hybrid_property
     def full_name(self):
@@ -313,17 +314,17 @@ class File(db.Model, MyMixin):
 
 
 class Supplier(db.Model, MyMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
-    principal = db.Column(db.String(50))
-    contact = db.Column(db.Integer)
-    email = db.Column(db.String(120))
-    nif = db.Column(db.Integer, unique=True)
-    iban = db.Column(db.String(30), unique=True)
-    address = db.Column(db.String(100))
-    postcode = db.Column(db.String(15))
-    city = db.Column(db.String(15))
-    files = db.relationship('File', back_populates="supplier")
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    principal = Column(String)
+    contact = Column(Integer)
+    email = Column(String)
+    nif = Column(Integer, unique=True)
+    iban = Column(String, unique=True)
+    address = Column(String)
+    postcode = Column(String)
+    city = Column(String)
+    files = relationship('File', back_populates="supplier")
 
     def __repr__(self):
         return f"Supplier('{self.name}')"
