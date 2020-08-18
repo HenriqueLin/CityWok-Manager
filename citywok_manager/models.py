@@ -297,6 +297,11 @@ class File(db.Model, MyMixin):
     employee = relationship("Employee", back_populates="files")
     supplier_id = Column(Integer, ForeignKey('supplier.id'))
     supplier = relationship("Supplier", back_populates="files")
+    income_id = Column(Integer, ForeignKey('income.id'))
+    income = relationship("Income", back_populates="files")
+    dairy_id = Column(Date, ForeignKey('diary.date'))
+    expense_id = Column(Integer, ForeignKey('expense.id'))
+    expense = relationship("Expense", back_populates="files")
 
     @hybrid_property
     def full_name(self):
@@ -402,3 +407,91 @@ class Supplier(db.Model, MyMixin):
                'address',
                'postcode',
                'city')
+class PaymentMethod(MyEnum):
+    Cash = '现金'
+    Card = '刷卡'
+    Transfer = '转账'
+    Check = '支票'
+
+
+class IncomeType(db.Model):
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False, unique=True)
+    changeable = Column(Boolean, default=True)
+
+
+class ExpenseType(db.Model):
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    changeable = Column(Boolean, default=True)
+
+    parent_id = Column(Integer, ForeignKey('expense_type.id'))
+    children = relationship(
+        'ExpenseType', backref=backref('parent', remote_side=[id]))
+
+    @classmethod
+    def get_query(cls):
+        return cls.query.filter(cls.parent_id != 1)
+
+    @classmethod
+    def get_salary_query(cls):
+        return cls.query.filter(cls.parent_id == 1)
+
+    def get_label(self):
+        return f'{self.parent.name}: {self.name}'
+
+
+class Diary(db.Model):
+    date = Column(Date, primary_key=True)
+    theoretical_income = Column(SqliteDecimal(2), nullable=False)
+    movements = relationship('Movement')
+    signature = relationship('File', uselist=False)
+    is_init = Column(Boolean, default=False)
+
+
+class Movement(db.Model, MyMixin):
+    id = Column(Integer, primary_key=True)
+    date = Column(Date, ForeignKey('diary.date'))
+    amount = Column(SqliteDecimal(2))
+    method = Column(Enum(PaymentMethod), nullable=False)
+    type = Column(String)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'movement',
+        'polymorphic_on': type
+    }
+
+    def __str__(self):
+        return f'{self.amount}'
+
+
+class Income(Movement):
+    id = Column(Integer, ForeignKey('movement.id'), primary_key=True)
+    income_type_id = Column(Integer, ForeignKey('income_type.id'))
+    income_type = relationship("IncomeType", backref="income")
+
+    files = relationship('File', back_populates="income")
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'income',
+    }
+
+
+class Expense(Movement):
+    id = Column(Integer, ForeignKey('movement.id'), primary_key=True)
+
+    expense_type_id = Column(Integer, ForeignKey('expense_type.id'))
+    expense_type = relationship("ExpenseType")
+
+    supplier_id = Column(Integer, ForeignKey('supplier.id'))
+    supplier = relationship("Supplier", backref='expense')
+
+    employee_id = Column(Integer, ForeignKey('employee.id'))
+    employee = relationship("Employee", backref='expense')
+
+    files = relationship('File', back_populates="expense")
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'expense',
+    }
+
