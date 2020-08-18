@@ -9,7 +9,7 @@
             <a href="{{url_for('supplier.new')}}" class="btn btn-success mb-2 px-4 mr-auto">添加</a>
             <form class="form-inline p-0 mb-2" action="" method="POST" novalidate>
                 {{ filterForm.hidden_tag() }}
-                {{ filterForm.order(class="custom-select mr-2",onchange="this.form.submit()") }}
+                {{ filterForm.order(class="custom-select mr-2 no-search",onchange="this.form.submit()") }}
                 {{ filterForm.context(class="form-control", type="search", placeholder="Search", onchange="this.form.submit()",autocomplete="off") }}
             </form>
         </div>

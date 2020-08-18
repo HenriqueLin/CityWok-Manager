@@ -8,13 +8,13 @@ margin: 0;height: 100%;">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet" type="text/css">
 
-    <!-- Place your kit's code here -->
-    <script src="https://kit.fontawesome.com/463143dff4.js" crossorigin="anonymous"></script>
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet" type="text/css">
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    <!-- select2 -->
+    <link href="{{ url_for('static',filename='css/select2.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static',filename='css/select2-bootstrap4.css') }}" rel="stylesheet" type="text/css">
 
     <title>{{ title }} - CityWok Manager</title>
 </head>
@@ -22,7 +22,8 @@ margin: 0;height: 100%;">
 {% set navbar = [
     ('/', 'home', '首页'),
     (url_for('employee.index'), 'employee', '员工管理'),
-    (url_for('supplier.index'),'supplier','供应商管理')
+    (url_for('supplier.index'),'supplier','供应商管理'),
+    (url_for('registry.index'),'registry','登记处')
 ] -%}
 
 <body class="d-flex flex-column" style="min-height: 100vh;">
@@ -95,17 +96,20 @@ margin: 0;height: 100%;">
     </div>
 
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
-        crossorigin="anonymous"></script>
+    <!-- JavaScript -->
+
+    <script src="{{ url_for('static',filename='js/jquery-3.5.1.js')}}"></script>
+    <script src="{{ url_for('static',filename='js/bootstrap.bundle.js')}}"></script>
+    <script src="{{ url_for('static',filename='js/select2.js')}}"></script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('select').not(".no-search").select2({
+                theme: 'bootstrap4',
+            });
+        });
+    </script>
 </body>
 
 </html>
