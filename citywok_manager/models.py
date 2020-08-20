@@ -179,6 +179,8 @@ class Employee(db.Model, MyMixin):
     total_salary = Column(Integer)
     tax_salary = Column(Integer)
     is_active = Column(Boolean, default=True)
+    arrear = Column(SqliteDecimal(2), default=0, nullable=False)
+
     files = relationship('File', back_populates="employee")
 
     @property

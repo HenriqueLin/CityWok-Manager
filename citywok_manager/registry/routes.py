@@ -138,6 +138,9 @@ def labor_expense():
             file.save(path)
             i += 1
 
+        if expense.expense_type.name == '预支':
+            expense.employee.arrear += expense.amount
+
         db.session.commit()
 
         flash('添加成功', 'success')
@@ -150,4 +153,4 @@ def labor_expense():
 
 @registry.route('/test', methods=['GET', 'POST'])
 def test():
-    return str(Diary.query.first().movements[2].method)
+    return str(Expense.query.first().employee.arrear)
