@@ -37,8 +37,10 @@ class EmployeeForm(FlaskForm):
                            render_kw={'type': 'date'})
     total_salary = IntegerField(
         '工资', validators=[Optional(), NumberRange(min=0, message='不得小于0')])
-    tax_salary = IntegerField(
-        '报税金额', validators=[Optional(), NumberRange(min=0, message='不得小于0')], default=600)
+    tax_salary = IntegerField('报税金额',
+                              validators=[Optional(),
+                                          NumberRange(min=0, message='不得小于0')],
+                              default=Setting.get_base_salary)
 
     def validate_id_validity(self, id_validity):
         if (self.id_validity.data and self.id_validity.data < date.today()):

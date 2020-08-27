@@ -88,6 +88,22 @@ class Setting(db.Model):
     base_salary = Column(SqliteDecimal(2), nullable=False)
     tax_rate = Column(SqliteDecimal(4), nullable=False)
 
+    @classmethod
+    def get_base_salary(cls):
+        return cls.query.get(1).base_salary
+
+    @classmethod
+    def set_base_salary(cls, value):
+        cls.query.get(1).base_salary = value
+
+    @classmethod
+    def get_tax_rate(cls):
+        return cls.query.get(1).tax_rate
+
+    @classmethod
+    def set_tax_rate(cls, value):
+        cls.query.get(1).tax_rate = value
+
 
 class User(db.Model, UserMixin):
     id = Column(Integer, primary_key=True)

@@ -34,6 +34,10 @@ with app.app_context():
     # create the database
     db.create_all()
 
+    # settings
+    db.session.add(Setting(base_salary=Decimal("635"),
+                           tax_rate=Decimal("0.3475")))
+
     # add basic coutries into database
     countries = ['中国', '葡萄牙', '巴西', '孟加拉', '尼泊尔', '阿根廷', '巴基斯坦']
     for county in countries:

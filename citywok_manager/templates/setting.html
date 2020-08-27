@@ -4,13 +4,27 @@
 <div class="px-2 px-md-5 pb-5">
     <h1>{{title}}</h1>
     <hr class="mb-4">
-    <h3 class="ml-2">添加职务</h3>
     <form action="" method="post" class="px-3" novalidate>
-        {{ add_job_form.hidden_tag() }}
+        {{ form.hidden_tag() }}
         <fieldset>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {% with field=add_job_form.job %}
+                    {% with field=form.base_salary %}
+                    {% include 'field.html' %}
+                    {% endwith %}
+                </div>
+                <div class="form-group col-md-6">
+                    {% with field=form.tax_rate %}
+                    {% include 'field.html' %}
+                    {% endwith %}
+                </div>
+            </div>
+            <input type="submit" value="更新" name="update" class="btn btn-info">
+            <hr class="mb-4">
+            <h3>添加职务</h3>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    {% with field=form.job %}
                     {% include 'field.html' %}
                     {% endwith %}
                     <input type="submit" value="添加" name="add_job" class="btn btn-info">
@@ -41,16 +55,11 @@
                     </div>
                 </div>
             </div>
-        </fieldset>
-    </form>
-    <hr class="my-5">
-    <h3 class="ml-2">添加国家</h3>
-    <form action="" method="post" class="px-3" novalidate>
-        {{ add_country_form.hidden_tag() }}
-        <fieldset>
+            <hr class="my-5">
+            <h3>添加国家</h3>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {% with field=add_country_form.country %}
+                    {% with field=form.country %}
                     {% include 'field.html' %}
                     {% endwith %}
                     <input type="submit" value="添加" name="add_country" class="btn btn-info">

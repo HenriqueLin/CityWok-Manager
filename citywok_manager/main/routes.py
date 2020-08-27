@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required
-from citywok_manager.main.forms import AddCountryForm, AddJobForm
-from citywok_manager.models import Job, Country
+from citywok_manager.main.forms import SettingForm
+from citywok_manager.models import Job, Country, Setting
 from citywok_manager import db
 
 main = Blueprint('main', __name__)
@@ -16,27 +16,31 @@ def home():
 @main.route("/setting", methods=['GET', 'POST'])
 @login_required
 def setting():
-    add_job_form = AddJobForm()
-    add_country_form = AddCountryForm()
+    form = SettingForm()
     if request.method == 'POST':
-        if 'add_job' in request.form and add_job_form.validate():
-            job = Job(name=add_job_form.job.data)
+        if 'add_job' in request.form and form.job.validate(form):
+            job = Job(name=form.job.data)
             db.session.add(job)
             db.session.commit()
             flash('成功添加职务', 'success')
             return redirect(url_for('main.setting'))
-        elif 'add_country' in request.form and add_country_form.validate():
-            country = Country(zh=add_country_form.country.data)
+        elif 'add_country' in request.form and form.country.validate(form):
+            country = Country(zh=form.country.data)
             db.session.add(country)
             db.session.commit()
             flash('成功添加国家', 'success')
             return redirect(url_for('main.setting'))
 
+        elif 'update' in request.form and form.tax_rate.validate(form) and form.base_salary.validate(form):
+            Setting.set_base_salary(form.base_salary.data)
+            Setting.set_tax_rate(form.tax_rate.data)
+            db.session.commit()
+            flash('更新成功', 'success')
+            return redirect(url_for('main.setting'))
     jobs = Job.query.all()
     countries = Country.query.all()
     return render_template('setting.html', title='系统设置',
-                           add_job_form=add_job_form,
-                           add_country_form=add_country_form,
+                           form=form,
                            jobs=jobs, countries=countries)
 
 
