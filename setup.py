@@ -1,6 +1,7 @@
 # coding:utf-8
 from citywok_manager import create_app, db, bcrypt
-from citywok_manager.models import Country, User, Job, IncomeType, Supplier, ExpenseType
+from citywok_manager.models import Country, User, Job, IncomeType, Supplier, ExpenseType, Setting
+from decimal import Decimal
 import os
 import shutil
 

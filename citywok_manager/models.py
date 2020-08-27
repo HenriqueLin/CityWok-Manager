@@ -83,6 +83,12 @@ class Role(MyEnum):
     Visiter = '查看'
 
 
+class Setting(db.Model):
+    id = Column(Integer, primary_key=True)
+    base_salary = Column(SqliteDecimal(2), nullable=False)
+    tax_rate = Column(SqliteDecimal(4), nullable=False)
+
+
 class User(db.Model, UserMixin):
     id = Column(Integer, primary_key=True)
     username = Column(String, unique=True, nullable=False)
