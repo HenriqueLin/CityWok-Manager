@@ -1,9 +1,8 @@
 from flask import request
 from flask_wtf import FlaskForm
-from wtforms import HiddenField, StringField, IntegerField, FileField, MultipleFileField, SelectField
+from wtforms import BooleanField, HiddenField, DateField, StringField, IntegerField, FileField, MultipleFileField, SelectField, FormField, FieldList, DecimalField, FloatField
 from wtforms_sqlalchemy.fields import QuerySelectField
 from wtforms.validators import InputRequired, ValidationError, NumberRange
-from wtforms.fields.html5 import DateField, DecimalField
 from datetime import datetime
 
 from citywok_manager.models import Diary, Supplier, ExpenseType, PaymentMethod, Employee
@@ -12,42 +11,43 @@ from citywok_manager.models import Diary, Supplier, ExpenseType, PaymentMethod, 
 class DailyIncomeForm(FlaskForm):
     date = DateField(label='日期',
                      default=datetime.today,
-                     validators=[InputRequired('必填')])
+                     validators=[InputRequired('必填')],
+                     render_kw={'type': 'date'})
 
     theoretical = DecimalField(label='理论收入',
                                validators=[InputRequired('必填'),
                                            NumberRange(min=0, message='不得小于0')],
-                               render_kw={'step': '0.01', 'min': '0'})
+                               render_kw={'step': '0.01', 'min': '0', 'type': 'number'})
 
     cash = DecimalField(label='现金收入',
                         validators=[InputRequired('必填'),
                                     NumberRange(min=0, message='不得小于0')],
-                        render_kw={'step': '0.01', 'min': '0'})
+                        render_kw={'step': '0.01', 'min': '0', 'type': 'number'})
 
     mb_1_total = DecimalField(label='MB-1-总收入',
                               validators=[InputRequired('必填')],
-                              render_kw={'step': '0.01', 'min': '0'})
+                              render_kw={'step': '0.01', 'min': '0', 'type': 'number'})
 
     mb_1_actual = DecimalField(label='MB-1-实际收入',
                                validators=[InputRequired('必填'),
                                            NumberRange(min=0, message='不得小于0')],
-                               render_kw={'step': '0.01', 'min': '0'})
+                               render_kw={'step': '0.01', 'min': '0', 'type': 'number'})
     mb_2_total = DecimalField(label='MB-2-总收入',
                               validators=[InputRequired('必填'),
                                           NumberRange(min=0, message='不得小于0')],
-                              render_kw={'step': '0.01', 'min': '0'})
+                              render_kw={'step': '0.01', 'min': '0', 'type': 'number'})
     mb_2_actual = DecimalField(label='MB-2-实际收入',
                                validators=[InputRequired('必填'),
                                            NumberRange(min=0, message='不得小于0')],
-                               render_kw={'step': '0.01', 'min': '0'})
+                               render_kw={'step': '0.01', 'min': '0', 'type': 'number'})
     mb_3_total = DecimalField(label='MB-3-总收入',
                               validators=[InputRequired('必填'),
                                           NumberRange(min=0, message='不得小于0')],
-                              render_kw={'step': '0.01', 'min': '0'})
+                              render_kw={'step': '0.01', 'min': '0', 'type': 'number'})
     mb_3_actual = DecimalField(label='MB-3-实际收入',
                                validators=[InputRequired('必填'),
                                            NumberRange(min=0, message='不得小于0')],
-                               render_kw={'step': '0.01', 'min': '0'})
+                               render_kw={'step': '0.01', 'min': '0', 'type': 'number'})
     mb_file = MultipleFileField('MB-文件')
     signature = FileField('参与人签字', validators=[InputRequired('请选择文件')])
 
@@ -77,12 +77,13 @@ class DailyIncomeForm(FlaskForm):
 class ExpenseForm(FlaskForm):
     date = DateField(label='日期',
                      default=datetime.today,
-                     validators=[InputRequired('必填')])
+                     validators=[InputRequired('必填')],
+                     render_kw={'type': 'date'})
 
     amount = DecimalField(label='金额',
                           validators=[InputRequired('必填'),
                                       NumberRange(min=0, message='不得小于0')],
-                          render_kw={'step': '0.01', 'min': '0'})
+                          render_kw={'step': '0.01', 'min': '0', 'type': 'number'})
 
     supplier = QuerySelectField(label='付款对象',
                                 validators=[InputRequired('必选')],
@@ -111,12 +112,13 @@ class ExpenseForm(FlaskForm):
 class LaborExpenseForm(FlaskForm):
     date = DateField(label='日期',
                      default=datetime.today,
-                     validators=[InputRequired('必填')])
+                     validators=[InputRequired('必填')],
+                     render_kw={'type': 'date'})
 
     amount = DecimalField(label='金额',
                           validators=[InputRequired('必填'),
                                       NumberRange(min=0, message='不得小于0')],
-                          render_kw={'step': '0.01', 'min': '0'})
+                          render_kw={'step': '0.01', 'min': '0', 'type': 'number'})
 
     employee = QuerySelectField(label='付款对象',
                                 validators=[InputRequired('必选')],

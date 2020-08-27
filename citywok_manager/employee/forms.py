@@ -1,7 +1,6 @@
 from flask import current_app, g
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, SelectField, IntegerField, FileField, TextAreaField, BooleanField, RadioField
-from wtforms.fields.html5 import DateField
+from wtforms import DateField, StringField, PasswordField, SubmitField, SelectField, IntegerField, FileField, TextAreaField, BooleanField, RadioField
 from wtforms_sqlalchemy.fields import QuerySelectField
 from wtforms.validators import InputRequired, Length, Email, EqualTo, Optional, ValidationError, NumberRange
 from datetime import date
@@ -18,19 +17,24 @@ class EmployeeForm(FlaskForm):
     zh_name = StringField('中文名')
     sex = SelectField('性别', choices=Sex.choices(),
                       validators=[InputRequired('必填')])
-    birthday = DateField('出生日期', validators=[Optional()])
-    contact = IntegerField('联系电话', validators=[Optional()])
-    email = StringField('邮箱地址', validators=[Optional(), Email('邮箱地址无效')])
+    birthday = DateField('出生日期', validators=[Optional()],
+                         render_kw={'type': 'date'})
+    contact = IntegerField('联系电话', validators=[Optional()],
+                           render_kw={'type': 'tel'})
+    email = StringField('邮箱地址', validators=[Optional(), Email('邮箱地址无效')],
+                        render_kw={'type': 'email'})
     job = QuerySelectField('职务', query_factory=Job.get_query,
                            get_pk=lambda x: x.id, get_label='name')
     id_type = SelectField('证件类型', choices=Id_type.choices())
     id_number = StringField('证件号码')
-    id_validity = DateField('证件有效期', validators=[Optional()])
+    id_validity = DateField('证件有效期', validators=[Optional()],
+                            render_kw={'type': 'date'})
     nationality = QuerySelectField(
         '国籍', query_factory=Country.get_query, get_pk=get_pk)
     nif = IntegerField('NIF', validators=[Optional()])
     niss = IntegerField('NISS', validators=[Optional()])
-    start_date = DateField('就职日期', validators=[Optional()])
+    start_date = DateField('就职日期', validators=[Optional()],
+                           render_kw={'type': 'date'})
     total_salary = IntegerField(
         '工资', validators=[Optional(), NumberRange(min=0, message='不得小于0')])
     tax_salary = IntegerField(
