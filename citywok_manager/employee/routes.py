@@ -8,7 +8,7 @@ from sqlalchemy import or_, and_
 from citywok_manager import db
 from citywok_manager.models import Employee, Sex, Id_type, File
 from citywok_manager.employee.forms import EmployeeForm, EmployeeFileForm, EmployeeFilterForm, EmployeeExportForm
-from citywok_manager.employee.utils import employee2excel
+from citywok_manager.utils import employee2excel
 
 employee = Blueprint('employee', __name__, url_prefix="/employee")
 

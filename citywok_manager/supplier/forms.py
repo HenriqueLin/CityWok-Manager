@@ -5,7 +5,7 @@ from flask_wtf import FlaskForm
 from flask import g
 
 from citywok_manager.models import Supplier, File
-from citywok_manager.main.utils import get_pk
+from citywok_manager.utils import get_pk
 import os
 
 

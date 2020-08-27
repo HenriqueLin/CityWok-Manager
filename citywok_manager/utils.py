@@ -1,8 +1,14 @@
-import xlsxwriter
 import os
 
-from citywok_manager.models import Employee
+import xlsxwriter
 from flask import current_app, safe_join
+from flask_login import current_user
+
+from citywok_manager.models import Employee
+
+
+def get_pk(obj):
+    return str(obj)
 
 
 def employee2excel():

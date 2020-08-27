@@ -11,7 +11,6 @@ import os
 from decimal import Decimal
 from datetime import datetime
 from functools import wraps
-from citywok_manager.main.utils import get_current_user_id
 from sqlalchemy.types import TypeDecorator, Integer
 
 
@@ -54,11 +53,11 @@ class MyMixin(object):
 
     @declared_attr
     def create_by_id(self):
-        return Column(Integer, ForeignKey('user.id'), default=get_current_user_id)
+        return Column(Integer, ForeignKey('user.id'), default=User.get_current_user_id)
 
     @declared_attr
     def update_by_id(self):
-        return Column(Integer, ForeignKey('user.id'), default=get_current_user_id, onupdate=get_current_user_id)
+        return Column(Integer, ForeignKey('user.id'), default=User.get_current_user_id, onupdate=User.get_current_user_id)
 
     @declared_attr
     def create_by(self):
@@ -159,6 +158,13 @@ class User(db.Model, UserMixin):
         except:
             return None
         return role
+
+    @staticmethod
+    def get_current_user_id():
+        if current_user:
+            return current_user.id
+        else:
+            return None
 
     @classmethod
     def authenticate_user(cls, username, password):

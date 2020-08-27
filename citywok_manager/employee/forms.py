@@ -6,8 +6,8 @@ from wtforms.validators import InputRequired, Length, Email, EqualTo, Optional, 
 from datetime import date
 import os
 
-from citywok_manager.models import Sex, Job, Id_type, Country, Employee, File
-from citywok_manager.main.utils import get_pk
+from citywok_manager.models import Sex, Job, Id_type, Country, Employee, File, Setting
+from citywok_manager.utils import get_pk
 
 
 class EmployeeForm(FlaskForm):
