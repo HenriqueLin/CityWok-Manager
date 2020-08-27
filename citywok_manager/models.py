@@ -211,6 +211,8 @@ class Employee(db.Model, MyMixin):
 
     files = relationship('File', back_populates="employee")
 
+    salarys = relationship('SalaryEmployee', back_populates="employee")
+
     @property
     def full_name(self):
         return self.first_name + ' ' + self.last_name
@@ -346,6 +348,7 @@ class File(db.Model, MyMixin):
     dairy_id = Column(Date, ForeignKey('diary.date'))
     expense_id = Column(Integer, ForeignKey('expense.id'))
     expense = relationship("Expense", back_populates="files")
+    salary_id = Column(Integer, ForeignKey('salary.id'))
 
     @hybrid_property
     def full_name(self):
@@ -465,6 +468,7 @@ class PaymentMethod(MyEnum):
     Card = '刷卡'
     Transfer = '转账'
     Check = '支票'
+    Mix = '混合'
 
 
 class IncomeType(db.Model):
@@ -505,7 +509,6 @@ class Diary(db.Model):
 class Movement(db.Model, MyMixin):
     id = Column(Integer, primary_key=True)
     date = Column(Date, ForeignKey('diary.date'))
-    amount = Column(SqliteDecimal(2))
     method = Column(Enum(PaymentMethod), nullable=False)
     type = Column(String)
 
@@ -520,6 +523,7 @@ class Movement(db.Model, MyMixin):
 
 class Income(Movement):
     id = Column(Integer, ForeignKey('movement.id'), primary_key=True)
+    amount = Column(SqliteDecimal(2), nullable=False)
     income_type_id = Column(Integer, ForeignKey('income_type.id'))
     income_type = relationship("IncomeType", backref="income")
 
@@ -532,6 +536,7 @@ class Income(Movement):
 
 class Expense(Movement):
     id = Column(Integer, ForeignKey('movement.id'), primary_key=True)
+    amount = Column(SqliteDecimal(2), nullable=False)
 
     expense_type_id = Column(Integer, ForeignKey('expense_type.id'))
     expense_type = relationship("ExpenseType")
@@ -547,4 +552,57 @@ class Expense(Movement):
     __mapper_args__ = {
         'polymorphic_identity': 'expense',
     }
+
+
+class Salary(Movement):
+    id = Column(Integer, ForeignKey('movement.id'), primary_key=True)
+    expense_type_id = Column(Integer, ForeignKey('expense_type.id'), default=5)
+    expense_type = relationship("ExpenseType")
+
+    month = Column(Date, nullable=False)
+    base_salary = Column(SqliteDecimal(2), nullable=False)
+    tax_rate = Column(SqliteDecimal(4), nullable=False)
+
+    employees = relationship('SalaryEmployee', back_populates='salary')
+    files = relationship('File', backref="salary")
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'salary',
+    }
+
+    @property
+    def cash(self):
+        res = 0
+        for e in self.employees:
+            res += e.cash
+        return res
+
+    @property
+    def transfer(self):
+        res = 0
+        for e in self.employees:
+            res += e.transfer
+        return res
+
+    @property
+    def amount(self):
+        return self.cash + self.transfer
+
+
+class SalaryEmployee(db.Model, MyMixin):
+    salary_id = Column(Integer, ForeignKey('salary.id'), primary_key=True)
+    employee_id = Column(Integer, ForeignKey('employee.id'), primary_key=True)
+
+    cash = Column(SqliteDecimal(2), nullable=False)
+    transfer = Column(SqliteDecimal(2), nullable=False)
+    repayment = Column(SqliteDecimal(2), nullable=False, default=0)
+    month = Column(Date, nullable=False)
+
+    employee = relationship("Employee", back_populates="salarys")
+    salary = relationship("Salary", back_populates="employees")
+
+    @property
+    def total(self):
+        return self.cash + self.transfer
+
 

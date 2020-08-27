@@ -2,7 +2,7 @@ from flask import request
 from flask_wtf import FlaskForm
 from wtforms import BooleanField, HiddenField, DateField, StringField, IntegerField, FileField, MultipleFileField, SelectField, FormField, FieldList, DecimalField, FloatField
 from wtforms_sqlalchemy.fields import QuerySelectField
-from wtforms.validators import InputRequired, ValidationError, NumberRange
+from wtforms.validators import InputRequired, ValidationError, NumberRange, DataRequired
 from datetime import datetime
 
 from citywok_manager.models import Diary, Supplier, ExpenseType, PaymentMethod, Employee
@@ -142,3 +142,74 @@ class LaborExpenseForm(FlaskForm):
         l = request.files.getlist('files')
         if not l[0].filename:
             raise ValidationError('请选择文件')
+
+
+class SalarySubForm(FlaskForm):
+    ID = HiddenField()
+
+    skip = BooleanField(label='跳过')
+
+    transfer_salary = FloatField(label='转账工资',
+                                 validators=[InputRequired('必填'),
+                                             NumberRange(min=0, message='不得小于0')],
+                                 render_kw={'step': '0.01', 'min': '0', 'type': 'number'})
+
+    repayment = FloatField(label='还款金额',
+                           validators=[InputRequired('必填'),
+                                       NumberRange(min=0, message='不得小于0')],
+                           render_kw={'step': '0.01', 'min': '0', 'type': 'number'})
+
+    cash_salary = FloatField(label='理论现金工资',
+                             validators=[InputRequired('必填'),
+                                         NumberRange(min=0, message='不得小于0')],
+                             render_kw={'step': '0.01', 'min': '0', 'type': 'number', 'readonly': 'true'})
+
+    real_cash_salary = FloatField(label='实际现金工资',
+                                  validators=[InputRequired('必填'),
+                                              NumberRange(min=0, message='不得小于0')],
+                                  render_kw={'step': '0.01', 'min': '0', 'type': 'number'})
+
+    sub_total = FloatField(label='小计',
+                           validators=[NumberRange(min=0, message='不得小于0')],
+                           render_kw={'step': '0.01', 'min': '0', 'type': 'number', 'readonly': 'true'})
+
+    def validate_real_cash_salary(self, real_cash_salary):
+        if (not self.skip.data) and abs(self.real_cash_salary.data - self.cash_salary.data) > 10:
+            raise ValidationError("实际与理论误差应<10")
+
+    def validate_sub_total(self, sub_total):
+        if (not self.skip.data) and (not self.sub_total.data):
+            raise ValidationError('未结算工资')
+
+
+class SalaryForm(FlaskForm):
+    date = DateField(label='支付日期',
+                     default=datetime.today,
+                     validators=[InputRequired('必填')],
+                     render_kw={'type': 'date'})
+
+    month = DateField(label='月份',
+                      default=datetime.today,
+                      validators=[InputRequired('必填')],
+                      format='%Y-%m',
+                      render_kw={'type': 'month'})
+
+    salarys = FieldList(FormField(SalarySubForm))
+
+    cash_total = DecimalField(label='现金合计',
+                              default=0,
+                              validators=[InputRequired('必填'),
+                                          NumberRange(min=0, message='不得小于0')],
+                              render_kw={'step': '0.01', 'min': '0', 'type': 'number', 'readonly': 'true'})
+
+    transfer_total = DecimalField(label='转账合计',
+                                  default=0,
+                                  validators=[InputRequired('必填'),
+                                              NumberRange(min=0, message='不得小于0')],
+                                  render_kw={'step': '0.01', 'min': '0', 'type': 'number', 'readonly': 'true'})
+
+    total = DecimalField(label='合计',
+                         default=0,
+                         validators=[InputRequired('必填'),
+                                     NumberRange(min=0, message='不得小于0')],
+                         render_kw={'step': '0.01', 'min': '0', 'type': 'number', 'readonly': 'true'})

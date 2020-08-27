@@ -1,0 +1,188 @@
+{% extends 'layout.html' %}
+{% set active_page = "registry" %}
+{% block content %}
+<div class="px-2 px-md-5 pb-5">
+    <h1>{{title}}</h1>
+    <hr class="mb-4">
+    <form action="" method="post" enctype='multipart/form-data' class="px-3" novalidate>
+        {{ form.hidden_tag() }}
+        <fieldset>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    {% with field=form.date %}
+                    {% include 'field.html' %}
+                    {% endwith %}
+                </div>
+                <!-- theoretical -->
+                <div class="form-group col-md-6">
+                    {% with field=form.month %}
+                    {% include 'field.html' %}
+                    {% endwith %}
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="更新" name="update" class="btn btn-success" hidden>
+            </div>
+            {% for (employee,subform, id) in data %}
+            <hr class="mb-4">
+            <div id="{{id}}">
+                <h3 class="ml-2">{{employee.id}}: {{employee.full_name}}</h3>
+                <dl class="row px-4">
+                    <dt class="col-sm-3">ID:</dt>
+                    <dd class="col-sm-9">{{ employee.id }}</dd>
+                    <dt class="col-sm-3">姓名:</dt>
+                    <dd class="col-sm-9">{{ employee.full_name }}</dd>
+                    <dt class="col-sm-3">中文名:</dt>
+                    <dd class="col-sm-9">{{ employee.zh_name }}</dd>
+
+                    <dt class="col-sm-3">就职日期:</dt>
+                    <dd class="col-sm-9">{{ employee.start_date }}</dd>
+                    <dt class="col-sm-3">总工资:</dt>
+                    <dd id="{{id}}_total" class="col-sm-9">{{ employee.total_salary }}</dd>
+                    <dt class="col-sm-3">合同工资:</dt>
+                    <dd id="{{id}}_contract" class="col-sm-9">{{ employee.tax_salary }}</dd>
+                    <dt class="col-sm-3">预支金额:</dt>
+                    <dd id="{{id}}_arrear" class="col-sm-9">{{ employee.arrear }}</dd>
+
+                </dl>
+                <div class="form-group form-check px-4 mb-0">
+                    {{subform.skip}}
+                    {{subform.skip.label (class="font-weight-bold")}}
+                </div>
+                <div class="form-row px-4">
+                    {{ subform.ID }}
+                    <div class="form-group col-md-3">
+                        {% with field=subform.transfer_salary %}
+                        {% include 'field.html' %}
+                        {% endwith %}
+                    </div>
+                    <div class="form-group col-md-3">
+                        {% with field=subform.repayment %}
+                        {% include 'field.html' %}
+                        {% endwith %}
+                    </div>
+                    <div class="form-group col-md-3">
+                        {% with field=subform.cash_salary %}
+                        {% include 'field.html' %}
+                        {% endwith %}
+                    </div>
+                    <div class="form-group col-md-3">
+                        {% with field=subform.real_cash_salary %}
+                        {% include 'field.html' %}
+                        {% endwith %}
+                    </div>
+                </div>
+                <div class="form-row px-4 justify-content-end">
+                    <div class="form-group col-md-6">
+                        {% with field=subform.sub_total %}
+                        {% include 'field.html' %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <hr class="mb-4">
+            <!-- summary -->
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    {% with field=form.transfer_total %}
+                    {% include 'field.html' %}
+                    {% endwith %}
+                </div>
+                <div class="form-group col-md-4">
+                    {% with field=form.cash_total %}
+                    {% include 'field.html' %}
+                    {% endwith %}
+                </div>
+                <div class="form-group col-md-4">
+                    {% with field=form.total %}
+                    {% include 'field.html' %}
+                    {% endwith %}
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group">
+                <input type="submit" value="添加" name="add" class="btn btn-success col-12">
+            </div>
+        </fieldset>
+    </form>
+</div>
+{% endblock content %}
+
+{% block js %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("input[name$='transfer_salary'],input[name$='repayment'],input[name$='real_cash_salary']").
+            on('change', cal_each).
+            on('dblclick', function () {
+                $(this).select();
+            }).
+            on("click", function () {
+                if (parseFloat($(this).val()) == 0) {
+                    $(this).select();
+                };
+            });
+        $("#month").on("change", function () {
+            $("input[name=update]").trigger("click")
+        });
+        $("input[name$='skip']").on('click', function () {
+            var id = $(this).attr('id').replace(/\D/g, '');
+            var target = $('#salarys-' + id + '-repayment, #salarys-' + id + '-transfer_salary, #salarys-' + id + '-real_cash_salary')
+            if (this.checked) {
+                target.attr("readonly", true);
+                $("#" + id + " :input").not(this).val(Number(0).toFixed(2))
+                cal_total()
+            } else {
+                target.removeAttr("readonly");
+            }
+        })
+    });
+
+    function cal_each() {
+        // get id
+        var id = $(this).attr('id').replace(/\D/g, '');
+        // get values
+        var total = parseFloat($('#' + id + '_total').text()); // 约定总工资
+        var repayment = parseFloat($('#salarys-' + id + '-repayment').val()); // 还款
+        var arrear = parseFloat($('#' + id + '_arrear').text()); // 欠款
+        var transfer = parseFloat($('#salarys-' + id + '-transfer_salary').val()); // 转账工资
+        var contract = parseFloat($('#' + id + '_contract').text()); // 合同工资
+        var real_cash = parseFloat($('#salarys-' + id + '-real_cash_salary').val()); // 实付现金
+        var base_salary = parseFloat('{{ base_salary }}'); // 最低工资
+        const tax_rate = parseFloat('{{ tax_rate }}'); // 税率
+        var tax = 0; // 应付税额
+        // check if repayment is greater than arrear
+        if (repayment > arrear) {
+            repayment = arrear;
+        }
+        if (contract > base_salary) {
+            var rest = contract - base_salary;
+            tax = rest * tax_rate;
+        }
+        // render the new values
+        $('#salarys-' + id + '-transfer_salary').val(transfer.toFixed(2));
+        $('#salarys-' + id + '-repayment').val(repayment.toFixed(2));
+        $("#salarys-" + id + "-cash_salary").val((total - transfer - repayment - tax).toFixed(2));
+        $("#salarys-" + id + "-sub_total").val((transfer + real_cash).toFixed(2));
+        cal_total();
+    };
+
+    function cal_total() {
+        var cash_total = 0;
+        $("input[name$='real_cash_salary']").each(function () {
+            cash_total += Number($(this).val());
+        });
+        var transfer_total = 0;
+        $("input[name$='transfer_salary']").each(function () {
+            transfer_total += Number($(this).val());
+        });
+        // render values 
+        $("#cash_total").val(cash_total.toFixed(2));
+        $("#transfer_total").val(transfer_total.toFixed(2));
+        $("#total").val((cash_total + transfer_total).toFixed(2));
+
+    };
+
+</script>
+{% endblock js %}

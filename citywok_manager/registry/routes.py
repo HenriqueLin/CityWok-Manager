@@ -1,10 +1,11 @@
-from flask import Blueprint, current_app, render_template, redirect, url_for, flash, request
-
+from flask import Blueprint, current_app, render_template, redirect, url_for, flash, request, current_app
+from decimal import Decimal
 import os
-
+from sqlalchemy import not_
+from datetime import date, datetime
 from citywok_manager import db
-from citywok_manager.models import Income, Diary, PaymentMethod, IncomeType, File, Expense, ExpenseType
-from citywok_manager.registry.forms import DailyIncomeForm, ExpenseForm, LaborExpenseForm
+from citywok_manager.models import Income, Diary, PaymentMethod, IncomeType, File, Expense, ExpenseType, Employee, Salary, SalaryEmployee, Setting
+from citywok_manager.registry.forms import DailyIncomeForm, ExpenseForm, LaborExpenseForm, SalaryForm, SalarySubForm
 
 registry = Blueprint('registry', __name__, url_prefix="/registry")
 
@@ -149,6 +150,59 @@ def labor_expense():
     return render_template('registry/labor_expense.html',
                            form=form,
                            title='人工支出')
+
+
+@registry.route('/salary/', defaults={'month': date.today().strftime("%Y-%m")}, methods=['GET', 'POST'])
+@registry.route('/salary/<month>', methods=['GET', 'POST'])
+def salary(month):
+    form = SalaryForm(month=datetime.strptime(month, "%Y-%m"))
+
+    if form.is_submitted():
+        if "update" in request.form:
+            return redirect(url_for('registry.salary', month=form.month.data.strftime("%Y-%m")))
+            #month = form.month.data
+        elif "add" in request.form and form.validate():
+            S = Salary(month=form.month.data,
+                       date=form.date.data,
+                       method=PaymentMethod.Mix,
+                       base_salary=Setting.get_base_salary(),
+                       tax_rate=Setting.get_tax_rate())
+            for subform in form.salarys:
+                if not subform.skip.data:
+                    s = SalaryEmployee(employee_id=subform.ID.data,
+                                       transfer=Decimal(
+                                           str(subform.transfer_salary.data)),
+                                       cash=Decimal(
+                                           str(subform.real_cash_salary.data)),
+                                       month=form.month.data)
+                    S.employees.append(s)
+            db.session.add(S)
+            db.session.commit()
+            flash('添加成功', 'success')
+            return redirect(url_for('registry.salary'))
+
+    employees = Employee.query.filter_by(is_active=True).\
+        filter(not_(Employee.salarys.
+                    any(SalaryEmployee.month == datetime.strptime(month, "%Y-%m").date()))).all()
+    for e in employees:
+        subform = SalarySubForm()
+        subform.ID = e.id
+        subform.skip = 0
+        subform.transfer_salary = 0
+        subform.cash_salary = 0
+        subform.repayment = e.arrear
+        subform.real_cash_salary = 0
+        subform.sub_total = 0
+        form.salarys.append_entry(subform)
+
+    return render_template('registry/salary.html',
+                           form=form,
+                           data=zip(employees,
+                                    form.salarys,
+                                    range(len(employees))),
+                           base_salary=Setting.get_base_salary(),
+                           tax_rate=Setting.get_tax_rate(),
+                           title='工资结算')
 
 
 @registry.route('/test', methods=['GET', 'POST'])
