@@ -1,15 +1,15 @@
-from flask_login import UserMixin
 from citywok_ms import db, login
+from flask_login import UserMixin
 from sqlalchemy import Column, Integer, String
 from sqlalchemy_utils import ChoiceType
 from werkzeug.security import check_password_hash
 
-
 Role = [
     ("admin", "Admin"),
     ("manager", "Manager"),
-    ("woker", "Woker"),
-    ("visiter", "Visiter"),
+    ("shareholder", "Shareholder"),
+    ("worker", "Worker"),
+    ("visitor", "Visitor"),
 ]
 
 

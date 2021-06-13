@@ -4,9 +4,9 @@ import flask_babel
 from config import Config
 from flask import Flask, current_app, request
 from flask_babel import Babel
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from flask_moment import Moment
-from flask_principal import Principal
+from flask_principal import Principal, UserNeed, identity_loaded
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from sqlalchemy_utils import i18n
@@ -56,6 +56,42 @@ def create_app(config_class=Config):
         app.register_blueprint(supplier)
         app.register_blueprint(file)
         app.register_blueprint(command)
+
+        @identity_loaded.connect_via(app)
+        def on_identity_loaded(sender, identity):
+            from citywok_ms.auth.permissions import (
+                admin_need,
+                shareholder_need,
+                manager_need,
+                visitor_need,
+                worker_need,
+            )
+
+            # Set the identity user object
+            identity.user = current_user
+
+            # Add the UserNeed to the identity, this may not be used
+            if hasattr(current_user, "id"):
+                identity.provides.add(UserNeed(current_user.id))
+
+            # Update the identity with the roles that the user provides
+            if hasattr(current_user, "role"):
+                if current_user.role in [
+                    "admin",
+                    "manager",
+                    "shareholder",
+                    "worker",
+                    "visitor",
+                ]:
+                    identity.provides.add(visitor_need)
+                if current_user.role in ["admin", "manager", "shareholder", "worker"]:
+                    identity.provides.add(worker_need)
+                if current_user.role in ["admin", "manager", "shareholder"]:
+                    identity.provides.add(shareholder_need)
+                if current_user.role in ["admin", "manager"]:
+                    identity.provides.add(manager_need)
+                if current_user.role in ["admin"]:
+                    identity.provides.add(admin_need)
 
         @app.shell_context_processor
         def make_shell_context():

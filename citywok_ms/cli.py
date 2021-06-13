@@ -1,4 +1,4 @@
-from citywok_ms.auth.models import Role, User
+from citywok_ms.auth.models import User
 import os
 from datetime import date
 
