@@ -28,7 +28,7 @@ class File(db.Model, CRUDMixin):
         return f"File({self.id}: {self.full_name})"
 
     @property
-    def formate(self) -> str:
+    def format(self) -> str:
         return os.path.splitext(self.full_name)[1]
 
     @hybrid_property
@@ -37,11 +37,11 @@ class File(db.Model, CRUDMixin):
 
     @base_name.setter
     def base_name(self, new_name: str):
-        self.full_name = new_name + self.formate
+        self.full_name = new_name + self.format
 
     @property
     def internal_name(self) -> str:
-        return f"{self.id}{self.formate}"
+        return f"{self.id}{self.format}"
 
     @property
     def path(self) -> str:

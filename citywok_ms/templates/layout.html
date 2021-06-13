@@ -38,7 +38,7 @@
 ('#', 'registry','Registry') #}
 
 <body class='mb-5'>
-    <header class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <header class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
         <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse"
             data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId" aria-expanded="false"
             aria-label="Toggle navigation">
@@ -86,13 +86,14 @@
         </div>
     </header>
 
-    <main class="container" role="main">
-        <div class="py-3 text-center">
+    <main class="container pt-2" role="main">
+        <div class="px-3 text-center d-print-none fixed-top" id="message">
             {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
             {% for category, message in messages %}
-            <div class="alert alert-{{ category }} w-100">
+            <div class="alert alert-{{ category }} alert-dismissible" role="alert">
                 {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {% endfor %}
             {% endif %}
