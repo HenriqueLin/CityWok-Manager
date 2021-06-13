@@ -1,5 +1,5 @@
 from citywok_ms.auth.forms import LoginForm
-from flask import Blueprint, redirect, url_for, flash, render_template, request
+from flask import Blueprint, redirect, url_for, flash, render_template
 from citywok_ms.auth.models import User
 from flask_login import current_user, login_user, logout_user
 import citywok_ms.auth.messages as auth_msg
@@ -20,13 +20,8 @@ def login():
         if user:
             login_user(user)
             flash(auth_msg.LOGIN_SUCCESS.format(name=user.username), category="success")
-            next_page = request.args.get("next")
             # FIXME: main index page
-            return (
-                redirect(next_page)
-                if next_page
-                else redirect(url_for("employee.index"))
-            )
+            return redirect(url_for("employee.index"))
         else:
             flash(auth_msg.LOGIN_FAIL, category="danger")
     return render_template("auth/login.html", title=auth_msg.LOGIN_TITLE, form=form)
