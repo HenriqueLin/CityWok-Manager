@@ -14,6 +14,10 @@ class Config(object):
     LANGUAGES = ["en"]
     UPLOAD_FOLDER = os.environ.get("UPLOAD_FOLDER") or os.path.join(basedir, "uploads")
 
+    ADMIN_NAME = os.environ.get("ADMIN_NAME") or "Admin"
+    ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL") or None
+    ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD") or "admin"
+
 
 class TestConfig(Config):
     TESTING = True

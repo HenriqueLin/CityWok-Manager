@@ -1,3 +1,4 @@
+from citywok_ms.auth.models import Role, User
 import os
 from datetime import date
 
@@ -10,6 +11,7 @@ from citywok_ms.employee.models import Employee
 from citywok_ms.file.models import EmployeeFile
 from citywok_ms.supplier.models import Supplier
 from sqlalchemy.exc import IntegrityError, OperationalError
+from werkzeug.security import generate_password_hash
 
 command = Blueprint("command", __name__, cli_group=None)
 
@@ -22,6 +24,16 @@ def create():
     "Create the database"
     db.create_all()
     click.echo("Created all tables.")
+
+    admin = User(
+        username=current_app.config["ADMIN_NAME"],
+        email=current_app.config["ADMIN_EMAIL"],
+        password=generate_password_hash(current_app.config["ADMIN_PASSWORD"]),
+        role="admin",
+    )
+    db.session.add(admin)
+    db.session.commit()
+    click.echo("Created admin user.")
 
 
 @db_cli.command("drop")
