@@ -4,7 +4,7 @@ import os
 
 from citywok_ms.employee.models import Employee
 from citywok_ms.supplier.models import Supplier
-from citywok_ms.file.models import EmployeeFile, SupplierFile, File
+from citywok_ms.file.models import EmployeeFile, SupplierFile
 import pytest
 from citywok_ms import create_app, db, current_app
 from config import TestConfig

@@ -1,3 +1,4 @@
+import click
 from flask import Blueprint
 from flask.cli import AppGroup
 from citywok_ms import db
@@ -11,23 +12,16 @@ db_cli = AppGroup("db")
 @db_cli.command("create")
 def create():
     "Create the database"
-    print("Creating all tables")
     db.create_all()
-
-    print("Success.")
+    click.echo("Created all tables.")
 
 
 @db_cli.command("drop")
+@click.confirmation_option(prompt="Are you sure you want to drop the db?")
 def drop():
     "Drop the database"
-    msg = "Drop All"
-    i = input(f'Please type "{msg}" to confirm the operation\n')
-    if i == msg:
-        print("Droping all tables")
-        db.drop_all()
-        print("Success.")
-    else:
-        print("Wrong input, exit.")
+    db.drop_all()
+    click.echo("Dropped all tables.")
 
 
 command.cli.add_command(db_cli)
