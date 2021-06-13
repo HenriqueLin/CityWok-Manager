@@ -1,7 +1,8 @@
-from citywok_ms.file.models import File, SupplierFile
 import citywok_ms.file.messages as file_msg
 import citywok_ms.supplier.messages as supplier_msg
+from citywok_ms.auth.permissions import manager, shareholder, visitor
 from citywok_ms.file.forms import FileForm
+from citywok_ms.file.models import File, SupplierFile
 from citywok_ms.supplier.forms import SupplierForm
 from citywok_ms.supplier.models import Supplier
 from flask import Blueprint, flash, redirect, render_template, url_for
@@ -10,6 +11,7 @@ supplier = Blueprint("supplier", __name__, url_prefix="/supplier")
 
 
 @supplier.route("/")
+@visitor.require(401)
 def index():
     return render_template(
         "supplier/index.html",
@@ -19,6 +21,7 @@ def index():
 
 
 @supplier.route("/new", methods=["GET", "POST"])
+@manager.require(403)
 def new():
     form = SupplierForm()
     if form.validate_on_submit():
@@ -31,6 +34,7 @@ def new():
 
 
 @supplier.route("/<int:supplier_id>")
+@shareholder.require(403)
 def detail(supplier_id):
     return render_template(
         "supplier/detail.html",
@@ -41,6 +45,7 @@ def detail(supplier_id):
 
 
 @supplier.route("/<int:supplier_id>/update", methods=["GET", "POST"])
+@manager.require(403)
 def update(supplier_id):
     supplier = Supplier.get_or_404(supplier_id)
     form = SupplierForm()
@@ -61,6 +66,7 @@ def update(supplier_id):
 
 
 @supplier.route("/<int:supplier_id>/upload", methods=["POST"])
+@manager.require(403)
 def upload(supplier_id):
     form = FileForm()
     file = form.file.data

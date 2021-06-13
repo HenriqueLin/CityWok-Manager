@@ -1,15 +1,17 @@
-from citywok_ms.file.models import EmployeeFile, File
 import citywok_ms.employee.messages as employee_msg
 import citywok_ms.file.messages as file_msg
+from citywok_ms.auth.permissions import manager, shareholder, visitor
 from citywok_ms.employee.forms import EmployeeForm
-from citywok_ms.file.forms import FileForm
-from flask import Blueprint, flash, redirect, render_template, url_for
 from citywok_ms.employee.models import Employee
+from citywok_ms.file.forms import FileForm
+from citywok_ms.file.models import EmployeeFile, File
+from flask import Blueprint, flash, redirect, render_template, url_for
 
 employee = Blueprint("employee", __name__, url_prefix="/employee")
 
 
 @employee.route("/")
+@visitor.require(401)
 def index():
     return render_template(
         "employee/index.html",
@@ -20,6 +22,7 @@ def index():
 
 
 @employee.route("/new", methods=["GET", "POST"])
+@manager.require(403)
 def new():
     form = EmployeeForm()
     if form.validate_on_submit():
@@ -32,6 +35,7 @@ def new():
 
 
 @employee.route("/<int:employee_id>")
+@shareholder.require(403)
 def detail(employee_id):
     return render_template(
         "employee/detail.html",
@@ -42,6 +46,7 @@ def detail(employee_id):
 
 
 @employee.route("/<int:employee_id>/update", methods=["GET", "POST"])
+@manager.require(403)
 def update(employee_id):
     employee = Employee.get_or_404(employee_id)
     form = EmployeeForm()
@@ -62,6 +67,7 @@ def update(employee_id):
 
 
 @employee.route("/<int:employee_id>/suspend", methods=["POST"])
+@manager.require(403)
 def suspend(employee_id):
     employee = Employee.get_or_404(employee_id)
     employee.suspend()
@@ -70,6 +76,7 @@ def suspend(employee_id):
 
 
 @employee.route("/<int:employee_id>/activate", methods=["POST"])
+@manager.require(403)
 def activate(employee_id):
     employee = Employee.get_or_404(employee_id)
     employee.activate()
@@ -78,6 +85,7 @@ def activate(employee_id):
 
 
 @employee.route("/<int:employee_id>/upload", methods=["POST"])
+@manager.require(403)
 def upload(employee_id):
     form = FileForm()
     file = form.file.data
