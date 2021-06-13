@@ -102,7 +102,7 @@ def test_update_get(client, employee_with_file, id):
     f = EmployeeFile.get_or_404(id)
     assert f.base_name in data
     # FIXME: Typo
-    assert f.formate in data
+    assert f.format in data
     assert "Update" in data
 
     # links
@@ -138,7 +138,7 @@ def test_update_post_valid(client, employee_with_file, id):
     assert f.full_name in data
     print(f)
     # FIXME: Typo
-    assert f.formate in data
+    assert f.format in data
     assert "Update" in data
 
     # flash messege
