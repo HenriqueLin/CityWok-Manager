@@ -6,6 +6,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_utils import i18n
 from flask_wtf.csrf import CSRFProtect
 from flask_moment import Moment
+from flask_login import LoginManager
+from flask_principal import Principal
 
 import os
 
@@ -13,6 +15,8 @@ csrf = CSRFProtect()
 db = SQLAlchemy()
 babel = Babel()
 moment = Moment()
+login = LoginManager()
+principal = Principal()
 
 
 def create_app(config_class=Config):
@@ -30,15 +34,19 @@ def create_app(config_class=Config):
     csrf.init_app(app)
     babel.init_app(app)
     moment.init_app(app)
+    login.init_app(app)
+    principal.init_app(app)
 
     with app.app_context():
         # imports
+        from citywok_ms.auth.routes import auth
         from citywok_ms.employee.routes import employee
         from citywok_ms.supplier.routes import supplier
         from citywok_ms.file.routes import file
         from citywok_ms.cli import command
 
         # blueprints
+        app.register_blueprint(auth)
         app.register_blueprint(employee)
         app.register_blueprint(supplier)
         app.register_blueprint(file)

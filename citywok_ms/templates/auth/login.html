@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="row justify-content-center align-items-center">
+    <div class="mb-5">
+        <div class="py-5"></div>
+        <h1 class="text-center my-4 pb-3">CityWok Manager</h1>
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <div class="row gy-3 overflow-hidden justify-content-center">
+                <div class="col-sm-6">
+                    {{ form.username.label(class="h5 form-label") }}
+                    <div class="input-group">
+                        {% if form.username.errors %}
+                        {{ form.username(class="form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        {{ form.username(class="form-control") }}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="w-100 my-0"></div>
+                <div class="col-sm-6">
+                    {{ form.password.label(class="h5") }}
+                    {% if form.password.errors %}
+                    {{ form.password(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.password.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.password(class="form-control ") }}
+                    {% endif %}
+                </div>
+                <div class="w-100 my-0"></div>
+                <div class="col-sm-6">
+                    {{ form.submit(class="btn btn-primary float-end") }}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}
