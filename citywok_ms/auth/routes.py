@@ -1,7 +1,7 @@
 from citywok_ms.auth.forms import LoginForm
 from flask import Blueprint, redirect, url_for, flash, render_template
 from citywok_ms.auth.models import User
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 import citywok_ms.auth.messages as auth_msg
 
 auth = Blueprint("auth", __name__)
@@ -25,3 +25,11 @@ def login():
         else:
             flash(auth_msg.LOGIN_FAIL, category="danger")
     return render_template("auth/login.html", title=auth_msg.LOGIN_TITLE, form=form)
+
+
+@auth.route("/logout", methods=["POST"])
+@login_required
+def logout():
+    logout_user()
+    flash(auth_msg.LOGOUT_SUCCESS, category="success")
+    return redirect(url_for("auth.login"))
