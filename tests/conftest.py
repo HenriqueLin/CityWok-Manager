@@ -24,6 +24,15 @@ def app():
 
 
 @pytest.fixture
+def app_without_db():
+    with TemporaryDirectory() as temp_dir:
+        TestConfig.UPLOAD_FOLDER = temp_dir
+        app = create_app(config_class=TestConfig)
+        with app.app_context():
+            yield app
+
+
+@pytest.fixture
 def basic_employee_data():
     return {
         "first_name": "basic",
