@@ -36,11 +36,29 @@ def create_app(config_class=Config):
         from citywok_ms.employee.routes import employee
         from citywok_ms.supplier.routes import supplier
         from citywok_ms.file.routes import file
+        from citywok_ms.cli import command
 
         # blueprints
         app.register_blueprint(employee)
         app.register_blueprint(supplier)
         app.register_blueprint(file)
+        app.register_blueprint(command)
+
+        @app.shell_context_processor
+        def make_shell_context():
+            from citywok_ms.employee.models import Employee
+            from citywok_ms.supplier.models import Supplier
+            from citywok_ms.file.models import File, EmployeeFile, SupplierFile
+
+            return {
+                "app": app,
+                "db": db,
+                "Employee": Employee,
+                "Supplier": Supplier,
+                "File": File,
+                "EmployeeFile": EmployeeFile,
+                "SupplierFile": SupplierFile,
+            }
 
         return app
 
