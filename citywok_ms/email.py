@@ -1,6 +1,7 @@
+from threading import Thread
 from flask.templating import render_template
 from flask_mail import Message
-
+from flask import current_app
 from citywok_ms import mail
 
 
@@ -39,8 +40,16 @@ def send_confirmation_email(target, token, username):
     )
 
 
+def send_async_email(app, msg):
+    with app.app_context():
+        mail.send(msg)
+
+
 def send_email(subject, recipients, text_body, html_body):
     msg = Message(subject, recipients=recipients)
     msg.body = text_body
     msg.html = html_body
-    mail.send(msg)
+    Thread(
+        target=send_async_email,
+        args=(current_app._get_current_object(), msg),
+    ).start()
