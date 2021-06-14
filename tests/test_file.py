@@ -101,13 +101,11 @@ def test_update_get(client, employee_with_file, id):
 
     f = EmployeeFile.get_or_404(id)
     assert f.base_name in data
-    # FIXME: Typo
     assert f.format in data
     assert "Update" in data
 
     # links
-    # FIXME: after adding cancel button
-    # assert url_for("employee.detail", employee_id=id) in data
+    assert url_for("employee.detail", employee_id=id) in data
 
 
 @pytest.mark.parametrize("id", [1, 2])
@@ -136,8 +134,6 @@ def test_update_post_valid(client, employee_with_file, id):
     assert f.remark == "xxx"
 
     assert f.full_name in data
-    print(f)
-    # FIXME: Typo
     assert f.format in data
     assert "Update" in data
 

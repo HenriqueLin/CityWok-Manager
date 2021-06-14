@@ -51,6 +51,7 @@ def create_app(config_class=Config):
         from citywok_ms.cli import command
         from citywok_ms.employee.routes import employee
         from citywok_ms.file.routes import file
+        from citywok_ms.main.routes import main
         from citywok_ms.supplier.routes import supplier
 
         # blueprints
@@ -59,6 +60,7 @@ def create_app(config_class=Config):
         app.register_blueprint(supplier)
         app.register_blueprint(file)
         app.register_blueprint(command)
+        app.register_blueprint(main)
 
         @identity_loaded.connect_via(app)
         def on_identity_loaded(sender, identity):
