@@ -1,13 +1,13 @@
-from config import Config
+import os
+
 import flask_babel
+from config import Config
 from flask import Flask, current_app, request
 from flask_babel import Babel
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy_utils import i18n
-from flask_wtf.csrf import CSRFProtect
 from flask_moment import Moment
-
-import os
+from flask_sqlalchemy import SQLAlchemy
+from flask_wtf.csrf import CSRFProtect
+from sqlalchemy_utils import i18n
 
 csrf = CSRFProtect()
 db = SQLAlchemy()
@@ -33,22 +33,24 @@ def create_app(config_class=Config):
 
     with app.app_context():
         # imports
-        from citywok_ms.employee.routes import employee
-        from citywok_ms.supplier.routes import supplier
-        from citywok_ms.file.routes import file
         from citywok_ms.cli import command
+        from citywok_ms.employee.routes import employee
+        from citywok_ms.file.routes import file
+        from citywok_ms.main.routes import main
+        from citywok_ms.supplier.routes import supplier
 
         # blueprints
         app.register_blueprint(employee)
         app.register_blueprint(supplier)
         app.register_blueprint(file)
         app.register_blueprint(command)
+        app.register_blueprint(main)
 
         @app.shell_context_processor
         def make_shell_context():
             from citywok_ms.employee.models import Employee
+            from citywok_ms.file.models import EmployeeFile, File, SupplierFile
             from citywok_ms.supplier.models import Supplier
-            from citywok_ms.file.models import File, EmployeeFile, SupplierFile
 
             return {
                 "app": app,
