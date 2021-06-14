@@ -5,6 +5,7 @@ from config import Config
 from flask import Flask, current_app, request
 from flask_babel import Babel
 from flask_login import LoginManager, current_user
+from flask_mail import Mail
 from flask_moment import Moment
 from flask_principal import Principal, UserNeed, identity_loaded
 from flask_sqlalchemy import SQLAlchemy
@@ -19,6 +20,7 @@ babel = Babel()
 moment = Moment()
 login = LoginManager()
 principal = Principal()
+mail = Mail()
 
 
 def create_app(config_class=Config):
@@ -41,6 +43,7 @@ def create_app(config_class=Config):
     login.login_message = REQUIRE_LOGIN
     login.login_message_category = "info"
     principal.init_app(app)
+    mail.init_app(app)
 
     with app.app_context():
         # imports
@@ -61,8 +64,8 @@ def create_app(config_class=Config):
         def on_identity_loaded(sender, identity):
             from citywok_ms.auth.permissions import (
                 admin_need,
-                shareholder_need,
                 manager_need,
+                shareholder_need,
                 visitor_need,
                 worker_need,
             )

@@ -1,3 +1,4 @@
+from citywok_ms.email import send_invite_email
 import citywok_ms.auth.messages as auth_msg
 from citywok_ms.auth.forms import InviteForm, LoginForm, RegistrationForm
 from citywok_ms.auth.models import User
@@ -55,19 +56,18 @@ def logout():
 def invite():
     form = InviteForm()
     if request.method == "GET":
-        link = request.args.get("link")
+        token = request.args.get("token")
     if form.validate_on_submit():
         token = User.create_invite_token(form.role.data, form.email.data)
-        link = url_for("auth.registration", token=token, _external=True)
-        # TODO: Send email
+        send_invite_email(form.email.data, token)
         flash(auth_msg.EMAIL_SENT, "success")
-        return redirect(url_for("auth.invite", link=link))
+        return redirect(url_for("auth.invite", token=token))
 
     return render_template(
         "auth/invite.html",
         title=auth_msg.INVITE_TITLE,
         form=form,
-        link=link,
+        token=token,
     )
 
 

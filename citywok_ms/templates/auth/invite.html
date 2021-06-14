@@ -27,7 +27,7 @@
         </div>
 </div>
 
-{% if link %}
+{% if token %}
 <!-- Modal -->
 <div class="modal fade" id="LinkModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="LinkModalLabel" aria-hidden="true">
@@ -38,7 +38,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body style=" min-height: 500px"">
-                Click <a href="{{ link }}">here</a> to registe,
+                Click <a id="link" href="{{ url_for('auth.registration',token=token, _external=True) }}"
+                    target="_blank">here</a>
+                to
+                registe,
                 or click the button bellow to copy the link and send it to the invitee.
             </div>
             <div class="modal-footer">
@@ -50,11 +53,12 @@
 {% endif %}
 {% endblock content %}
 
-{% if link %}
+{% if token %}
 {% block js %}
 <script type="text/javascript">
     function copy() {
-        navigator.clipboard.writeText('{{ link| safe }}');
+        let link = document.getElementById("link").href
+        navigator.clipboard.writeText(link);
     };
     $(window).on('load', function () {
         $('#LinkModal').modal('show');
