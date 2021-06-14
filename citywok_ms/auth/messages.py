@@ -21,7 +21,6 @@ INVALID_CONFIRMATION = "Confirmation link is invalid."
 
 FORGET_SUCCESS = "A e-mail to reset the password has been sent to {email}."
 FORGET_TITLE = "Forget Password"
-FORGET_NOT_EXIST = 'User with email "{email}" doesn\'t exist.'
 
 RESET_SUCCESS = "Your password has been reset."
 RESET_TITLE = "Reset Password"

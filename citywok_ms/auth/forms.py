@@ -47,6 +47,10 @@ class ForgetPasswordForm(FlaskForm):
     )
     submit = SubmitField("Submit")
 
+    def validate_email(self, email):
+        if not User.get_by_email(email.data):
+            raise ValidationError("User with this e-mail address do not exist.")
+
 
 class ResetPasswordForm(FlaskForm):
     password = PasswordField(

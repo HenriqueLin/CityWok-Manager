@@ -149,13 +149,10 @@ def forget_password():
     form = ForgetPasswordForm()
     if form.validate_on_submit():
         user = User.get_by_email(form.email.data)
-        if user:
-            token = user.create_reset_token()
-            send_password_reset_email(user, token)
-            flash(auth_msg.FORGET_SUCCESS.format(email=form.email.data), "success")
-            return redirect(url_for("auth.login"))
-        else:
-            flash(auth_msg.FORGET_NOT_EXIST.format(email=form.email.data), "warning")
+        token = user.create_reset_token()
+        send_password_reset_email(user, token)
+        flash(auth_msg.FORGET_SUCCESS.format(email=form.email.data), "success")
+        return redirect(url_for("auth.login"))
     return render_template(
         "auth/forget_password.html", title=auth_msg.FORGET_TITLE, form=form
     )
@@ -176,6 +173,7 @@ def reset_password(token):
             return redirect(url_for("auth.login"))
     else:
         flash(auth_msg.RESET_INVALID, "warning")
+        return redirect(url_for("auth.login"))
     return render_template(
         "auth/reset_password.html", title=auth_msg.RESET_TITLE, form=form
     )
