@@ -33,8 +33,7 @@ auth = Blueprint("auth", __name__)
 def login():
     form = LoginForm()
     if current_user.is_authenticated:
-        # FIXME: after create a main index page
-        return redirect(url_for("employee.index"))
+        return redirect(url_for("main.index"))
     if form.validate_on_submit():
         user = User.authenticate_user(
             username=form.username.data, password=form.password.data
@@ -49,8 +48,7 @@ def login():
                     auth_msg.LOGIN_SUCCESS.format(name=user.username),
                     category="success",
                 )
-                # FIXME: main index page
-                return redirect(url_for("employee.index"))
+                return redirect(url_for("main.index"))
             else:
                 flash(auth_msg.REQUIRE_CONFIRMATION, "warning")
                 return redirect(url_for("auth.login"))
@@ -94,8 +92,7 @@ def invite(token=None):
 def registration(token):
     if current_user.is_authenticated:
         flash(auth_msg.REQUIRED_LOGOUT, "warning")
-        # FIXME: to main page
-        return redirect(url_for("employee.index"))
+        return redirect(url_for("main.index"))
     role, email = User.verify_invite_token(token)
     if not role:
         flash(auth_msg.INVALID_INVITE, "warning")
@@ -125,8 +122,7 @@ def registration(token):
 def confirmation(token):
     if current_user.is_authenticated:
         flash(auth_msg.REQUIRED_LOGOUT, "warning")
-        # FIXME: to main page
-        return redirect(url_for("employee.index"))
+        return redirect(url_for("main.index"))
 
     user = User.verify_confirmation_token(token)
     if user:
@@ -144,8 +140,7 @@ def confirmation(token):
 @auth.route("/forget_password", methods=["GET", "POST"])
 def forget_password():
     if current_user.is_authenticated:
-        # FIXME: to main page
-        return redirect(url_for("employee.index"))
+        return redirect(url_for("main.index"))
     form = ForgetPasswordForm()
     if form.validate_on_submit():
         user = User.get_by_email(form.email.data)
@@ -161,8 +156,7 @@ def forget_password():
 @auth.route("/reset_password/<token>", methods=["GET", "POST"])
 def reset_password(token):
     if current_user.is_authenticated:
-        # FIXME: to main page
-        return redirect(url_for("employee.index"))
+        return redirect(url_for("main.index"))
     user = User.verify_reset_token(token)
     if user:
         form = ResetPasswordForm()
