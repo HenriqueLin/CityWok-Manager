@@ -1,9 +1,18 @@
 import citywok_ms.auth.messages as auth_msg
-from citywok_ms.auth.forms import LoginForm
+from citywok_ms.auth.forms import InviteForm, LoginForm, RegistrationForm
 from citywok_ms.auth.models import User
-from flask import Blueprint, current_app, flash, redirect, render_template, url_for
+from flask import (
+    Blueprint,
+    current_app,
+    flash,
+    redirect,
+    render_template,
+    url_for,
+    request,
+)
 from flask_login import current_user, login_user, logout_user
 from flask_principal import AnonymousIdentity, Identity, identity_changed
+from citywok_ms.auth.permissions import manager
 
 auth = Blueprint("auth", __name__)
 
@@ -39,3 +48,51 @@ def logout():
     )
     flash(auth_msg.LOGOUT_SUCCESS, category="success")
     return redirect(url_for("auth.login"))
+
+
+@auth.route("/invite", methods=["GET", "POST"])
+@manager.require(403)
+def invite():
+    form = InviteForm()
+    if request.method == "GET":
+        link = request.args.get("link")
+    if form.validate_on_submit():
+        token = User.create_invite_token(form.role.data, form.email.data)
+        link = url_for("auth.registration", token=token, _external=True)
+        # TODO: Send email
+        flash(auth_msg.EMAIL_SENT, "success")
+        return redirect(url_for("auth.invite", link=link))
+
+    return render_template(
+        "auth/invite.html",
+        title=auth_msg.INVITE_TITLE,
+        form=form,
+        link=link,
+    )
+
+
+@auth.route("/registration/<token>", methods=["GET", "POST"])
+def registration(token):
+    if current_user.is_authenticated:
+        flash(auth_msg.REGISTE_LOGGED_IN, "warning")
+        # FIXME: to main page
+        return redirect(url_for("employee.index"))
+    role, email = User.verify_invite_token(token)
+    if not role:
+        flash(auth_msg.INVALID_TOKEN, "warning")
+        return redirect(url_for("auth.login"))
+    form = RegistrationForm()
+    if request.method == "GET":
+        form.email.data = email
+    elif request.method == "POST":
+        if form.validate_on_submit():
+            User.create_by_form(form, role)
+            flash(auth_msg.REGISTE_SUCCESS, category="success")
+            # FIXME: to main page
+            return redirect(url_for("employee.index"))
+
+    return render_template(
+        "auth/registration.html",
+        title=auth_msg.REGISTE_TITLE,
+        form=form,
+    )

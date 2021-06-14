@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div>
+    <!-- title -->
+    <h1>{{title}}</h1>
+    <hr>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="row gy-3 overflow-hidden justify-content-center">
+            <div class="col-sm-6">
+                {% with field=form.email %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <div class="w-100 my-0"></div>
+            <div class="col-sm-6">
+                {% with field=form.role %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <div class="w-100 my-0"></div>
+            <div class="gx-3 col-sm-6">
+                {{ form.submit(class="btn btn-success ms-1 float-end") }}
+                {# FIXME: to main page #}
+                <a href="{{url_for('employee.index')}}" class="btn btn-secondary float-end">Cancle</a>
+            </div>
+        </div>
+</div>
+
+{% if link %}
+<!-- Modal -->
+<div class="modal fade" id="LinkModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="LinkModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="LinkModalLabel">Invite link</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body style=" min-height: 500px"">
+                Click <a href="{{ link }}">here</a> to registe,
+                or click the button bellow to copy the link and send it to the invitee.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="copy()">Copy</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock content %}
+
+{% if link %}
+{% block js %}
+<script type="text/javascript">
+    function copy() {
+        navigator.clipboard.writeText('{{ link| safe }}');
+    };
+    $(window).on('load', function () {
+        $('#LinkModal').modal('show');
+    });
+</script>
+{% endblock js %}
+{% endif %}

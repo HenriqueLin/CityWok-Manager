@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div>
+    <!-- title -->
+    <h1>{{title}}</h1>
+    <hr>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="row gy-3 overflow-hidden justify-content-center">
+            <div class="col-sm-6">
+                {% with field=form.username %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <div class="w-100 my-0"></div>
+            <div class="col-sm-6">
+                {% with field=form.email %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <div class="w-100 my-0"></div>
+            <div class="col-sm-6">
+                {% with field=form.password %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <div class="w-100 my-0"></div>
+            <div class="col-sm-6">
+                {% with field=form.password2 %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <div class="w-100 my-0"></div>
+            <div class="gx-3 col-sm-6">
+                {{ form.submit(class="btn btn-success ms-1 float-end") }}
+                <a href="{{url_for('auth.login')}}" class="btn btn-secondary float-end">Cancle</a>
+            </div>
+        </div>
+</div>
+{% endblock content %}
