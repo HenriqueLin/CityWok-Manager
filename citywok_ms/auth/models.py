@@ -67,6 +67,20 @@ class User(db.Model, UserMixin, CRUDMixin):
             return
         return role, email
 
+    def create_reset_token(self, expires_sec=7200):  # 2 hour
+        s = TimedSerializer(current_app.secret_key, expires_sec)
+        return s.dumps({"id": self.id, "email": self.email}).decode("utf-8")
+
+    @staticmethod
+    def verify_reset_token(token):
+        s = TimedSerializer(current_app.secret_key)
+        try:
+            id = s.loads(token)["id"]
+            email = s.loads(token)["email"]
+        except Exception:
+            return
+        return db.session.query(User).filter_by(id=id, email=email).first()
+
     @staticmethod
     def create_confirmation_token(id, email, username):
         s = Serializer(current_app.secret_key)
@@ -91,3 +105,7 @@ class User(db.Model, UserMixin, CRUDMixin):
     def confirm(self):
         self.confirmed = True
         db.session.commit()
+
+    @classmethod
+    def get_by_email(cls, email) -> "User":
+        return db.session.query(User).filter_by(email=email).first()

@@ -36,12 +36,32 @@ class InviteForm(FlaskForm):
     submit = SubmitField(label="Invite")
 
 
+class ForgetPasswordForm(FlaskForm):
+    email = EmailField(
+        label="Email",
+        validators=[InputRequired(), Email()],
+    )
+    submit = SubmitField("Submit")
+
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField(
+        label="New Password",
+        validators=[InputRequired()],
+    )
+    password2 = PasswordField(
+        label="Repeat Password",
+        validators=[InputRequired(), EqualTo("password")],
+    )
+    submit = SubmitField(label="Reset")
+
+
 class RegistrationForm(FlaskForm):
     username = StringField(
         label="Username",
         validators=[InputRequired()],
     )
-    email = StringField(
+    email = EmailField(
         label="Email",
         validators=[InputRequired(), Email()],
     )

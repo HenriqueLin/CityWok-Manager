@@ -4,6 +4,19 @@ from flask_mail import Message
 from citywok_ms import mail
 
 
+def send_password_reset_email(user, token):
+    send_email(
+        "[CityWok-Manager] Reset Password",
+        recipients=[user.email],
+        text_body=render_template(
+            "email/password_reset.txt", token=token, username=user.username
+        ),
+        html_body=render_template(
+            "email/password_reset.html", token=token, username=user.username
+        ),
+    )
+
+
 def send_invite_email(invitee, token):
     send_email(
         "[CityWok-Manager] Invite",

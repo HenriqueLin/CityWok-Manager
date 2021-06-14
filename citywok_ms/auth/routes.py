@@ -1,19 +1,30 @@
-from citywok_ms.email import send_confirmation_email, send_invite_email
 import citywok_ms.auth.messages as auth_msg
-from citywok_ms.auth.forms import InviteForm, LoginForm, RegistrationForm
+from citywok_ms import db
+from citywok_ms.auth.forms import (
+    ForgetPasswordForm,
+    InviteForm,
+    LoginForm,
+    RegistrationForm,
+    ResetPasswordForm,
+)
 from citywok_ms.auth.models import User
+from citywok_ms.auth.permissions import manager
+from citywok_ms.email import (
+    send_confirmation_email,
+    send_invite_email,
+    send_password_reset_email,
+)
 from flask import (
     Blueprint,
     current_app,
     flash,
     redirect,
     render_template,
-    url_for,
     request,
+    url_for,
 )
 from flask_login import current_user, login_user, logout_user
 from flask_principal import AnonymousIdentity, Identity, identity_changed
-from citywok_ms.auth.permissions import manager
 
 auth = Blueprint("auth", __name__)
 
@@ -127,3 +138,43 @@ def confirmation(token):
         flash(auth_msg.INVALID_CONFIRMATION, "warning")
 
     return redirect(url_for("auth.login"))
+
+
+@auth.route("/forget_password", methods=["GET", "POST"])
+def forget_password():
+    if current_user.is_authenticated:
+        # FIXME: to main page
+        return redirect(url_for("employee.index"))
+    form = ForgetPasswordForm()
+    if form.validate_on_submit():
+        user = User.get_by_email(form.email.data)
+        if user:
+            token = user.create_reset_token()
+            send_password_reset_email(user, token)
+            flash(auth_msg.FORGET_SUCCESS.format(email=form.email.data), "success")
+            return redirect(url_for("auth.login"))
+        else:
+            flash(auth_msg.FORGET_NOT_EXIST.format(email=form.email.data), "warning")
+    return render_template(
+        "auth/forget_password.html", title=auth_msg.FORGET_TITLE, form=form
+    )
+
+
+@auth.route("/reset_password/<token>", methods=["GET", "POST"])
+def reset_password(token):
+    if current_user.is_authenticated:
+        # FIXME: to main page
+        return redirect(url_for("employee.index"))
+    user = User.verify_reset_token(token)
+    if user:
+        form = ResetPasswordForm()
+        if form.validate_on_submit():
+            user.set_password(form.password.data)
+            flash(auth_msg.RESET_SUCCESS, "success")
+            db.session.commit()
+            return redirect(url_for("auth.login"))
+    else:
+        flash(auth_msg.RESET_INVALID, "warning")
+    return render_template(
+        "auth/reset_password.html", title=auth_msg.RESET_TITLE, form=form
+    )

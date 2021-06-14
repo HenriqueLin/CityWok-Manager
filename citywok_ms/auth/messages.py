@@ -10,11 +10,19 @@ INVALID_INVITE = "Invite link is invalid."
 
 LOGOUT_SUCCESS = "You have been logged out."
 
-REGISTE_SUCCESS = "A confirmation e-mail has been sent to {email}"
+REGISTE_SUCCESS = "A confirmation e-mail has been sent to {email}."
 REGISTE_TITLE = "Register"
 REQUIRED_LOGOUT = "You are already logged in."
 
-ALREADY_CONFIRMED = "Your e-mail has already been confirmed."
-CONFIRMATION_SUCCESS = "Your e-mail is now confirmed."
+ALREADY_CONFIRMED = "Your e-mail address has already been confirmed."
+CONFIRMATION_SUCCESS = "Your e-mail address is now confirmed."
 
 INVALID_CONFIRMATION = "Confirmation link is invalid."
+
+FORGET_SUCCESS = "A e-mail to reset the password has been sent to {email}."
+FORGET_TITLE = "Forget Password"
+FORGET_NOT_EXIST = 'User with email "{email}" doesn\'t exist.'
+
+RESET_SUCCESS = "Your password has been reset."
+RESET_TITLE = "Reset Password"
+RESET_INVALID = "Reset link is invalid."
