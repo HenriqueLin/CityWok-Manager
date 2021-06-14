@@ -35,6 +35,10 @@ class InviteForm(FlaskForm):
     )
     submit = SubmitField(label="Invite")
 
+    def validate_email(self, email):
+        if User.get_by_email(email.data):
+            raise ValidationError("E-mail address already taken.")
+
 
 class ForgetPasswordForm(FlaskForm):
     email = EmailField(

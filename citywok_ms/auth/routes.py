@@ -70,8 +70,9 @@ def logout():
 
 
 @auth.route("/invite", methods=["GET", "POST"])
+@auth.route("/invite/<token>", methods=["GET", "POST"])
 @manager.require(403)
-def invite():
+def invite(token=None):
     form = InviteForm()
     if request.method == "GET":
         token = request.args.get("token")
