@@ -1,4 +1,4 @@
-from citywok_ms.email import send_invite_email
+from citywok_ms.email import send_confirmation_email, send_invite_email
 import citywok_ms.auth.messages as auth_msg
 from citywok_ms.auth.forms import InviteForm, LoginForm, RegistrationForm
 from citywok_ms.auth.models import User
@@ -29,13 +29,20 @@ def login():
             username=form.username.data, password=form.password.data
         )
         if user:
-            login_user(user)
-            identity_changed.send(
-                current_app._get_current_object(), identity=Identity(user.id)
-            )
-            flash(auth_msg.LOGIN_SUCCESS.format(name=user.username), category="success")
-            # FIXME: main index page
-            return redirect(url_for("employee.index"))
+            if user.confirmed:
+                login_user(user)
+                identity_changed.send(
+                    current_app._get_current_object(), identity=Identity(user.id)
+                )
+                flash(
+                    auth_msg.LOGIN_SUCCESS.format(name=user.username),
+                    category="success",
+                )
+                # FIXME: main index page
+                return redirect(url_for("employee.index"))
+            else:
+                flash(auth_msg.REQUIRE_CONFIRMATION, "warning")
+                return redirect(url_for("auth.login"))
         else:
             flash(auth_msg.LOGIN_FAIL, category="danger")
     return render_template("auth/login.html", title=auth_msg.LOGIN_TITLE, form=form)
@@ -74,25 +81,49 @@ def invite():
 @auth.route("/registration/<token>", methods=["GET", "POST"])
 def registration(token):
     if current_user.is_authenticated:
-        flash(auth_msg.REGISTE_LOGGED_IN, "warning")
+        flash(auth_msg.REQUIRED_LOGOUT, "warning")
         # FIXME: to main page
         return redirect(url_for("employee.index"))
     role, email = User.verify_invite_token(token)
     if not role:
-        flash(auth_msg.INVALID_TOKEN, "warning")
+        flash(auth_msg.INVALID_INVITE, "warning")
         return redirect(url_for("auth.login"))
     form = RegistrationForm()
     if request.method == "GET":
         form.email.data = email
     elif request.method == "POST":
         if form.validate_on_submit():
-            User.create_by_form(form, role)
-            flash(auth_msg.REGISTE_SUCCESS, category="success")
-            # FIXME: to main page
-            return redirect(url_for("employee.index"))
+            user = User.create_by_form(form, role)
+            token = User.create_confirmation_token(user.id, user.email, user.username)
+            send_confirmation_email(user.email, token, user.username)
+            flash(
+                auth_msg.REGISTE_SUCCESS.format(email=form.email.data),
+                category="success",
+            )
+            return redirect(url_for("auth.login"))
 
     return render_template(
         "auth/registration.html",
         title=auth_msg.REGISTE_TITLE,
         form=form,
     )
+
+
+@auth.route("/confirmation/<token>")
+def confirmation(token):
+    if current_user.is_authenticated:
+        flash(auth_msg.REQUIRED_LOGOUT, "warning")
+        # FIXME: to main page
+        return redirect(url_for("employee.index"))
+
+    user = User.verify_confirmation_token(token)
+    if user:
+        if user.confirmed:
+            flash(auth_msg.ALREADY_CONFIRMED, "info")
+        else:
+            user.confirm()
+            flash(auth_msg.CONFIRMATION_SUCCESS, "success")
+    else:
+        flash(auth_msg.INVALID_CONFIRMATION, "warning")
+
+    return redirect(url_for("auth.login"))

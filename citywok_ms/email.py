@@ -13,6 +13,19 @@ def send_invite_email(invitee, token):
     )
 
 
+def send_confirmation_email(target, token, username):
+    send_email(
+        "[CityWok-Manager] Confirmation",
+        recipients=[target],
+        text_body=render_template(
+            "email/confirmation.txt", token=token, username=username
+        ),
+        html_body=render_template(
+            "email/confirmation.html", token=token, username=username
+        ),
+    )
+
+
 def send_email(subject, recipients, text_body, html_body):
     msg = Message(subject, recipients=recipients)
     msg.body = text_body

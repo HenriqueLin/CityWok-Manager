@@ -2,8 +2,9 @@ from citywok_ms import db, login
 from citywok_ms.utils.models import CRUDMixin
 from flask import current_app
 from flask_login import UserMixin
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from sqlalchemy import Column, Integer, String
+from itsdangerous import TimedJSONWebSignatureSerializer as TimedSerializer
+from itsdangerous import JSONWebSignatureSerializer as Serializer
+from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy_utils import ChoiceType
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -27,6 +28,7 @@ class User(db.Model, UserMixin, CRUDMixin):
     email = Column(String, unique=True, nullable=True)
     password = Column(String, nullable=False)
     role = Column(ChoiceType(Role), nullable=False)
+    confirmed = Column(Boolean, default=False, nullable=False)
 
     def __repr__(self):
         return f"User('{self.role}','{self.username}','{self.email}')"
@@ -52,15 +54,40 @@ class User(db.Model, UserMixin, CRUDMixin):
 
     @staticmethod
     def create_invite_token(role, email, expires_sec=86400):  # 1 day
-        s = Serializer(current_app.secret_key, expires_sec)
-        return s.dumps({"role": role, "email": email or ""}).decode("utf-8")
+        s = TimedSerializer(current_app.secret_key, expires_sec)
+        return s.dumps({"role": role, "email": email}).decode("utf-8")
 
     @staticmethod
     def verify_invite_token(token):
-        s = Serializer(current_app.secret_key)
+        s = TimedSerializer(current_app.secret_key)
         try:
             role = s.loads(token)["role"]
             email = s.loads(token)["email"]
         except Exception:
             return
         return role, email
+
+    @staticmethod
+    def create_confirmation_token(id, email, username):
+        s = Serializer(current_app.secret_key)
+        return s.dumps({"id": id, "email": email, "username": username}).decode("utf-8")
+
+    @staticmethod
+    def verify_confirmation_token(token) -> "User":
+        s = Serializer(current_app.secret_key)
+        try:
+            id = s.loads(token)["id"]
+            email = s.loads(token)["email"]
+            username = s.loads(token)["username"]
+        except Exception:
+            return
+        user = (
+            db.session.query(User)
+            .filter_by(id=id, email=email, username=username)
+            .first()
+        )
+        return user
+
+    def confirm(self):
+        self.confirmed = True
+        db.session.commit()

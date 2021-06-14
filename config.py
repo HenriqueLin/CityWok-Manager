@@ -18,9 +18,9 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # admin
-    ADMIN_NAME = os.environ.get("ADMIN_NAME") or "Admin"
-    ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL") or None
-    ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD") or "admin"
+    ADMIN_NAME = os.environ.get("ADMIN_NAME")
+    ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL")
+    ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
 
     # mail
     MAIL_SERVER = "smtp.googlemail.com"
@@ -28,7 +28,7 @@ class Config(object):
     MAIL_USE_TLS = True
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
-    MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER")
+    MAIL_DEFAULT_SENDER = os.environ.get("ADMIN_EMAIL")
 
 
 class TestConfig(Config):

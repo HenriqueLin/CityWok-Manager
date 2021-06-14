@@ -30,6 +30,7 @@ def create():
         email=current_app.config["ADMIN_EMAIL"],
         password=generate_password_hash(current_app.config["ADMIN_PASSWORD"]),
         role="admin",
+        confirmed=True,
     )
     db.session.add(admin)
     db.session.commit()
