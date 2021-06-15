@@ -7,7 +7,7 @@ from flask_babel import Babel
 from flask_login import LoginManager, current_user
 from flask_mail import Mail
 from flask_moment import Moment
-from flask_principal import Principal, UserNeed, identity_loaded
+from flask_principal import Principal, RoleNeed, UserNeed, identity_loaded
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from sqlalchemy_utils import i18n
@@ -64,14 +64,6 @@ def create_app(config_class=Config):
 
         @identity_loaded.connect_via(app)
         def on_identity_loaded(sender, identity):
-            from citywok_ms.auth.permissions import (
-                admin_need,
-                manager_need,
-                shareholder_need,
-                visitor_need,
-                worker_need,
-            )
-
             # Set the identity user object
             identity.user = current_user
 
@@ -81,22 +73,7 @@ def create_app(config_class=Config):
 
             # Update the identity with the roles that the user provides
             if hasattr(current_user, "role"):
-                if current_user.role in [
-                    "admin",
-                    "manager",
-                    "shareholder",
-                    "worker",
-                    "visitor",
-                ]:
-                    identity.provides.add(visitor_need)
-                if current_user.role in ["admin", "manager", "shareholder", "worker"]:
-                    identity.provides.add(worker_need)
-                if current_user.role in ["admin", "manager", "shareholder"]:
-                    identity.provides.add(shareholder_need)
-                if current_user.role in ["admin", "manager"]:
-                    identity.provides.add(manager_need)
-                if current_user.role in ["admin"]:
-                    identity.provides.add(admin_need)
+                identity.provides.add(RoleNeed(current_user.role.code))
 
         @app.shell_context_processor
         def make_shell_context():

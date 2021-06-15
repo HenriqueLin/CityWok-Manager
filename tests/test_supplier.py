@@ -21,7 +21,7 @@ from flask import request, url_for
 from wtforms.fields.simple import HiddenField, SubmitField
 
 
-def test_index_get(client):
+def test_index_get(client, admin):
     response = client.get(url_for("supplier.index"))
     data = response.data.decode()
 
@@ -36,7 +36,7 @@ def test_index_get(client):
     assert url_for("supplier.detail", supplier_id=1) not in data
 
 
-def test_index_get_with_supplier(client, supplier):
+def test_index_get_with_supplier(client, admin, supplier):
     response = client.get(url_for("supplier.index"))
     data = response.data.decode()
 
@@ -56,13 +56,13 @@ def test_index_get_with_supplier(client, supplier):
     assert "FULL" in data
 
 
-def test_index_post(client):
+def test_index_post(client, admin):
     response = client.post(url_for("supplier.index"))
 
     assert response.status_code == 405
 
 
-def test_new_get(client):
+def test_new_get(client, admin):
     response = client.get(url_for("supplier.new"))
     data = response.data.decode()
 
@@ -83,7 +83,7 @@ def test_new_get(client):
     assert url_for("supplier.index") in data
 
 
-def test_new_post_valid(client):
+def test_new_post_valid(client, admin):
     # new supplier's data
     request_data = {
         "name": "BASIC",
@@ -112,7 +112,7 @@ def test_new_post_valid(client):
     assert NEW_SUCCESS.format(name=supplier.name) in html.unescape(data)
 
 
-def test_new_post_invalid(client):
+def test_new_post_invalid(client, admin):
     response = client.post(url_for("supplier.new"), data={}, follow_redirects=True)
     data = response.data.decode()
 
@@ -128,7 +128,7 @@ def test_new_post_invalid(client):
 
 
 @pytest.mark.parametrize("id", [1, 2])  # id of 2 supplier created in "supplier" fixture
-def test_detail_get(client, supplier_with_file, id):
+def test_detail_get(client, admin, supplier_with_file, id):
     response = client.get(url_for("supplier.detail", supplier_id=id))
     data = response.data.decode()
 
@@ -171,7 +171,7 @@ def test_detail_get(client, supplier_with_file, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_update_get(client, supplier, id):
+def test_update_get(client, admin, supplier, id):
     response = client.get(url_for("supplier.update", supplier_id=id))
     data = response.data.decode()
 
@@ -197,7 +197,7 @@ def test_update_get(client, supplier, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_update_post_valid(client, supplier, id):
+def test_update_post_valid(client, admin, supplier, id):
     request_data = {
         "name": "UPDATED",
         "principal": "UPDATED",
@@ -228,7 +228,7 @@ def test_update_post_valid(client, supplier, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_update_post_invalid(client, supplier, id):
+def test_update_post_invalid(client, admin, supplier, id):
     response = client.post(
         url_for("supplier.update", supplier_id=id),
         data={},
@@ -247,7 +247,7 @@ def test_update_post_invalid(client, supplier, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_upload_get(client, supplier, id):
+def test_upload_get(client, admin, supplier, id):
     response = client.get(
         url_for("supplier.upload", supplier_id=id),
     )
@@ -255,7 +255,7 @@ def test_upload_get(client, supplier, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_upload_post_valid(client, supplier, id):
+def test_upload_post_valid(client, admin, supplier, id):
     request_data = {
         "file": (io.BytesIO(b"test"), "test.jpg"),
     }
@@ -277,7 +277,7 @@ def test_upload_post_valid(client, supplier, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_upload_post_invalid_format(client, supplier, id):
+def test_upload_post_invalid_format(client, admin, supplier, id):
     request_data = {
         "file": (io.BytesIO(b"test"), "test.exe"),
     }
@@ -295,7 +295,7 @@ def test_upload_post_invalid_format(client, supplier, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_upload_post_invalid_empty(client, supplier, id):
+def test_upload_post_invalid_empty(client, admin, supplier, id):
     response = client.post(
         url_for("supplier.upload", supplier_id=id),
         data={},

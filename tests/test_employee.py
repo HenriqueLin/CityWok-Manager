@@ -22,7 +22,7 @@ import pytest
 import html
 
 
-def test_index_get(client):
+def test_index_get(client, admin):
     response = client.get(url_for("employee.index"))
     data = response.data.decode()
 
@@ -39,7 +39,7 @@ def test_index_get(client):
     assert url_for("employee.detail", employee_id=1) not in data
 
 
-def test_index_get_with_employee(client, employee):
+def test_index_get_with_employee(client, admin, employee):
     response = client.get(url_for("employee.index"))
     data = response.data.decode()
 
@@ -61,13 +61,13 @@ def test_index_get_with_employee(client, employee):
     assert "ACTIVE" in data
 
 
-def test_index_post(client):
+def test_index_post(client, admin):
     response = client.post(url_for("employee.index"))
 
     assert response.status_code == 405
 
 
-def test_new_get(client):
+def test_new_get(client, admin):
     response = client.get(url_for("employee.new"))
     data = response.data.decode()
 
@@ -88,7 +88,7 @@ def test_new_get(client):
     assert url_for("employee.index") in data
 
 
-def test_new_post_valid(client):
+def test_new_post_valid(client, admin):
     # new employee's data
     request_data = {
         "first_name": "NEW",
@@ -124,7 +124,7 @@ def test_new_post_valid(client):
     assert NEW_SUCCESS.format(name=employee.full_name) in html.unescape(data)
 
 
-def test_new_post_invalid(client):
+def test_new_post_invalid(client, admin):
     response = client.post(url_for("employee.new"), data={}, follow_redirects=True)
     data = response.data.decode()
 
@@ -140,7 +140,7 @@ def test_new_post_invalid(client):
 
 
 @pytest.mark.parametrize("id", [1, 2])  # id of 2 employee created in "employee" fixture
-def test_detail_get(client, employee_with_file, id):
+def test_detail_get(client, admin, employee_with_file, id):
     response = client.get(url_for("employee.detail", employee_id=id))
     data = response.data.decode()
 
@@ -184,7 +184,7 @@ def test_detail_get(client, employee_with_file, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_update_get(client, employee, id):
+def test_update_get(client, admin, employee, id):
     response = client.get(url_for("employee.update", employee_id=id))
     data = response.data.decode()
 
@@ -210,7 +210,7 @@ def test_update_get(client, employee, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_update_post_valid(client, employee, id):
+def test_update_post_valid(client, admin, employee, id):
     request_data = {
         "first_name": "UPDATED",
         "last_name": "UPDATED",
@@ -248,7 +248,7 @@ def test_update_post_valid(client, employee, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_update_post_invalid(client, employee, id):
+def test_update_post_invalid(client, admin, employee, id):
     response = client.post(
         url_for("employee.update", employee_id=id),
         data={},
@@ -269,7 +269,7 @@ def test_update_post_invalid(client, employee, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_activate_get(client, employee, id):
+def test_activate_get(client, admin, employee, id):
     response = client.get(
         url_for("employee.activate", employee_id=id),
     )
@@ -277,7 +277,7 @@ def test_activate_get(client, employee, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_activate_post(client, employee, id):
+def test_activate_post(client, admin, employee, id):
     response = client.post(
         url_for("employee.activate", employee_id=id),
         follow_redirects=True,
@@ -292,7 +292,7 @@ def test_activate_post(client, employee, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_suspende_get(client, employee, id):
+def test_suspende_get(client, admin, employee, id):
     response = client.get(
         url_for("employee.suspend", employee_id=id),
     )
@@ -300,7 +300,7 @@ def test_suspende_get(client, employee, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_suspende_post(client, employee, id):
+def test_suspende_post(client, admin, employee, id):
     response = client.post(
         url_for("employee.suspend", employee_id=id),
         follow_redirects=True,
@@ -315,7 +315,7 @@ def test_suspende_post(client, employee, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_upload_get(client, employee, id):
+def test_upload_get(client, admin, employee, id):
     response = client.get(
         url_for("employee.upload", employee_id=id),
     )
@@ -323,7 +323,7 @@ def test_upload_get(client, employee, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_upload_post_valid(client, employee, id):
+def test_upload_post_valid(client, admin, employee, id):
     request_data = {
         "file": (io.BytesIO(b"test"), "test.jpg"),
     }
@@ -345,7 +345,7 @@ def test_upload_post_valid(client, employee, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_upload_post_invalid_format(client, employee, id):
+def test_upload_post_invalid_format(client, admin, employee, id):
     request_data = {
         "file": (io.BytesIO(b"test"), "test.exe"),
     }
@@ -363,7 +363,7 @@ def test_upload_post_invalid_format(client, employee, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_upload_post_invalid_empty(client, employee, id):
+def test_upload_post_invalid_empty(client, admin, employee, id):
     response = client.post(
         url_for("employee.upload", employee_id=id),
         data={},

@@ -34,7 +34,8 @@ def test_db_create(app_without_db):
     result = runner.invoke(create)
 
     assert not result.exception
-    assert result.output == "Created all tables.\n"
+    assert "Created all tables." in result.output
+    assert "Created admin user." in result.output
 
 
 @pytest.mark.parametrize("input, output", [("y", "Dropped"), ("n", "Abort")])

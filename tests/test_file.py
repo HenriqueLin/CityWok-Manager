@@ -22,7 +22,7 @@ from wtforms.fields.simple import HiddenField, SubmitField
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_download_get(client, employee_with_file, id):
+def test_download_get(client, admin, employee_with_file, id):
     response = client.get(
         url_for("file.download", file_id=id),
         follow_redirects=True,
@@ -42,7 +42,7 @@ def test_delete_get(client):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_delete_post(client, employee_with_file, id):
+def test_delete_post(client, admin, employee_with_file, id):
     response = client.post(
         url_for("file.delete", file_id=id),
         follow_redirects=True,
@@ -66,7 +66,7 @@ def test_restore_get(client):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_restore_post(client, employee_with_file, id):
+def test_restore_post(client, admin, employee_with_file, id):
     response = client.post(
         url_for("file.restore", file_id=id),
         follow_redirects=True,
@@ -85,7 +85,7 @@ def test_restore_post(client, employee_with_file, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_update_get(client, employee_with_file, id):
+def test_update_get(client, admin, employee_with_file, id):
     response = client.get(url_for("file.update", file_id=id))
     data = response.data.decode()
 
@@ -109,8 +109,7 @@ def test_update_get(client, employee_with_file, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_update_post_valid(client, employee_with_file, id):
-    print(EmployeeFile.get_or_404(id).full_name)
+def test_update_post_valid(client, admin, employee_with_file, id):
     request_data = {
         "file_name": "updated",
         "remark": "xxx",
@@ -142,7 +141,7 @@ def test_update_post_valid(client, employee_with_file, id):
 
 
 @pytest.mark.parametrize("id", [1, 2])
-def test_update_post_invalid(client, employee_with_file, id):
+def test_update_post_invalid(client, admin, employee_with_file, id):
     response = client.post(
         url_for("file.update", file_id=id),
         data={},
@@ -156,79 +155,3 @@ def test_update_post_invalid(client, employee_with_file, id):
     assert request.url.endswith(url_for("file.update", file_id=id))
 
     assert "This field is required." in data
-
-
-# class TestDelete:
-#     def test_get(self, test_client, test_files):
-#         response = test_client.get('/file/1/delete')
-#         assert response.status_code == 405
-
-#     def test_valid_post(self, test_client, test_files):
-#         response = test_client.post('/file/1/delete',
-#                                     follow_redirects=True)
-#         assert response.status_code == 200
-#         assert 'File has been move to trash bin' in response.data.decode(
-#             'utf-8')
-#         response = test_client.post('/file/1/delete',
-#                                     follow_redirects=True)
-#         assert response.status_code == 200
-#         assert 'File has already been deleted' in response.data.decode(
-#             'utf-8')
-
-#     def test_invalid_post(self, test_client, test_files):
-#         response = test_client.post('/file/101/delete',
-#                                     follow_redirects=True)
-#         assert response.status_code == 404
-
-
-# class TestRestore:
-#     def test_get(self, test_client, test_files):
-#         response = test_client.get('/file/2/restore')
-#         assert response.status_code == 405
-
-#     def test_valid_post(self, test_client, test_files):
-#         response = test_client.post('/file/2/restore',
-#                                     follow_redirects=True)
-#         assert response.status_code == 200
-#         assert 'File has been restore' in response.data.decode(
-#             'utf-8')
-#         response = test_client.post('/file/2/restore',
-#                                     follow_redirects=True)
-#         assert response.status_code == 200
-#         assert "File hasn&#39;t been deleted" in response.data.decode(
-#             'utf-8')
-
-#     def test_invalid_post(self, test_client, test_files):
-#         response = test_client.post('/file/101/restore',
-#                                     follow_redirects=True)
-#         assert response.status_code == 404
-
-
-# class TestUpdate:
-#     def test_get(self, test_client, test_files):
-#         response = test_client.get('/file/1/update')
-#         assert response.status_code == 200
-#         assert b'emp_1' in response.data
-#         assert b'Update File' in response.data
-#         assert b'action="/file/1/update"'
-
-#     def test_post(self, test_client, test_files):
-#         data = dict(file_name='changed',
-#                     remark='remark')
-#         response = test_client.post('/file/1/update',
-#                                     data=data,
-#                                     follow_redirects=True)
-#         assert response.status_code == 200
-#         assert request.url.endswith('/employee/1')
-#         f = db.session.query(File).get(1)
-#         assert f.file_name == 'changed'
-#         assert f.remark == 'remark'
-#         assert 'File has been update' in response.data.decode(
-#             'utf-8')
-
-
-# class TestDownload:
-#     def test_get(self, test_client, test_files):
-#         response = test_client.get('/file/1/download', follow_redirects=True)
-#         assert response.status_code == 200
-#         assert b'test_file_content' in response.data

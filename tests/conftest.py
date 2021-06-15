@@ -1,14 +1,18 @@
-from datetime import date
 import datetime
 import os
-
-from citywok_ms.employee.models import Employee
-from citywok_ms.supplier.models import Supplier
-from citywok_ms.file.models import EmployeeFile, SupplierFile
-import pytest
-from citywok_ms import create_app, db, current_app
-from config import TestConfig
+from datetime import date
 from tempfile import TemporaryDirectory
+
+import pytest
+from citywok_ms import create_app, current_app, db, principal
+from citywok_ms.auth.models import User
+from citywok_ms.employee.models import Employee
+from citywok_ms.file.models import EmployeeFile, SupplierFile
+from citywok_ms.supplier.models import Supplier
+from config import TestConfig
+from flask_login import login_user
+from flask_principal import Identity
+from werkzeug.security import generate_password_hash
 
 
 @pytest.fixture
@@ -24,50 +28,34 @@ def app():
 
 
 @pytest.fixture
+def admin(client, mocker):
+    admin = User(
+        username="admin",
+        email="admin@mail.com",
+        password=generate_password_hash("admin"),
+        role="admin",
+        confirmed=True,
+    )
+    db.session.add(admin)
+    db.session.commit()
+    login_user(admin)
+
+    @principal.identity_loader
+    def load_identity():
+        return Identity(admin.id)
+
+    mocker.patch("flask_login.utils._get_user", return_value=admin)
+
+    return admin
+
+
+@pytest.fixture
 def app_without_db():
     with TemporaryDirectory() as temp_dir:
         TestConfig.UPLOAD_FOLDER = temp_dir
         app = create_app(config_class=TestConfig)
         with app.app_context():
             yield app
-
-
-@pytest.fixture
-def basic_employee_data():
-    return {
-        "first_name": "basic",
-        "last_name": "basic",
-        "sex": "F",
-        "id_type": "passport",
-        "id_number": "1",
-        "id_validity": "2100-01-01",
-        "nationality": "US",
-        "total_salary": 1000,
-        "taxed_salary": 635.00,
-    }
-
-
-@pytest.fixture
-def complete_employee_data():
-    return {
-        "first_name": "complete",
-        "last_name": "complete",
-        "zh_name": "中文",
-        "sex": "M",
-        "birthday": "2020-01-01",
-        "contact": "123123123",
-        "email": "123@mail.com",
-        "id_type": "passport",
-        "id_number": "123",
-        "id_validity": "2100-01-01",
-        "nationality": "US",
-        "nif": 123123,
-        "niss": 321321,
-        "employment_date": "2021-01-01",
-        "total_salary": 1000,
-        "taxed_salary": 635.00,
-        "remark": "REMARK",
-    }
 
 
 @pytest.fixture
