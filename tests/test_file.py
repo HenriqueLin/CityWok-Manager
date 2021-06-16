@@ -21,8 +21,9 @@ from flask.helpers import url_for
 from wtforms.fields.simple import HiddenField, SubmitField
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_download_get(client, admin, employee_with_file, id):
+def test_download_get(client, user, employee_with_file, id):
     response = client.get(
         url_for("file.download", file_id=id),
         follow_redirects=True,
@@ -41,8 +42,9 @@ def test_delete_get(client):
     assert response.status_code == 405
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_delete_post(client, admin, employee_with_file, id):
+def test_delete_post(client, user, employee_with_file, id):
     response = client.post(
         url_for("file.delete", file_id=id),
         follow_redirects=True,
@@ -65,8 +67,9 @@ def test_restore_get(client):
     assert response.status_code == 405
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_restore_post(client, admin, employee_with_file, id):
+def test_restore_post(client, user, employee_with_file, id):
     response = client.post(
         url_for("file.restore", file_id=id),
         follow_redirects=True,
@@ -84,8 +87,9 @@ def test_restore_post(client, admin, employee_with_file, id):
         assert RESTORE_SUCCESS.format(name=f.full_name) in html.unescape(data)
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_update_get(client, admin, employee_with_file, id):
+def test_update_get(client, user, employee_with_file, id):
     response = client.get(url_for("file.update", file_id=id))
     data = response.data.decode()
 
@@ -108,8 +112,9 @@ def test_update_get(client, admin, employee_with_file, id):
     assert url_for("employee.detail", employee_id=id) in data
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_update_post_valid(client, admin, employee_with_file, id):
+def test_update_post_valid(client, user, employee_with_file, id):
     request_data = {
         "file_name": "updated",
         "remark": "xxx",
@@ -140,8 +145,9 @@ def test_update_post_valid(client, admin, employee_with_file, id):
     assert UPDATE_SUCCESS.format(name=f.full_name) in html.unescape(data)
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_update_post_invalid(client, admin, employee_with_file, id):
+def test_update_post_invalid(client, user, employee_with_file, id):
     response = client.post(
         url_for("file.update", file_id=id),
         data={},

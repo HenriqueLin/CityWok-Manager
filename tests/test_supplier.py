@@ -21,7 +21,8 @@ from flask import request, url_for
 from wtforms.fields.simple import HiddenField, SubmitField
 
 
-def test_index_get(client, admin):
+@pytest.mark.role("admin")
+def test_index_get(client, user):
     response = client.get(url_for("supplier.index"))
     data = response.data.decode()
 
@@ -36,7 +37,8 @@ def test_index_get(client, admin):
     assert url_for("supplier.detail", supplier_id=1) not in data
 
 
-def test_index_get_with_supplier(client, admin, supplier):
+@pytest.mark.role("admin")
+def test_index_get_with_supplier(client, user, supplier):
     response = client.get(url_for("supplier.index"))
     data = response.data.decode()
 
@@ -56,13 +58,15 @@ def test_index_get_with_supplier(client, admin, supplier):
     assert "FULL" in data
 
 
-def test_index_post(client, admin):
+@pytest.mark.role("admin")
+def test_index_post(client, user):
     response = client.post(url_for("supplier.index"))
 
     assert response.status_code == 405
 
 
-def test_new_get(client, admin):
+@pytest.mark.role("admin")
+def test_new_get(client, user):
     response = client.get(url_for("supplier.new"))
     data = response.data.decode()
 
@@ -83,7 +87,8 @@ def test_new_get(client, admin):
     assert url_for("supplier.index") in data
 
 
-def test_new_post_valid(client, admin):
+@pytest.mark.role("admin")
+def test_new_post_valid(client, user):
     # new supplier's data
     request_data = {
         "name": "BASIC",
@@ -112,7 +117,8 @@ def test_new_post_valid(client, admin):
     assert NEW_SUCCESS.format(name=supplier.name) in html.unescape(data)
 
 
-def test_new_post_invalid(client, admin):
+@pytest.mark.role("admin")
+def test_new_post_invalid(client, user):
     response = client.post(url_for("supplier.new"), data={}, follow_redirects=True)
     data = response.data.decode()
 
@@ -127,8 +133,9 @@ def test_new_post_invalid(client, admin):
     assert db.session.query(Supplier).count() == 0
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])  # id of 2 supplier created in "supplier" fixture
-def test_detail_get(client, admin, supplier_with_file, id):
+def test_detail_get(client, user, supplier_with_file, id):
     response = client.get(url_for("supplier.detail", supplier_id=id))
     data = response.data.decode()
 
@@ -170,8 +177,9 @@ def test_detail_get(client, admin, supplier_with_file, id):
     assert "These files will be permanente removed 30 days after being deleted" in data
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_update_get(client, admin, supplier, id):
+def test_update_get(client, user, supplier, id):
     response = client.get(url_for("supplier.update", supplier_id=id))
     data = response.data.decode()
 
@@ -196,8 +204,9 @@ def test_update_get(client, admin, supplier, id):
     assert url_for("supplier.detail", supplier_id=id) in data
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_update_post_valid(client, admin, supplier, id):
+def test_update_post_valid(client, user, supplier, id):
     request_data = {
         "name": "UPDATED",
         "principal": "UPDATED",
@@ -227,8 +236,9 @@ def test_update_post_valid(client, admin, supplier, id):
     assert UPDATE_SUCCESS.format(name=supplier.name) in html.unescape(data)
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_update_post_invalid(client, admin, supplier, id):
+def test_update_post_invalid(client, user, supplier, id):
     response = client.post(
         url_for("supplier.update", supplier_id=id),
         data={},
@@ -246,16 +256,18 @@ def test_update_post_invalid(client, admin, supplier, id):
     assert "This field is required." in data
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_upload_get(client, admin, supplier, id):
+def test_upload_get(client, user, supplier, id):
     response = client.get(
         url_for("supplier.upload", supplier_id=id),
     )
     assert response.status_code == 405
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_upload_post_valid(client, admin, supplier, id):
+def test_upload_post_valid(client, user, supplier, id):
     request_data = {
         "file": (io.BytesIO(b"test"), "test.jpg"),
     }
@@ -276,8 +288,9 @@ def test_upload_post_valid(client, admin, supplier, id):
     assert os.path.isfile(f.path)
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_upload_post_invalid_format(client, admin, supplier, id):
+def test_upload_post_invalid_format(client, user, supplier, id):
     request_data = {
         "file": (io.BytesIO(b"test"), "test.exe"),
     }
@@ -294,8 +307,9 @@ def test_upload_post_invalid_format(client, admin, supplier, id):
     assert INVALID_FORMAT.format(format=".exe") in html.unescape(data)
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_upload_post_invalid_empty(client, admin, supplier, id):
+def test_upload_post_invalid_empty(client, user, supplier, id):
     response = client.post(
         url_for("supplier.upload", supplier_id=id),
         data={},

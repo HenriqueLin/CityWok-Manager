@@ -28,25 +28,31 @@ def app():
 
 
 @pytest.fixture
-def admin(client, mocker):
-    admin = User(
-        username="admin",
-        email="admin@mail.com",
-        password=generate_password_hash("admin"),
-        role="admin",
+def user(client, mocker, request):
+    marker = request.node.get_closest_marker("role")
+    user = User(
+        username="user",
+        email="user@mail.com",
+        password=generate_password_hash("user"),
+        role="user",
         confirmed=True,
     )
-    db.session.add(admin)
+    db.session.add(user)
     db.session.commit()
-    login_user(admin)
+    if marker is None or not marker.args[0]:
+        user.role = "admin"
+    else:
+        user.role = marker.args[0]
+    db.session.commit()
 
-    @principal.identity_loader
-    def load_identity():
-        return Identity(admin.id)
+    if marker is not None and marker.args[0]:
+        login_user(user)
 
-    mocker.patch("flask_login.utils._get_user", return_value=admin)
+        @principal.identity_loader
+        def load_identity():
+            return Identity(user.id)
 
-    return admin
+        mocker.patch("flask_login.utils._get_user", return_value=user)
 
 
 @pytest.fixture

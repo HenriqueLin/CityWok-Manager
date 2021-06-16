@@ -1,7 +1,9 @@
 from flask import url_for
+import pytest
 
 
-def test_index_get(client, admin):
+@pytest.mark.role("admin")
+def test_index_get(client, user):
     response = client.get(url_for("main.index"))
     data = response.data.decode()
 

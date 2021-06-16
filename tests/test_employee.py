@@ -22,7 +22,8 @@ import pytest
 import html
 
 
-def test_index_get(client, admin):
+@pytest.mark.role("admin")
+def test_index_get(client, user):
     response = client.get(url_for("employee.index"))
     data = response.data.decode()
 
@@ -39,7 +40,8 @@ def test_index_get(client, admin):
     assert url_for("employee.detail", employee_id=1) not in data
 
 
-def test_index_get_with_employee(client, admin, employee):
+@pytest.mark.role("admin")
+def test_index_get_with_employee(client, user, employee):
     response = client.get(url_for("employee.index"))
     data = response.data.decode()
 
@@ -61,13 +63,15 @@ def test_index_get_with_employee(client, admin, employee):
     assert "ACTIVE" in data
 
 
-def test_index_post(client, admin):
+@pytest.mark.role("admin")
+def test_index_post(client, user):
     response = client.post(url_for("employee.index"))
 
     assert response.status_code == 405
 
 
-def test_new_get(client, admin):
+@pytest.mark.role("admin")
+def test_new_get(client, user):
     response = client.get(url_for("employee.new"))
     data = response.data.decode()
 
@@ -88,7 +92,8 @@ def test_new_get(client, admin):
     assert url_for("employee.index") in data
 
 
-def test_new_post_valid(client, admin):
+@pytest.mark.role("admin")
+def test_new_post_valid(client, user):
     # new employee's data
     request_data = {
         "first_name": "NEW",
@@ -124,7 +129,9 @@ def test_new_post_valid(client, admin):
     assert NEW_SUCCESS.format(name=employee.full_name) in html.unescape(data)
 
 
-def test_new_post_invalid(client, admin):
+@pytest.mark.role("admin")
+@pytest.mark.role("admin")
+def test_new_post_invalid(client, user):
     response = client.post(url_for("employee.new"), data={}, follow_redirects=True)
     data = response.data.decode()
 
@@ -139,8 +146,9 @@ def test_new_post_invalid(client, admin):
     assert db.session.query(Employee).count() == 0
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])  # id of 2 employee created in "employee" fixture
-def test_detail_get(client, admin, employee_with_file, id):
+def test_detail_get(client, user, employee_with_file, id):
     response = client.get(url_for("employee.detail", employee_id=id))
     data = response.data.decode()
 
@@ -183,8 +191,9 @@ def test_detail_get(client, admin, employee_with_file, id):
     assert "These files will be permanente removed 30 days after being deleted" in data
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_update_get(client, admin, employee, id):
+def test_update_get(client, user, employee, id):
     response = client.get(url_for("employee.update", employee_id=id))
     data = response.data.decode()
 
@@ -209,8 +218,9 @@ def test_update_get(client, admin, employee, id):
     assert url_for("employee.detail", employee_id=id) in data
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_update_post_valid(client, admin, employee, id):
+def test_update_post_valid(client, user, employee, id):
     request_data = {
         "first_name": "UPDATED",
         "last_name": "UPDATED",
@@ -247,8 +257,9 @@ def test_update_post_valid(client, admin, employee, id):
     assert UPDATE_SUCCESS.format(name=employee.full_name) in html.unescape(data)
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_update_post_invalid(client, admin, employee, id):
+def test_update_post_invalid(client, user, employee, id):
     response = client.post(
         url_for("employee.update", employee_id=id),
         data={},
@@ -268,16 +279,18 @@ def test_update_post_invalid(client, admin, employee, id):
     assert "This field is required." in data
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_activate_get(client, admin, employee, id):
+def test_activate_get(client, user, employee, id):
     response = client.get(
         url_for("employee.activate", employee_id=id),
     )
     assert response.status_code == 405
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_activate_post(client, admin, employee, id):
+def test_activate_post(client, user, employee, id):
     response = client.post(
         url_for("employee.activate", employee_id=id),
         follow_redirects=True,
@@ -291,16 +304,18 @@ def test_activate_post(client, admin, employee, id):
     assert ACTIVATE_SUCCESS.format(name=employee.full_name) in html.unescape(data)
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_suspende_get(client, admin, employee, id):
+def test_suspende_get(client, user, employee, id):
     response = client.get(
         url_for("employee.suspend", employee_id=id),
     )
     assert response.status_code == 405
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_suspende_post(client, admin, employee, id):
+def test_suspende_post(client, user, employee, id):
     response = client.post(
         url_for("employee.suspend", employee_id=id),
         follow_redirects=True,
@@ -314,16 +329,18 @@ def test_suspende_post(client, admin, employee, id):
     assert SUSPEND_SUCCESS.format(name=employee.full_name) in html.unescape(data)
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_upload_get(client, admin, employee, id):
+def test_upload_get(client, user, employee, id):
     response = client.get(
         url_for("employee.upload", employee_id=id),
     )
     assert response.status_code == 405
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_upload_post_valid(client, admin, employee, id):
+def test_upload_post_valid(client, user, employee, id):
     request_data = {
         "file": (io.BytesIO(b"test"), "test.jpg"),
     }
@@ -344,8 +361,9 @@ def test_upload_post_valid(client, admin, employee, id):
     assert os.path.isfile(f.path)
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_upload_post_invalid_format(client, admin, employee, id):
+def test_upload_post_invalid_format(client, user, employee, id):
     request_data = {
         "file": (io.BytesIO(b"test"), "test.exe"),
     }
@@ -362,8 +380,9 @@ def test_upload_post_invalid_format(client, admin, employee, id):
     assert INVALID_FORMAT.format(format=".exe") in html.unescape(data)
 
 
+@pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_upload_post_invalid_empty(client, admin, employee, id):
+def test_upload_post_invalid_empty(client, user, employee, id):
     response = client.post(
         url_for("employee.upload", employee_id=id),
         data={},
