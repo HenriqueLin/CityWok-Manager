@@ -43,6 +43,7 @@ pyparsing==2.4.7
 pytest==6.2.1
 pytest-cov==2.11.1
 pytest-flask==1.2.0
+pytest-mock==3.6.1
 python-dotenv==0.17.1
 pytz==2020.5
 regex==2021.4.4
