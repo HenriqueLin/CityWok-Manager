@@ -82,10 +82,11 @@ class User(db.Model, UserMixin, CRUDMixin):
         user = db.session.query(User).filter_by(id=id, email=email).first()
         return user
 
-    @staticmethod
-    def create_confirmation_token(id, email, username):
+    def create_confirmation_token(self):
         s = Serializer(current_app.secret_key)
-        return s.dumps({"id": id, "email": email, "username": username}).decode("utf-8")
+        return s.dumps(
+            {"id": self.id, "email": self.email, "username": self.username}
+        ).decode("utf-8")
 
     @staticmethod
     def verify_confirmation_token(token) -> "User":

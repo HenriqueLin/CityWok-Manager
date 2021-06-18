@@ -407,7 +407,7 @@ def test_confirmation_get(client):
     response = client.get(
         url_for(
             "auth.confirmation",
-            token=User.create_confirmation_token(user.id, user.email, user.username),
+            token=user.create_confirmation_token(),
         ),
         follow_redirects=True,
     )
@@ -438,7 +438,7 @@ def test_confirmation_get_loggedin(client, user):
     response = client.get(
         url_for(
             "auth.confirmation",
-            token=User.create_confirmation_token(test.id, test.email, test.username),
+            token=test.create_confirmation_token(),
         ),
         follow_redirects=True,
     )
@@ -466,7 +466,7 @@ def test_confirmation_get_confirmed(client):
     response = client.get(
         url_for(
             "auth.confirmation",
-            token=User.create_confirmation_token(user.id, user.email, user.username),
+            token=user.create_confirmation_token(),
         ),
         follow_redirects=True,
     )
@@ -513,7 +513,7 @@ def test_confirmation_post(client):
     response = client.post(
         url_for(
             "auth.confirmation",
-            token=User.create_confirmation_token(user.id, user.email, user.username),
+            token=user.create_confirmation_token(),
         )
     )
     assert response.status_code == 405

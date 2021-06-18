@@ -103,7 +103,7 @@ def registration(token):
     elif request.method == "POST":
         if form.validate_on_submit():
             user = User.create_by_form(form, role)
-            token = User.create_confirmation_token(user.id, user.email, user.username)
+            token = user.create_confirmation_token()
             send_confirmation_email(user.email, token, user.username)
             flash(
                 auth_msg.REGISTE_SUCCESS.format(email=form.email.data),
