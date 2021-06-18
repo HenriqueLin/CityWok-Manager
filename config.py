@@ -36,3 +36,6 @@ class TestConfig(Config):
     WTF_CSRF_ENABLED = False
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
     MAIL_SUPPRESS_SEND = True
+    ADMIN_NAME = "admin"
+    ADMIN_EMAIL = "admin@mail.com"
+    ADMIN_PASSWORD = "admin_password"
