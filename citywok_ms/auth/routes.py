@@ -109,6 +109,7 @@ def registration(token):
                 auth_msg.REGISTE_SUCCESS.format(email=form.email.data),
                 category="success",
             )
+            db.session.commit()
             return redirect(url_for("auth.login"))
 
     return render_template(
@@ -131,6 +132,7 @@ def confirmation(token):
         else:
             user.confirm()
             flash(auth_msg.CONFIRMATION_SUCCESS, "success")
+            db.session.commit()
     else:
         flash(auth_msg.INVALID_CONFIRMATION, "warning")
 

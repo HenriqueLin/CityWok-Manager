@@ -1,4 +1,5 @@
 import citywok_ms.file.messages as file_msg
+from citywok_ms import db
 from citywok_ms.auth.permissions import manager, shareholder
 from citywok_ms.file.forms import FileUpdateForm
 from citywok_ms.file.models import File
@@ -29,6 +30,7 @@ def delete(file_id):
     else:
         f.delete()
         flash(file_msg.DELETE_SUCCESS.format(name=f.full_name), "success")
+        db.session.commit()
     return redirect(f.owner_url)
 
 
@@ -41,6 +43,8 @@ def restore(file_id):
     else:
         f.restore()
         flash(file_msg.RESTORE_SUCCESS.format(name=f.full_name), "success")
+        db.session.commit()
+
     return redirect(f.owner_url)
 
 
@@ -52,6 +56,7 @@ def update(file_id):
     if form.validate_on_submit():
         f.update_by_form(form)
         flash(file_msg.UPDATE_SUCCESS.format(name=f.full_name), "success")
+        db.session.commit()
         return redirect(f.owner_url)
     form.file_name.data = f.base_name
     form.remark.data = f.remark

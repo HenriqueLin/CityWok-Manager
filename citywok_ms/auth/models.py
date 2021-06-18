@@ -40,7 +40,6 @@ class User(db.Model, UserMixin, CRUDMixin):
         user.set_password(form.password.data)
         user.role = role
         db.session.add(user)
-        db.session.commit()
         return user
 
     def set_password(self, password: str):
@@ -106,7 +105,6 @@ class User(db.Model, UserMixin, CRUDMixin):
 
     def confirm(self):
         self.confirmed = True
-        db.session.commit()
 
     @classmethod
     def get_by_email(cls, email) -> "User":
