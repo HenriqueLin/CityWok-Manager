@@ -41,12 +41,10 @@ class CRUDMixin(object):
         instance = cls()
         form.populate_obj(instance)
         db.session.add(instance)
-        db.session.commit()
         return instance
 
     def update_by_form(self, form: FlaskForm):
         form.populate_obj(self)
-        db.session.commit()
 
     @classmethod
     def get_all(cls):

@@ -53,16 +53,13 @@ class File(db.Model, CRUDMixin):
 
     def delete(self):
         self.delete_date = datetime.utcnow()
-        db.session.commit()
 
     def restore(self):
         self.delete_date = None
-        db.session.commit()
 
     def update_by_form(self, form: FileForm):
         self.remark = form.remark.data
         self.base_name = form.file_name.data
-        db.session.commit()
 
     @staticmethod
     def split_file_format(file: FileStorage) -> str:
@@ -88,7 +85,6 @@ class EmployeeFile(File):
             os.path.join(current_app.config["UPLOAD_FOLDER"], db_file.internal_name)
         )
         db_file.size = os.path.getsize(db_file.path)
-        db.session.commit()
         return db_file
 
 
@@ -111,5 +107,4 @@ class SupplierFile(File):
             os.path.join(current_app.config["UPLOAD_FOLDER"], db_file.internal_name)
         )
         db_file.size = os.path.getsize(db_file.path)
-        db.session.commit()
         return db_file

@@ -56,11 +56,9 @@ class Employee(db.Model, CRUDMixin):
 
     def activate(self):
         self.active = True
-        db.session.commit()
 
     def suspend(self):
         self.active = False
-        db.session.commit()
 
     @property
     def active_files(self) -> List[EmployeeFile]:
