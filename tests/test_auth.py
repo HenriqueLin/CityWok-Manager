@@ -326,6 +326,13 @@ def test_registration_post_valid(client):
 
     assert request.url.endswith(url_for("auth.login"))
 
+    assert (
+        db.session.query(User)
+        .filter_by(email="test@mail.com", username="test_user")
+        .count()
+        == 1
+    )
+
 
 def test_registration_post_invalid_username(client):
     user = User(
@@ -359,6 +366,8 @@ def test_registration_post_invalid_username(client):
     assert REGISTE_SUCCESS.format(email="test2@mail.com") not in data
     assert "Please use a different username." in data
 
+    assert db.session.query(User).filter_by(email="test2@mail.com").count() == 0
+
 
 def test_registration_post_invalid_email(client):
     user = User(
@@ -391,6 +400,7 @@ def test_registration_post_invalid_email(client):
     # titles
     assert REGISTE_SUCCESS.format(email="test@mail.com") not in data
     assert "Please use a different email address." in data
+    assert db.session.query(User).filter_by(username="test2").count() == 0
 
 
 def test_confirmation_get(client):
