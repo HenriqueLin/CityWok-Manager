@@ -1,14 +1,16 @@
+import citywok_ms.file.messages as file_msg
+from citywok_ms.auth.permissions import manager, shareholder
 from citywok_ms.file.forms import FileUpdateForm
+from citywok_ms.file.models import File
 from flask import Blueprint, flash, redirect, render_template, url_for
 from flask.helpers import send_file
-import citywok_ms.file.messages as file_msg
-from citywok_ms.file.models import File
 
 file = Blueprint("file", __name__, url_prefix="/file")
 
 
 @file.route("/<file_id>/download", strict_slashes=False)
 @file.route("/<file_id>/download/<file_name>", strict_slashes=False)
+@shareholder.require(403)
 def download(file_id, file_name=None):
     f: File = File.get_or_404(file_id)
     if f.full_name != file_name:
@@ -19,6 +21,7 @@ def download(file_id, file_name=None):
 
 
 @file.route("/<file_id>/delete", methods=["POST"])
+@manager.require(403)
 def delete(file_id):
     f: File = File.get_or_404(file_id)
     if f.delete_date:
@@ -30,6 +33,7 @@ def delete(file_id):
 
 
 @file.route("/<file_id>/restore", methods=["POST"])
+@manager.require(403)
 def restore(file_id):
     f: File = File.get_or_404(file_id)
     if not f.delete_date:
@@ -41,6 +45,7 @@ def restore(file_id):
 
 
 @file.route("/<file_id>/update", methods=["GET", "POST"])
+@manager.require(403)
 def update(file_id):
     f: File = File.get_or_404(file_id)
     form = FileUpdateForm()

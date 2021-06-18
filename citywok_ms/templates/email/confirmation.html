@@ -1,0 +1,9 @@
+<p>Hi,{{ username }} </p>
+
+<p>Click the link bellow to confirm your e-mail address:</p>
+<p>{{ url_for('auth.confirmation', token=token, _external=True) }}</p>
+
+<p>If you are not sure why you recieved this e-amil, please simply ignore this message.</p>
+
+<p>Sincerely,</p>
+<p>CityWok-Manager</p>

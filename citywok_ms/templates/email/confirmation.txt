@@ -1,0 +1,9 @@
+Hi,{{ username }} 
+
+Click the link bellow to confirm your e-mail address:
+{{ url_for('auth.confirmation', token=token, _external=True) }}
+
+If you are not sure why you recieved this e-amil, please simply ignore this message.
+
+Sincerely,
+CityWok-Manager

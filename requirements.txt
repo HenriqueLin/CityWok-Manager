@@ -4,6 +4,7 @@ attrs==20.3.0
 autopep8==1.5.4
 Babel==2.9.0
 black==21.5b2
+blinker==1.4
 certifi==2020.12.5
 chardet==4.0.0
 click==7.1.2
@@ -14,7 +15,10 @@ email-validator==1.1.2
 flake8==3.9.2
 Flask==1.1.2
 Flask-Babel==2.0.0
+Flask-Login==0.5.0
+Flask-Mail==0.9.1
 Flask-Moment==0.11.0
+Flask-Principal==0.4.0
 Flask-SQLAlchemy==2.4.4
 Flask-WTF==0.14.3
 humanize==3.2.0
@@ -39,6 +43,7 @@ pyparsing==2.4.7
 pytest==6.2.1
 pytest-cov==2.11.1
 pytest-flask==1.2.0
+pytest-mock==3.6.1
 python-dotenv==0.17.1
 pytz==2020.5
 regex==2021.4.4
