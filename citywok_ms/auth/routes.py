@@ -72,8 +72,8 @@ def logout():
 @manager.require(403)
 def invite(token=None):
     form = InviteForm()
-    if request.method == "GET":
-        token = request.args.get("token")
+    if request.method == "POST":
+        token = None
     if form.validate_on_submit():
         token = User.create_invite_token(form.role.data, form.email.data)
         send_invite_email(form.email.data, token)
@@ -93,7 +93,7 @@ def registration(token):
     if current_user.is_authenticated:
         flash(auth_msg.REQUIRED_LOGOUT, "warning")
         return redirect(url_for("main.index"))
-    role, email = User.verify_invite_token(token)
+    role, email = User.verify_invite_token(token) or (None, None)
     if not role:
         flash(auth_msg.INVALID_INVITE, "warning")
         return redirect(url_for("auth.login"))
@@ -166,7 +166,7 @@ def reset_password(token):
             db.session.commit()
             return redirect(url_for("auth.login"))
     else:
-        flash(auth_msg.RESET_INVALID, "warning")
+        flash(auth_msg.INVALID_RESET, "warning")
         return redirect(url_for("auth.login"))
     return render_template(
         "auth/reset_password.html", title=auth_msg.RESET_TITLE, form=form

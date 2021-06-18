@@ -24,4 +24,4 @@ FORGET_TITLE = "Forget Password"
 
 RESET_SUCCESS = "Your password has been reset."
 RESET_TITLE = "Reset Password"
-RESET_INVALID = "Reset link is invalid."
+INVALID_RESET = "Reset link is invalid."

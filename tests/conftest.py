@@ -4,7 +4,7 @@ from datetime import date
 from tempfile import TemporaryDirectory
 
 import pytest
-from citywok_ms import create_app, current_app, db, principal
+from citywok_ms import create_app, current_app, db, principal, login
 from citywok_ms.auth.models import User
 from citywok_ms.employee.models import Employee
 from citywok_ms.file.models import EmployeeFile, SupplierFile
@@ -48,11 +48,19 @@ def user(client, mocker, request):
     if marker is not None and marker.args[0]:
         login_user(user)
 
+        @login.request_loader
+        def load_user_from_request(request):
+            return user
+
         @principal.identity_loader
         def load_identity():
             return Identity(user.id)
 
-        mocker.patch("flask_login.utils._get_user", return_value=user)
+    yield user
+
+    @login.request_loader
+    def load_user_from_request_none(request):
+        return None
 
 
 @pytest.fixture

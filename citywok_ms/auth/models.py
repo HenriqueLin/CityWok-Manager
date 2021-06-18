@@ -2,9 +2,9 @@ from citywok_ms import db, login
 from citywok_ms.utils.models import CRUDMixin
 from flask import current_app
 from flask_login import UserMixin
-from itsdangerous import TimedJSONWebSignatureSerializer as TimedSerializer
 from itsdangerous import JSONWebSignatureSerializer as Serializer
-from sqlalchemy import Column, Integer, String, Boolean
+from itsdangerous import TimedJSONWebSignatureSerializer as TimedSerializer
+from sqlalchemy import Boolean, Column, Integer, String
 from sqlalchemy_utils import ChoiceType
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -79,7 +79,8 @@ class User(db.Model, UserMixin, CRUDMixin):
             email = s.loads(token)["email"]
         except Exception:
             return
-        return db.session.query(User).filter_by(id=id, email=email).first()
+        user = db.session.query(User).filter_by(id=id, email=email).first()
+        return user
 
     @staticmethod
     def create_confirmation_token(id, email, username):
