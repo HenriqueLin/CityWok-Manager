@@ -12,8 +12,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from sqlalchemy_utils import i18n
 
-from citywok_ms.auth.messages import REQUIRE_LOGIN
-
 csrf = CSRFProtect()
 db = SQLAlchemy()
 babel = Babel()
@@ -39,9 +37,6 @@ def create_app(config_class=Config):
     babel.init_app(app)
     moment.init_app(app)
     login.init_app(app)
-    login.login_view = "auth.login"
-    login.login_message = REQUIRE_LOGIN
-    login.login_message_category = "info"
     principal.init_app(app)
     mail.init_app(app)
 
@@ -50,6 +45,7 @@ def create_app(config_class=Config):
         from citywok_ms.auth.routes import auth
         from citywok_ms.cli import command
         from citywok_ms.employee.routes import employee
+        from citywok_ms.error.handlers import error
         from citywok_ms.file.routes import file
         from citywok_ms.main.routes import main
         from citywok_ms.supplier.routes import supplier
@@ -61,6 +57,7 @@ def create_app(config_class=Config):
         app.register_blueprint(file)
         app.register_blueprint(command)
         app.register_blueprint(main)
+        app.register_blueprint(error)
 
         @identity_loaded.connect_via(app)
         def on_identity_loaded(sender, identity):

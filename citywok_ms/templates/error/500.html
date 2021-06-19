@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+{% set active_page = "employee" %}
+{% block content %}
+<div class="px-4 py-5 my-5 text-center">
+    <h1 class="display-5 fw-bold">500</h1>
+    <div class="col-sm-6 mx-auto">
+        <h3>An unexpected error has occurred</h3>
+        <p>The administrator has been notified.</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a href="{{ request.referrer }}" class="btn btn-secondary px-4">Back</a>
+            <a href="{{ url_for('main.index') }}" class="btn btn-primary px-4">Home</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

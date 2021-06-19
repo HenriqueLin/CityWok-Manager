@@ -118,4 +118,29 @@ def load_example():
         click.echo("Please create database first.")
 
 
+@db_cli.command("add_user")
+@click.argument("username", nargs=1)
+@click.argument("email", nargs=1)
+@click.argument("password", nargs=1)
+@click.argument("role", nargs=1)
+@click.argument("confirmed", nargs=1, type=click.BOOL, default=True)
+def add_user(username, email, password, role, confirmed):
+    "Add a user"
+    try:
+        user = User(
+            username=username,
+            email=email,
+            password=generate_password_hash(password),
+            role=role,
+            confirmed=confirmed,
+        )
+        db.session.add(user)
+        db.session.commit()
+        click.echo("Created new user.")
+    except Exception as e:
+        db.session.rollback()
+        click.echo("Failed to create new user.")
+        click.echo(e)
+
+
 command.cli.add_command(db_cli)
