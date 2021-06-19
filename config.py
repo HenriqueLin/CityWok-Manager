@@ -8,7 +8,7 @@ load_dotenv(os.path.join(basedir, ".env"))
 class Config(object):
     # general
     SECRET_KEY = os.environ.get("SECRET_KEY") or "you-will-never-guess"
-    LANGUAGES = ["en"]
+    LANGUAGES = ["en", "pt", "zh"]
     UPLOAD_FOLDER = os.environ.get("UPLOAD_FOLDER") or os.path.join(basedir, "uploads")
 
     # sqlalchemy
