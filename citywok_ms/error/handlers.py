@@ -13,4 +13,5 @@ def unauthorized(error):
 
 @error.app_errorhandler(403)
 def forbidden(error):
-    return render_template("error/403.html")
+    return render_template("error/403.html"), 403
+
