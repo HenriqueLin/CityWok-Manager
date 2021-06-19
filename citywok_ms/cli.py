@@ -17,6 +17,7 @@ command = Blueprint("command", __name__, cli_group=None)
 
 
 dev = AppGroup("dev")
+i18n = AppGroup("i18n")
 
 
 @dev.command("create")
@@ -143,4 +144,33 @@ def add_user(username, email, password, role, confirmed):
         click.echo(e)
 
 
+@i18n.command()
+@click.argument("lang")
+def init(lang):
+    """Initialize a new language."""
+    if os.system("pybabel extract -F babel.cfg -k _l -o messages.pot ."):
+        raise RuntimeError("extract command failed")
+    if os.system("pybabel init -i messages.pot -d citywok_ms/translations -l " + lang):
+        raise RuntimeError("init command failed")
+    os.remove("messages.pot")
+
+
+@i18n.command()
+def update():
+    """Update all languages."""
+    if os.system("pybabel extract -F babel.cfg -k _l -o messages.pot ."):
+        raise RuntimeError("extract command failed")
+    if os.system("pybabel update -i messages.pot -d citywok_ms/translations"):
+        raise RuntimeError("update command failed")
+    os.remove("messages.pot")
+
+
+@i18n.command()
+def compile():
+    """Compile all languages."""
+    if os.system("pybabel compile -d citywok_ms/translations"):
+        raise RuntimeError("compile command failed")
+
+
 command.cli.add_command(dev)
+command.cli.add_command(i18n)
