@@ -1,5 +1,5 @@
 from citywok_ms.auth.messages import REQUIRE_LOGIN
-from flask import Blueprint, render_template, redirect
+from flask import Blueprint, render_template, redirect, abort
 from flask.helpers import flash, url_for
 from citywok_ms import db
 
@@ -26,3 +26,23 @@ def not_found_error(error):
 def internal_error(error):
     db.session.rollback()
     return render_template("error/500.html"), 500
+
+
+@error.route("/401")
+def _401():
+    abort(401)
+
+
+@error.route("/403")
+def _403():
+    abort(403)
+
+
+@error.route("/404")
+def _404():
+    abort(404)
+
+
+@error.route("/500")
+def _500():
+    abort(500)
