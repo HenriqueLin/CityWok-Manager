@@ -11,6 +11,7 @@ from flask_principal import Principal, RoleNeed, UserNeed, identity_loaded
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from sqlalchemy_utils import i18n
+from flask_migrate import Migrate
 
 csrf = CSRFProtect()
 db = SQLAlchemy()
@@ -19,6 +20,7 @@ moment = Moment()
 login = LoginManager()
 principal = Principal()
 mail = Mail()
+migrate = Migrate()
 
 
 def create_app(config_class=Config):
@@ -39,6 +41,7 @@ def create_app(config_class=Config):
     login.init_app(app)
     principal.init_app(app)
     mail.init_app(app)
+    migrate.init_app(app, db)
 
     with app.app_context():
         # imports

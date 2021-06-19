@@ -16,10 +16,10 @@ from werkzeug.security import generate_password_hash
 command = Blueprint("command", __name__, cli_group=None)
 
 
-db_cli = AppGroup("db")
+dev = AppGroup("dev")
 
 
-@db_cli.command("create")
+@dev.command("create")
 def create():
     "Create the database"
     db.create_all()
@@ -37,7 +37,7 @@ def create():
     click.echo("Created admin user.")
 
 
-@db_cli.command("drop")
+@dev.command("drop")
 @click.confirmation_option(prompt="Are you sure you want to drop the db?")
 def drop():
     "Drop the database and remove all user files"
@@ -53,7 +53,7 @@ def drop():
     click.echo("Deleted all files.")
 
 
-@db_cli.command("load_example")
+@dev.command("load_example")
 def load_example():
     """Load example entities to the database"""
     try:
@@ -118,7 +118,7 @@ def load_example():
         click.echo("Please create database first.")
 
 
-@db_cli.command("add_user")
+@dev.command("add_user")
 @click.argument("username", nargs=1)
 @click.argument("email", nargs=1)
 @click.argument("password", nargs=1)
@@ -143,4 +143,4 @@ def add_user(username, email, password, role, confirmed):
         click.echo(e)
 
 
-command.cli.add_command(db_cli)
+command.cli.add_command(dev)
