@@ -10,3 +10,7 @@ def unauthorized(error):
     flash(REQUIRE_LOGIN, "info")
     return redirect(url_for("auth.login"))
 
+
+@error.app_errorhandler(403)
+def forbidden(error):
+    return render_template("error/403.html")
