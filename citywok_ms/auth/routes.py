@@ -1,4 +1,3 @@
-import citywok_ms.auth.messages as auth_msg
 from citywok_ms import db
 from citywok_ms.auth.forms import (
     ForgetPasswordForm,
@@ -23,6 +22,7 @@ from flask import (
     request,
     url_for,
 )
+from flask_babel import _
 from flask_login import current_user, login_user, logout_user
 from flask_principal import AnonymousIdentity, Identity, identity_changed
 
@@ -45,16 +45,16 @@ def login():
                     current_app._get_current_object(), identity=Identity(user.id)
                 )
                 flash(
-                    auth_msg.LOGIN_SUCCESS.format(name=user.username),
+                    _("Welcome %(name)s, you are logged in.", name=user.username),
                     category="success",
                 )
                 return redirect(url_for("main.index"))
             else:
-                flash(auth_msg.REQUIRE_CONFIRMATION, "warning")
+                flash(_("Your e-mail hasn't been confirmed."), "warning")
                 return redirect(url_for("auth.login"))
         else:
-            flash(auth_msg.LOGIN_FAIL, category="danger")
-    return render_template("auth/login.html", title=auth_msg.LOGIN_TITLE, form=form)
+            flash(_("Please check your username/password."), category="danger")
+    return render_template("auth/login.html", title=_("Login"), form=form)
 
 
 @auth.route("/logout", methods=["GET", "POST"])
@@ -63,7 +63,7 @@ def logout():
     identity_changed.send(
         current_app._get_current_object(), identity=AnonymousIdentity()
     )
-    flash(auth_msg.LOGOUT_SUCCESS, category="success")
+    flash(_("You have been logged out."), category="success")
     return redirect(url_for("auth.login"))
 
 
@@ -77,12 +77,12 @@ def invite(token=None):
     if form.validate_on_submit():
         token = User.create_invite_token(form.role.data, form.email.data)
         send_invite_email(form.email.data, token)
-        flash(auth_msg.EMAIL_SENT, "success")
+        flash(_("A invite e-mail has been sent to the envitee."), "success")
         return redirect(url_for("auth.invite", token=token))
 
     return render_template(
         "auth/invite.html",
-        title=auth_msg.INVITE_TITLE,
+        title=_("Invite"),
         form=form,
         token=token,
     )
@@ -91,11 +91,11 @@ def invite(token=None):
 @auth.route("/registration/<token>", methods=["GET", "POST"])
 def registration(token):
     if current_user.is_authenticated:
-        flash(auth_msg.REQUIRED_LOGOUT, "warning")
+        flash(_("You are already logged in."), "warning")
         return redirect(url_for("main.index"))
     role, email = User.verify_invite_token(token) or (None, None)
     if not role:
-        flash(auth_msg.INVALID_INVITE, "warning")
+        flash(_("Invite link is invalid."), "warning")
         return redirect(url_for("auth.login"))
     form = RegistrationForm()
     if request.method == "GET":
@@ -106,7 +106,10 @@ def registration(token):
             token = user.create_confirmation_token()
             send_confirmation_email(user.email, token, user.username)
             flash(
-                auth_msg.REGISTE_SUCCESS.format(email=form.email.data),
+                _(
+                    "A confirmation e-mail has been sent to %(email)s.",
+                    email=form.email.data,
+                ),
                 category="success",
             )
             db.session.commit()
@@ -114,7 +117,7 @@ def registration(token):
 
     return render_template(
         "auth/registration.html",
-        title=auth_msg.REGISTE_TITLE,
+        title=_("Register"),
         form=form,
     )
 
@@ -122,19 +125,19 @@ def registration(token):
 @auth.route("/confirmation/<token>")
 def confirmation(token):
     if current_user.is_authenticated:
-        flash(auth_msg.REQUIRED_LOGOUT, "warning")
+        flash(_("You are already logged in."), "warning")
         return redirect(url_for("main.index"))
 
     user = User.verify_confirmation_token(token)
     if user:
         if user.confirmed:
-            flash(auth_msg.ALREADY_CONFIRMED, "info")
+            flash(_("Your e-mail address has already been confirmed."), "info")
         else:
             user.confirm()
-            flash(auth_msg.CONFIRMATION_SUCCESS, "success")
+            flash(_("Your e-mail address is now confirmed."), "success")
             db.session.commit()
     else:
-        flash(auth_msg.INVALID_CONFIRMATION, "warning")
+        flash(_("Confirmation link is invalid."), "warning")
 
     return redirect(url_for("auth.login"))
 
@@ -148,10 +151,16 @@ def forget_password():
         user = User.get_by_email(form.email.data)
         token = user.create_reset_token()
         send_password_reset_email(user, token)
-        flash(auth_msg.FORGET_SUCCESS.format(email=form.email.data), "success")
+        flash(
+            _(
+                "A e-mail to reset the password has been sent to %(email)s.",
+                email=form.email.data,
+            ),
+            "success",
+        )
         return redirect(url_for("auth.login"))
     return render_template(
-        "auth/forget_password.html", title=auth_msg.FORGET_TITLE, form=form
+        "auth/forget_password.html", title=_("Forget Password"), form=form
     )
 
 
@@ -164,12 +173,12 @@ def reset_password(token):
         form = ResetPasswordForm()
         if form.validate_on_submit():
             user.set_password(form.password.data)
-            flash(auth_msg.RESET_SUCCESS, "success")
+            flash(_("Your password has been reset."), "success")
             db.session.commit()
             return redirect(url_for("auth.login"))
     else:
-        flash(auth_msg.INVALID_RESET, "warning")
+        flash(_("Reset link is invalid."), "warning")
         return redirect(url_for("auth.login"))
     return render_template(
-        "auth/reset_password.html", title=auth_msg.RESET_TITLE, form=form
+        "auth/reset_password.html", title=_("Reset Password"), form=form
     )

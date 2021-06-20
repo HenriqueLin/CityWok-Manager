@@ -7,14 +7,6 @@ import html
 import pytest
 from citywok_ms import db
 from citywok_ms.file.forms import FileForm
-from citywok_ms.file.messages import (
-    DELETE_DUPLICATE,
-    DELETE_SUCCESS,
-    RESTORE_DUPLICATE,
-    RESTORE_SUCCESS,
-    UPDATE_SUCCESS,
-    UPDATE_TITLE,
-)
 from citywok_ms.file.models import EmployeeFile
 from flask import request
 from flask.helpers import url_for
@@ -57,9 +49,9 @@ def test_delete_post(client, user, employee_with_file, id):
 
     assert request.url.endswith(url_for("employee.detail", employee_id=id))
     if id == 1:
-        assert DELETE_SUCCESS.format(name=f.full_name) in html.unescape(data)
+        assert f'File "{f.full_name}" has been deleted.' in html.unescape(data)
     elif id == 2:
-        assert DELETE_DUPLICATE.format(name=f.full_name) in html.unescape(data)
+        assert f'File "{f.full_name}" has already been deleted.' in html.unescape(data)
 
 
 def test_restore_get(client):
@@ -82,9 +74,9 @@ def test_restore_post(client, user, employee_with_file, id):
 
     assert request.url.endswith(url_for("employee.detail", employee_id=id))
     if id == 1:
-        assert RESTORE_DUPLICATE.format(name=f.full_name) in html.unescape(data)
+        assert f'File "{f.full_name}" hasn\'t been deleted.' in html.unescape(data)
     elif id == 2:
-        assert RESTORE_SUCCESS.format(name=f.full_name) in html.unescape(data)
+        assert f'File "{f.full_name}" has been restored.' in html.unescape(data)
 
 
 @pytest.mark.role("admin")
@@ -96,12 +88,12 @@ def test_update_get(client, user, employee_with_file, id):
     # state code
     assert response.status_code == 200
     # titles
-    assert UPDATE_TITLE in data
+    assert "Update File" in data
     # form
     for field in FileForm()._fields.values():
         if isinstance(field, (HiddenField, SubmitField)):
             continue
-        assert field.label.text in data
+        assert field.id in data
 
     f = EmployeeFile.get_or_404(id)
     assert f.base_name in data
@@ -142,7 +134,7 @@ def test_update_post_valid(client, user, employee_with_file, id):
     assert "Update" in data
 
     # flash messege
-    assert UPDATE_SUCCESS.format(name=f.full_name) in html.unescape(data)
+    assert f'File "{f.full_name}" has been updated.' in html.unescape(data)
 
 
 @pytest.mark.role("admin")

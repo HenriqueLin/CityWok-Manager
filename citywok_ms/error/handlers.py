@@ -1,14 +1,14 @@
-from citywok_ms.auth.messages import REQUIRE_LOGIN
 from flask import Blueprint, render_template, redirect, abort
 from flask.helpers import flash, url_for
 from citywok_ms import db
+from flask_babel import _
 
 error = Blueprint("error", __name__)
 
 
 @error.app_errorhandler(401)
 def unauthorized(error):
-    flash(REQUIRE_LOGIN, "info")
+    flash(_("Please log in to access this page."), "info")
     return redirect(url_for("auth.login"))
 
 

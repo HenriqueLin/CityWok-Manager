@@ -1,6 +1,5 @@
 import html
 from flask import url_for, request
-from citywok_ms.auth.messages import REQUIRE_LOGIN
 
 
 def test_401(client):
@@ -9,7 +8,7 @@ def test_401(client):
 
     assert response.status_code == 200
 
-    assert REQUIRE_LOGIN in data
+    assert "Please log in to access this page." in data
     assert request.url.endswith(url_for("auth.login"))
 
 

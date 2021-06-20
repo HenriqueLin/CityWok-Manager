@@ -5,17 +5,8 @@ import os
 
 import pytest
 from citywok_ms import db
-from citywok_ms.file.messages import INVALID_FORMAT, NO_FILE, UPLOAD_SUCCESS
 from citywok_ms.file.models import SupplierFile
 from citywok_ms.supplier.forms import SupplierForm
-from citywok_ms.supplier.messages import (
-    DETAIL_TITLE,
-    INDEX_TITLE,
-    NEW_SUCCESS,
-    NEW_TITLE,
-    UPDATE_SUCCESS,
-    UPDATE_TITLE,
-)
 from citywok_ms.supplier.models import Supplier
 from flask import request, url_for
 from wtforms.fields.simple import HiddenField, SubmitField
@@ -30,7 +21,7 @@ def test_index_get(client, user):
     assert response.status_code == 200
 
     # titles
-    assert INDEX_TITLE in data
+    assert "Suppliers" in data
 
     # links
     assert url_for("supplier.new") in data
@@ -46,7 +37,7 @@ def test_index_get_with_supplier(client, user, supplier):
     assert response.status_code == 200
 
     # titles
-    assert INDEX_TITLE in data
+    assert "Suppliers" in data
 
     # links
     assert url_for("supplier.new") in data
@@ -74,13 +65,13 @@ def test_new_get(client, user):
     assert response.status_code == 200
 
     # titles
-    assert NEW_TITLE in data
+    assert "New Supplier" in data
 
     # form
     for field in SupplierForm()._fields.values():
         if isinstance(field, (HiddenField, SubmitField)):
             continue
-        assert field.label.text in data
+        assert field.id in data
     assert "Add" in data
 
     # links
@@ -114,7 +105,7 @@ def test_new_post_valid(client, user):
             assert getattr(supplier, key) == request_data[key]
 
     # flash messege
-    assert NEW_SUCCESS.format(name=supplier.name) in html.unescape(data)
+    assert f'New supplier "{supplier.name}" has been added.' in html.unescape(data)
 
 
 @pytest.mark.role("admin")
@@ -145,7 +136,7 @@ def test_detail_get(client, user, supplier_with_file, id):
     # state code
     assert response.status_code == 200
     # titles
-    assert DETAIL_TITLE in data
+    assert "Supplier Detail" in data
     assert "Files" in data
 
     # links
@@ -186,12 +177,12 @@ def test_update_get(client, user, supplier, id):
     # state code
     assert response.status_code == 200
     # titles
-    assert UPDATE_TITLE in data
+    assert "Update Supplier" in data
     # form
     for field in SupplierForm()._fields.values():
         if isinstance(field, (HiddenField, SubmitField)):
             continue
-        assert field.label.text in data
+        assert field.id in data
 
     supplier = Supplier.get_or_404(id)
     for attr in Supplier.__table__.columns:
@@ -233,7 +224,7 @@ def test_update_post_valid(client, user, supplier, id):
             assert getattr(supplier, key) == request_data[key]
 
     # flash messege
-    assert UPDATE_SUCCESS.format(name=supplier.name) in html.unescape(data)
+    assert f'Supplier "{supplier.name}" has been updated.' in html.unescape(data)
 
 
 @pytest.mark.role("admin")
@@ -281,7 +272,7 @@ def test_upload_post_valid(client, user, supplier, id):
 
     assert response.status_code == 200
     assert request.url.endswith(url_for("supplier.detail", supplier_id=id))
-    assert UPLOAD_SUCCESS.format(name="test.jpg") in html.unescape(data)
+    assert 'File "test.jpg" has been uploaded.' in html.unescape(data)
     assert db.session.query(SupplierFile).count() == 1
     f = db.session.query(SupplierFile).get(1)
     assert f.full_name == "test.jpg"
@@ -304,7 +295,7 @@ def test_upload_post_invalid_format(client, user, supplier, id):
 
     assert response.status_code == 200
     assert request.url.endswith(url_for("supplier.detail", supplier_id=id))
-    assert INVALID_FORMAT.format(format=".exe") in html.unescape(data)
+    assert 'Invalid file format ".exe".' in html.unescape(data)
 
 
 @pytest.mark.role("admin")
@@ -320,4 +311,4 @@ def test_upload_post_invalid_empty(client, user, supplier, id):
 
     assert response.status_code == 200
     assert request.url.endswith(url_for("supplier.detail", supplier_id=id))
-    assert NO_FILE in html.unescape(data)
+    assert "No file has been uploaded." in html.unescape(data)
