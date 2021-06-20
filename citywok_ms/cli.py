@@ -154,14 +154,14 @@ def init(lang, quiet):
         cmd_init = (
             "pybabel -q init -i messages.pot -d citywok_ms/translations -l " + lang
         )
-    else:
+    else:  # test: no cover
         cmd_extract = "pybabel extract -F babel.cfg -k _l -o messages.pot ."
         cmd_init = "pybabel init -i messages.pot -d citywok_ms/translations -l " + lang
 
     if os.system(cmd_extract):
-        raise RuntimeError("extract command failed")
+        raise RuntimeError("extract command failed")  # test: no cover
     if os.system(cmd_init):
-        raise RuntimeError("init command failed")
+        raise RuntimeError("init command failed")  # test: no cover
     os.remove("messages.pot")
 
 
@@ -172,14 +172,14 @@ def update(quiet):
     if quiet:
         cmd_extract = "pybabel -q extract -F babel.cfg -k _l -o messages.pot ."
         cmd_update = "pybabel -q update -N -i messages.pot -d citywok_ms/translations"
-    else:
+    else:  # test: no cover
         cmd_extract = "pybabel extract -F babel.cfg -k _l -o messages.pot ."
         cmd_update = "pybabel update -N -i messages.pot -d citywok_ms/translations"
 
     if os.system(cmd_extract):
-        raise RuntimeError("extract command failed")
+        raise RuntimeError("extract command failed")  # test: no cover
     if os.system(cmd_update):
-        raise RuntimeError("update command failed")
+        raise RuntimeError("update command failed")  # test: no cover
     os.remove("messages.pot")
 
 
@@ -189,11 +189,11 @@ def compile(quiet):
     """Compile all languages."""
     if quiet:
         cmd_compile = "pybabel -q compile --statistics -f -d citywok_ms/translations"
-    else:
+    else:  # test: no cover
         cmd_compile = "pybabel compile --statistics -f -d citywok_ms/translations"
 
     if os.system(cmd_compile):
-        raise RuntimeError("compile command failed")
+        raise RuntimeError("compile command failed")  # test: no cover
 
 
 command.cli.add_command(dev)
