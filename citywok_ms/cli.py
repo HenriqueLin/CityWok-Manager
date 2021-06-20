@@ -146,29 +146,53 @@ def add_user(username, email, password, role, confirmed):
 
 @i18n.command()
 @click.argument("lang")
-def init(lang):
+@click.option("-q", "--quiet", is_flag=True)
+def init(lang, quiet):
     """Initialize a new language."""
-    if os.system("pybabel extract -F babel.cfg -k _l -o messages.pot ."):
+    if quiet:
+        cmd_extract = "pybabel -q extract -F babel.cfg -k _l -o messages.pot ."
+        cmd_init = (
+            "pybabel -q init -i messages.pot -d citywok_ms/translations -l " + lang
+        )
+    else:
+        cmd_extract = "pybabel extract -F babel.cfg -k _l -o messages.pot ."
+        cmd_init = "pybabel init -i messages.pot -d citywok_ms/translations -l " + lang
+
+    if os.system(cmd_extract):
         raise RuntimeError("extract command failed")
-    if os.system("pybabel init -i messages.pot -d citywok_ms/translations -l " + lang):
+    if os.system(cmd_init):
         raise RuntimeError("init command failed")
     os.remove("messages.pot")
 
 
 @i18n.command()
-def update():
+@click.option("-q", "--quiet", is_flag=True)
+def update(quiet):
     """Update all languages."""
-    if os.system("pybabel extract -F babel.cfg -k _l -o messages.pot ."):
+    if quiet:
+        cmd_extract = "pybabel -q extract -F babel.cfg -k _l -o messages.pot ."
+        cmd_update = "pybabel -q update -N -i messages.pot -d citywok_ms/translations"
+    else:
+        cmd_extract = "pybabel extract -F babel.cfg -k _l -o messages.pot ."
+        cmd_update = "pybabel update -N -i messages.pot -d citywok_ms/translations"
+
+    if os.system(cmd_extract):
         raise RuntimeError("extract command failed")
-    if os.system("pybabel update -N -i messages.pot -d citywok_ms/translations"):
+    if os.system(cmd_update):
         raise RuntimeError("update command failed")
     os.remove("messages.pot")
 
 
 @i18n.command()
-def compile():
+@click.option("-q", "--quiet", is_flag=True)
+def compile(quiet):
     """Compile all languages."""
-    if os.system("pybabel compile --statistics -f -d citywok_ms/translations"):
+    if quiet:
+        cmd_compile = "pybabel -q compile --statistics -f -d citywok_ms/translations"
+    else:
+        cmd_compile = "pybabel compile --statistics -f -d citywok_ms/translations"
+
+    if os.system(cmd_compile):
         raise RuntimeError("compile command failed")
 
 
