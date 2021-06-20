@@ -121,8 +121,22 @@ def test_new_post_valid(client, user):
 
 @pytest.mark.role("admin")
 @pytest.mark.role("admin")
-def test_new_post_invalid(client, user):
-    response = client.post(url_for("employee.new"), data={}, follow_redirects=True)
+def test_new_post_invalid(client, user, employee):
+    request_data = {
+        "first_name": "NEW",
+        "sex": "F",
+        "id_type": "passport",
+        "id_number": "1",
+        "id_validity": "2000-01-01",
+        "nationality": "US",
+        "total_salary": 1000,
+        "taxed_salary": 635.00,
+        "nif": 123123,
+        "niss": 321321,
+    }
+    response = client.post(
+        url_for("employee.new"), data=request_data, follow_redirects=True
+    )
     data = response.data.decode()
 
     # state code
@@ -131,9 +145,12 @@ def test_new_post_invalid(client, user):
     assert request.url.endswith(url_for("employee.new"))
     # form validation message
     assert "This field is required." in data
+    assert "ID has expired" in data
+    assert "This NIF already existe" in data
+    assert "This NISS already existe" in data
 
     # database data
-    assert db.session.query(Employee).count() == 0
+    assert db.session.query(Employee).count() == 2  # 2 employee created in fixture
 
 
 @pytest.mark.role("admin")

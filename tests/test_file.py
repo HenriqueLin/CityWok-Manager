@@ -7,7 +7,7 @@ import html
 import pytest
 from citywok_ms import db
 from citywok_ms.file.forms import FileForm
-from citywok_ms.file.models import EmployeeFile
+from citywok_ms.file.models import EmployeeFile, SupplierFile
 from flask import request
 from flask.helpers import url_for
 from wtforms.fields.simple import HiddenField, SubmitField
@@ -81,7 +81,7 @@ def test_restore_post(client, user, employee_with_file, id):
 
 @pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_update_get(client, user, employee_with_file, id):
+def test_update_get_employee_file(client, user, employee_with_file, id):
     response = client.get(url_for("file.update", file_id=id))
     data = response.data.decode()
 
@@ -102,6 +102,31 @@ def test_update_get(client, user, employee_with_file, id):
 
     # links
     assert url_for("employee.detail", employee_id=id) in data
+
+
+@pytest.mark.role("admin")
+@pytest.mark.parametrize("id", [1, 2])
+def test_update_get_supplier_file(client, user, supplier_with_file, id):
+    response = client.get(url_for("file.update", file_id=id))
+    data = response.data.decode()
+
+    # state code
+    assert response.status_code == 200
+    # titles
+    assert "Update File" in data
+    # form
+    for field in FileForm()._fields.values():
+        if isinstance(field, (HiddenField, SubmitField)):
+            continue
+        assert field.id in data
+
+    f = SupplierFile.get_or_404(id)
+    assert f.base_name in data
+    assert f.format in data
+    assert "Update" in data
+
+    # links
+    assert url_for("supplier.detail", supplier_id=id) in data
 
 
 @pytest.mark.role("admin")
