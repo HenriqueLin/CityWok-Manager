@@ -6,89 +6,90 @@ from wtforms.fields.html5 import EmailField
 from wtforms.fields.simple import SubmitField
 from wtforms.validators import Email, EqualTo, InputRequired, Length, ValidationError
 from wtforms_alchemy.utils import choice_type_coerce_factory
+from flask_babel import lazy_gettext as _l, _
 
 
 class LoginForm(FlaskForm):
     username = StringField(
-        "User Name",
+        label=_l("User Name"),
         validators=[InputRequired(), Length(min=2, max=20)],
     )
     password = PasswordField(
-        "Password",
+        label=_l("Password"),
         validators=[InputRequired()],
     )
 
-    submit = SubmitField(label="Login")
+    submit = SubmitField(label=_l("Login"))
 
 
 class InviteForm(FlaskForm):
     email = EmailField(
-        label="Invitee's E-mail",
+        label=_l("Invitee's E-mail"),
         validators=[InputRequired(), Email()],
     )
     role = BlankSelectField(
-        label="Role",
+        label=_l("Role"),
         choices=Role[1:],
         coerce=choice_type_coerce_factory(User.role.type),
         message="---",
         validators=[InputRequired()],
     )
-    submit = SubmitField(label="Invite")
+    submit = SubmitField(label=_l("Invite"))
 
     def validate_email(self, email):
         if User.get_by_email(email.data):
-            raise ValidationError("E-mail address already taken.")
+            raise ValidationError(_("E-mail address already taken."))
 
 
 class ForgetPasswordForm(FlaskForm):
     email = EmailField(
-        label="Email",
+        label=_l("Email"),
         validators=[InputRequired(), Email()],
     )
-    submit = SubmitField("Submit")
+    submit = SubmitField(_l("Submit"))
 
     def validate_email(self, email):
         if not User.get_by_email(email.data):
-            raise ValidationError("User with this e-mail address do not exist.")
+            raise ValidationError(_("User with this e-mail address do not exist."))
 
 
 class ResetPasswordForm(FlaskForm):
     password = PasswordField(
-        label="New Password",
+        label=_l("New Password"),
         validators=[InputRequired()],
     )
     password2 = PasswordField(
-        label="Repeat Password",
+        label=_l("Repeat Password"),
         validators=[InputRequired(), EqualTo("password")],
     )
-    submit = SubmitField(label="Reset")
+    submit = SubmitField(label=_l("Reset"))
 
 
 class RegistrationForm(FlaskForm):
     username = StringField(
-        label="Username",
+        label=_l("User Name"),
         validators=[InputRequired()],
     )
     email = EmailField(
-        label="Email",
+        label=_l("Email"),
         validators=[InputRequired(), Email()],
     )
     password = PasswordField(
-        label="Password",
+        label=_l("Password"),
         validators=[InputRequired()],
     )
     password2 = PasswordField(
-        label="Repeat Password",
+        label=_l("Repeat Password"),
         validators=[InputRequired(), EqualTo("password")],
     )
-    submit = SubmitField(label="Register")
+    submit = SubmitField(label=_l("Register"))
 
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
         if user is not None:
-            raise ValidationError("Please use a different username.")
+            raise ValidationError(_("Please use a different username."))
 
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
-            raise ValidationError("Please use a different email address.")
+            raise ValidationError(_("Please use a different email address."))

@@ -5,20 +5,20 @@
     <!-- title -->
     <h1>{{title}}</h1>
     {% if not employee.active %}
-    <p class="text-warning mb-2">Suspended</p>
+    <p class="text-warning mb-2">{{_('Suspended')}}</p>
     {% endif %}
     <div class="d-print-none">
         <a href="{{url_for('employee.update',employee_id=employee.id)}}" class="btn btn-primary "
-            id="update_button">Update</a>
+            id="update_button">{{_('Update')}}</a>
         {% if employee.active %}
         <form action="{{url_for('employee.suspend',employee_id=employee.id)}}" method="post" class="d-inline">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <input type="submit" value="suspend" class="btn btn-danger">
+            <input type="submit" value="{{_('Suspend')}}" class="btn btn-danger">
         </form>
         {% else %}
         <form action="{{url_for('employee.activate',employee_id=employee.id)}}" method="post" class="d-inline">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <input type="submit" value="Activate" class="btn btn-success">
+            <input type="submit" value="{{_('Activate')}}" class="btn btn-success">
         </form>
         {% endif %}
     </div>
@@ -26,62 +26,62 @@
     <hr>
     <!-- informations -->
     <dl class="row">
-        <dt class="col-4">ID:</dt>
+        <dt class="col-4">{{_('ID')}}:</dt>
         <dd class="col-8">{{ employee.id }}</dd>
-        <dt class="col-4">Name:</dt>
+        <dt class="col-4">{{_('Name')}}:</dt>
         <dd class="col-8">{{ employee.full_name }}</dd>
-        <dt class="col-4">Chinese Name:</dt>
+        <dt class="col-4">{{_('Chinese Name')}}:</dt>
         <dd class="col-8">{{ employee.zh_name or '-'}}</dd>
-        <dt class="col-4">Sex:</dt>
+        <dt class="col-4">{{_('Sex')}}:</dt>
         <dd class="col-8">{{ employee.sex }}</dd>
-        <dt class="col-4">Birthday:</dt>
+        <dt class="col-4">{{_('Birthday')}}:</dt>
         <dd class="col-8">{{ employee.birthday or '-'}}</dd>
-        <dt class="col-4">Contact:</dt>
+        <dt class="col-4">{{_('Contact')}}:</dt>
         <dd class="col-8">{{ employee.contact or '-'}}</dd>
-        <dt class="col-4">E-Mail:</dt>
+        <dt class="col-4">{{_('E-Mail')}}:</dt>
         <dd class="col-8">{{ employee.email or '-'}}</dd>
     </dl>
     <dl class="row">
-        <dt class="col-4">ID Type:</dt>
+        <dt class="col-4">{{_('ID Type')}}:</dt>
         <dd class="col-8">{{ employee.id_type }}</dd>
-        <dt class="col-4">ID Number:</dt>
+        <dt class="col-4">{{_('ID Number')}}:</dt>
         <dd class="col-8">{{ employee.id_number }}</dd>
-        <dt class="col-4">ID Validity:</dt>
+        <dt class="col-4">{{_('ID Validity')}}:</dt>
         <dd class="col-8">{{ employee.id_validity }}</dd>
-        <dt class="col-4">Nationality:</dt>
+        <dt class="col-4">{{_('Nationality')}}:</dt>
         <dd class="col-8">{{ employee.nationality }}</dd>
-        <dt class="col-4">NIF:</dt>
+        <dt class="col-4">{{_('NIF')}}:</dt>
         <dd class="col-8">{{ employee.nif or '-'}}</dd>
-        <dt class="col-4">NISS:</dt>
+        <dt class="col-4">{{_('NISS')}}:</dt>
         <dd class="col-8">{{ employee.niss or '-'}}</dd>
     </dl>
     <dl class="row">
-        <dt class="col-4">Start date:</dt>
+        <dt class="col-4">{{_('Start date')}}:</dt>
         <dd class="col-8">{{ employee.employment_date or '-'}}</dd>
-        <dt class="col-4">Total Salary:</dt>
+        <dt class="col-4">{{_('Total Salary')}}:</dt>
         <dd class="col-8">{{ employee.total_salary }}</dd>
-        <dt class="col-4">Taxed Salary:</dt>
+        <dt class="col-4">{{_('Taxed Salary')}}:</dt>
         <dd class="col-8">{{ employee.taxed_salary }}</dd>
     </dl>
     <dl class="row">
-        <dt class="col-4">Remark:</dt>
+        <dt class="col-4">{{_('Remark')}}:</dt>
         <dd class="col-8">{{ employee.remark or '-'}}</dd>
     </dl>
     <div class="d-print-none">
         <hr>
-        <h3 id="Files">Files</h3>
+        <h3 id="Files">{{_('Files')}}</h3>
         <div class="mb-2">
             <form action="{{url_for('employee.upload',employee_id=employee.id)}}" method="post"
                 enctype='multipart/form-data' class="d-inline" novalidate>
                 {{ file_form.hidden_tag() }}
                 {{ file_form.file(id="selectedFile", style="display:none", onchange="form.submit()") }}
-                <input type="button" value="New File" class="btn btn-success"
+                <input type="button" value="{{_('New File')}}" class="btn btn-success"
                     onclick="document.getElementById('selectedFile').click();" />
             </form>
             {% if employee.deleted_files %}
             <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#deletedFiles"
                 aria-expanded="false" aria-controls="deletedFiles" id="fileButton">
-                Show deleted files
+                {{_('Show deleted files')}}
             </button>
             {% endif %}
         </div>
@@ -90,11 +90,11 @@
             <table class="table table-striped table-bordered text-nowrap text-center">
                 <thead class="table-dark">
                     <tr>
-                        <th scope="col">File Name</th>
-                        <th scope="col">Upload Date</th>
-                        <th scope="col">Size</th>
-                        <th scope="col">Edit</th>
-                        <th scope="col">Delete</th>
+                        <th scope="col">{{_('File Name')}}</th>
+                        <th scope="col">{{_('Upload Date')}}</th>
+                        <th scope="col">{{_('Size')}}</th>
+                        <th scope="col">{{_('Edit')}}</th>
+                        <th scope="col">{{_('Delete')}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -128,16 +128,16 @@
         {% endif %}
 
         <div class="collapse" id="deletedFiles">
-            <h4>Deleted Files</h4>
+            <h4>{{_('Deleted Files')}}</h4>
 
             <div class="table-responsive">
                 <table class="table table-striped table-bordered text-nowrap text-center">
                     <thead class="table-dark">
                         <tr>
-                            <th scope="col">File Name</th>
-                            <th scope="col">Deleted Date</th>
-                            <th scope="col">Size</th>
-                            <th scope="col">Restore</th>
+                            <th scope="col">{{_('File Name')}}</th>
+                            <th scope="col">{{_('Deleted Date')}}</th>
+                            <th scope="col">{{_('Size')}}</th>
+                            <th scope="col">{{_('Restore')}}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -170,7 +170,7 @@
                 <span class="material-icons mb-18 info">
                     info
                 </span>
-                These files will be permanente removed 30 days after being deleted
+                {{_('These files will be permanente removed 30 days after being deleted')}}
             </div>
         </div>
     </div>
@@ -182,7 +182,7 @@
     $(document).ready(function () {
         $('#fileButton').click(function () {
             $(this).text(function (i, old) {
-                return old == 'Hide deleted files' ? 'Show deleted files' : 'Hide deleted files';
+                return old == '{{_("Hide deleted files")}}' ? '{{_("Show deleted files")}}' : '{{_("Hide deleted files")}}';
             });
         });
     });

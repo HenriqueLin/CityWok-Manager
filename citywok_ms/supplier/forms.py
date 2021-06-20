@@ -3,35 +3,68 @@ from flask_wtf import FlaskForm
 from wtforms import HiddenField, StringField, SubmitField, TextAreaField
 from wtforms.fields.html5 import EmailField, IntegerField, TelField
 from wtforms.validators import Email, InputRequired, Optional, ValidationError
+from flask_babel import lazy_gettext as _l, _
 
 
 class SupplierForm(FlaskForm):
     hide_id = HiddenField()
-    name = StringField(label="Company Name", validators=[InputRequired()])
-    abbreviation = StringField(label="Abbreviation", validators=[Optional()])
-    principal = StringField(label="Principal", validators=[InputRequired()])
-    contact = TelField(label="Contact", validators=[Optional()])
-
-    email = EmailField(label="E-mail", validators=[Optional(), Email()])
-    nif = IntegerField(label="NIF", validators=[Optional()])
-    iban = StringField(
-        label="IBAN", validators=[Optional()], filters=[lambda x: x or None]
+    name = StringField(
+        label=_l("Company Name"),
+        validators=[InputRequired()],
     )
-    address = StringField(label="Address", validators=[Optional()])
-    postcode = StringField(label="Postcode", validators=[Optional()])
-    city = StringField(label="City", validators=[Optional()])
+    abbreviation = StringField(
+        label=_l("Abbreviation"),
+        validators=[Optional()],
+    )
+    principal = StringField(
+        label=_l("Principal"),
+        validators=[InputRequired()],
+    )
+    contact = TelField(
+        label=_l("Contact"),
+        validators=[Optional()],
+    )
 
-    remark = TextAreaField(label="Remark", validators=[Optional()])
+    email = EmailField(
+        label=_l("E-mail"),
+        validators=[Optional(), Email()],
+    )
+    nif = IntegerField(
+        label=_l("NIF"),
+        validators=[Optional()],
+    )
+    iban = StringField(
+        label=_l("IBAN"),
+        validators=[Optional()],
+        filters=[lambda x: x or None],
+    )
+    address = StringField(
+        label=_l("Address"),
+        validators=[Optional()],
+    )
+    postcode = StringField(
+        label=_l("Postcode"),
+        validators=[Optional()],
+    )
+    city = StringField(
+        label=_l("City"),
+        validators=[Optional()],
+    )
 
-    submit = SubmitField(label="Add")
-    update = SubmitField(label="Update")
+    remark = TextAreaField(
+        label=_l("Remark"),
+        validators=[Optional()],
+    )
+
+    submit = SubmitField(label=_l("Add"))
+    update = SubmitField(label=_l("Update"))
 
     def validate_nif(self, nif):
         s = Supplier.query.filter_by(nif=nif.data).first()
         if nif.data and s and (s.id != self.hide_id.data):
-            raise ValidationError("This NIF already existe")
+            raise ValidationError(_("This NIF already existe"))
 
     def validate_iban(self, iban):
         s = Supplier.query.filter_by(iban=iban.data).first()
         if iban.data and s and (s.id != self.hide_id.data):
-            raise ValidationError("This IBAN already existe")
+            raise ValidationError(_("This IBAN already existe"))

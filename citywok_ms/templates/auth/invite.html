@@ -21,7 +21,7 @@
             <div class="w-100 my-0"></div>
             <div class="gx-3 col-sm-6">
                 {{ form.submit(class="btn btn-success ms-1 float-end") }}
-                <a href="{{url_for('main.index')}}" class="btn btn-secondary float-end">Cancle</a>
+                <a href="{{url_for('main.index')}}" class="btn btn-secondary float-end">{{_('Cancle')}}</a>
             </div>
         </div>
 </div>
@@ -33,18 +33,16 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="LinkModalLabel">Invite link</h5>
+                <h5 class="modal-title" id="LinkModalLabel">{{_('Invite link')}}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body style=" min-height: 500px"">
-                Click <a id="link" href="{{ url_for('auth.registration',token=token, _external=True) }}"
-                    target="_blank">here</a>
-                to
-                registe,
-                or click the button bellow to copy the link and send it to the invitee.
+                {{_('Click')}} <a id="link" href="{{ url_for('auth.registration',token=token, _external=True) }}"
+                    target="_blank">{{_('here')}}</a>
+                {{_('to registe, or click the button bellow to copy the link.')}}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="copy()">Copy</button>
+                <button type="button" class="btn btn-primary" onclick="copy()">{{_('Copy')}}</button>
             </div>
         </div>
     </div>

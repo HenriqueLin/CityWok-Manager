@@ -1,27 +1,29 @@
-LOGIN_SUCCESS = 'Welcome "{name}", you are logged in.'
-LOGIN_FAIL = "Please check your username/password."
-LOGIN_TITLE = "Login"
-REQUIRE_CONFIRMATION = "Your e-mail hasn't been confirmed."
-REQUIRE_LOGIN = "Please log in to access this page."
+from flask_babel import lazy_gettext as _l
 
-INVITE_TITLE = "Invite"
-EMAIL_SENT = "A invite e-mail has been sent to the envitee."
-INVALID_INVITE = "Invite link is invalid."
+LOGIN_SUCCESS = _l("Welcome {name}, you are logged in.")
+LOGIN_FAIL = _l("Please check your username/password.")
+LOGIN_TITLE = _l("Login")
+REQUIRE_CONFIRMATION = _l("Your e-mail hasn't been confirmed.")
+REQUIRE_LOGIN = _l("Please log in to access this page.")
 
-LOGOUT_SUCCESS = "You have been logged out."
+INVITE_TITLE = _l("Invite")
+EMAIL_SENT = _l("A invite e-mail has been sent to the envitee.")
+INVALID_INVITE = _l("Invite link is invalid.")
 
-REGISTE_SUCCESS = "A confirmation e-mail has been sent to {email}."
-REGISTE_TITLE = "Register"
-REQUIRED_LOGOUT = "You are already logged in."
+LOGOUT_SUCCESS = _l("You have been logged out.")
 
-ALREADY_CONFIRMED = "Your e-mail address has already been confirmed."
-CONFIRMATION_SUCCESS = "Your e-mail address is now confirmed."
+REGISTE_SUCCESS = _l("A confirmation e-mail has been sent to {email}.")
+REGISTE_TITLE = _l("Register")
+REQUIRED_LOGOUT = _l("You are already logged in.")
 
-INVALID_CONFIRMATION = "Confirmation link is invalid."
+ALREADY_CONFIRMED = _l("Your e-mail address has already been confirmed.")
+CONFIRMATION_SUCCESS = _l("Your e-mail address is now confirmed.")
 
-FORGET_SUCCESS = "A e-mail to reset the password has been sent to {email}."
-FORGET_TITLE = "Forget Password"
+INVALID_CONFIRMATION = _l("Confirmation link is invalid.")
 
-RESET_SUCCESS = "Your password has been reset."
-RESET_TITLE = "Reset Password"
-INVALID_RESET = "Reset link is invalid."
+FORGET_SUCCESS = _l("A e-mail to reset the password has been sent to {email}.")
+FORGET_TITLE = _l("Forget Password")
+
+RESET_SUCCESS = _l("Your password has been reset.")
+RESET_TITLE = _l("Reset Password")
+INVALID_RESET = _l("Reset link is invalid.")

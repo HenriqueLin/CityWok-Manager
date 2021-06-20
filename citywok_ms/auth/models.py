@@ -7,13 +7,14 @@ from itsdangerous import TimedJSONWebSignatureSerializer as TimedSerializer
 from sqlalchemy import Boolean, Column, Integer, String
 from sqlalchemy_utils import ChoiceType
 from werkzeug.security import check_password_hash, generate_password_hash
+from flask_babel import lazy_gettext as _l
 
 Role = [
-    ("admin", "Admin"),
-    ("manager", "Manager"),
-    ("shareholder", "Shareholder"),
-    ("worker", "Worker"),
-    ("visitor", "Visitor"),
+    ("admin", _l("Admin")),
+    ("manager", _l("Manager")),
+    ("shareholder", _l("Shareholder")),
+    ("worker", _l("Worker")),
+    ("visitor", _l("Visitor")),
 ]
 
 
