@@ -160,7 +160,7 @@ def update():
     """Update all languages."""
     if os.system("pybabel extract -F babel.cfg -k _l -o messages.pot ."):
         raise RuntimeError("extract command failed")
-    if os.system("pybabel update -i messages.pot -d citywok_ms/translations"):
+    if os.system("pybabel update -N -i messages.pot -d citywok_ms/translations"):
         raise RuntimeError("update command failed")
     os.remove("messages.pot")
 
@@ -168,7 +168,7 @@ def update():
 @i18n.command()
 def compile():
     """Compile all languages."""
-    if os.system("pybabel compile -d citywok_ms/translations"):
+    if os.system("pybabel compile --statistics -f -d citywok_ms/translations"):
         raise RuntimeError("compile command failed")
 
 
