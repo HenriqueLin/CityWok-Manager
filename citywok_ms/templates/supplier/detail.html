@@ -6,53 +6,53 @@
     <h1>{{title}}</h1>
     <div class="d-print-none">
         <a href="{{url_for('supplier.update',supplier_id=supplier.id)}}" class="btn btn-primary d-print-none"
-            id="update_button">Update</a>
+            id="update_button">{{_('Update')}}</a>
     </div>
     <hr>
     <!-- information -->
     <dl class="row">
-        <dt class="col-4">ID:</dt>
+        <dt class="col-4">{{_('ID')}}:</dt>
         <dd class="col-8">{{ supplier.id }}</dd>
-        <dt class="col-4">Company Name:</dt>
+        <dt class="col-4">{{_('Company Name')}}:</dt>
         <dd class="col-8">{{ supplier.name }}</dd>
-        <dt class="col-4">Abbreviation:</dt>
+        <dt class="col-4">{{_('Abbreviation')}}:</dt>
         <dd class="col-8">{{ supplier.abbreviation or '-' }}</dd>
-        <dt class="col-4">Principal:</dt>
+        <dt class="col-4">{{_('Principal')}}:</dt>
         <dd class="col-8">{{ supplier.principal or '-'}}</dd>
-        <dt class="col-4">Contact:</dt>
+        <dt class="col-4">{{_('Contact')}}:</dt>
         <dd class="col-8">{{ supplier.contact or '-'}}</dd>
-        <dt class="col-4">E-mail:</dt>
+        <dt class="col-4">{{_('E-mail')}}:</dt>
         <dd class="col-8">{{ supplier.email or '-'}}</dd>
     </dl>
     <dl class="row">
-        <dt class="col-4">NIF:</dt>
+        <dt class="col-4">{{_('NIF')}}:</dt>
         <dd class="col-8">{{ supplier.nif or '-'}}</dd>
-        <dt class="col-4">IBAN:</dt>
+        <dt class="col-4">{{_('IBAN')}}:</dt>
         <dd class="col-8">{{ supplier.iban or '-'}}</dd>
-        <dt class="col-4">Address:</dt>
+        <dt class="col-4">{{_('Address')}}:</dt>
         <dd class="col-8">{{ supplier.address or '-'}}</dd>
-        <dt class="col-4">Postcode:</dt>
+        <dt class="col-4">{{_('Postcode')}}:</dt>
         <dd class="col-8">{{ supplier.postcode or '-'}}</dd>
-        <dt class="col-4">City:</dt>
+        <dt class="col-4">{{_('City')}}:</dt>
         <dd class="col-8">{{ supplier.city or '-'}}</dd>
-        <dt class="col-4">Remark:</dt>
+        <dt class="col-4">{{_('Remark')}}:</dt>
         <dd class="col-8">{{ supplier.remark or '-'}}</dd>
     </dl>
     <div class="d-print-none">
         <hr>
-        <h3 id="Files">Files</h3>
+        <h3 id="Files">{{_('Files')}}</h3>
         <div class="mb-2">
             <form action="{{url_for('supplier.upload',supplier_id=supplier.id)}}" method="post"
                 enctype='multipart/form-data' class="d-inline" novalidate>
                 {{ file_form.hidden_tag() }}
                 {{ file_form.file(id="selectedFile", style="display:none", onchange="form.submit()") }}
-                <input type="button" value="New File" class="btn btn-success"
+                <input type="button" value="{{_('New File')}}" class="btn btn-success"
                     onclick="document.getElementById('selectedFile').click();" />
             </form>
             {% if supplier.deleted_files %}
             <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#deletedFiles"
                 aria-expanded="false" aria-controls="deletedFiles" id="fileButton">
-                Show deleted files
+                {{_('Show deleted files')}}
             </button>
             {% endif %}
         </div>
@@ -61,11 +61,11 @@
             <table class="table table-striped table-bordered text-nowrap text-center">
                 <thead class="table-dark">
                     <tr>
-                        <th scope="col">File Name</th>
-                        <th scope="col">Upload Date</th>
-                        <th scope="col">Size</th>
-                        <th scope="col">Edit</th>
-                        <th scope="col">Delete</th>
+                        <th scope="col">{{_('File Name')}}</th>
+                        <th scope="col">{{_('Upload Date')}}</th>
+                        <th scope="col">{{_('Size')}}</th>
+                        <th scope="col">{{_('Edit')}}</th>
+                        <th scope="col">{{_('Delete')}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -99,16 +99,16 @@
         {% endif %}
 
         <div class="collapse" id="deletedFiles">
-            <h4>Deleted Files</h4>
+            <h4>{{_('Deleted Files')}}</h4>
 
             <div class="table-responsive">
                 <table class="table table-striped table-bordered text-nowrap text-center">
                     <thead class="table-dark">
                         <tr>
-                            <th scope="col">File Name</th>
-                            <th scope="col">Deleted Date</th>
-                            <th scope="col">Size</th>
-                            <th scope="col">Restore</th>
+                            <th scope="col">{{_('File Name')}}</th>
+                            <th scope="col">{{_('Deleted Date')}}</th>
+                            <th scope="col">{{_('Size')}}</th>
+                            <th scope="col">{{_('Restore')}}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -141,7 +141,7 @@
                 <span class="material-icons mb-18 info">
                     info
                 </span>
-                These files will be permanente removed 30 days after being deleted
+                {{_('These files will be permanente removed 30 days after being deleted')}}
             </div>
         </div>
     </div>
@@ -153,7 +153,7 @@
     $(document).ready(function () {
         $('#fileButton').click(function () {
             $(this).text(function (i, old) {
-                return old == 'Hide deleted files' ? 'Show deleted files' : 'Hide deleted files';
+                return old == '{{_("Hide deleted files")}}' ? '{{_("Show deleted files")}}' : '{{_("Hide deleted files")}}';
             });
         });
     });

@@ -1,25 +1,15 @@
-from citywok_ms.file.messages import INVALID_FORMAT, NO_FILE, UPLOAD_SUCCESS
-import os
-from citywok_ms.file.models import EmployeeFile
-import io
-from wtforms.fields.simple import HiddenField, SubmitField
-from citywok_ms.employee.messages import (
-    ACTIVATE_SUCCESS,
-    DETAIL_TITLE,
-    INDEX_TITLE,
-    NEW_SUCCESS,
-    NEW_TITLE,
-    SUSPEND_SUCCESS,
-    UPDATE_SUCCESS,
-    UPDATE_TITLE,
-)
-from citywok_ms.employee.models import Employee
-from citywok_ms.employee.forms import EmployeeForm
-from citywok_ms import db
 import datetime
-from flask import url_for, request
-import pytest
 import html
+import io
+import os
+
+import pytest
+from citywok_ms import db
+from citywok_ms.employee.forms import EmployeeForm
+from citywok_ms.employee.models import Employee
+from citywok_ms.file.models import EmployeeFile
+from flask import request, url_for
+from wtforms.fields.simple import HiddenField, SubmitField
 
 
 @pytest.mark.role("admin")
@@ -31,7 +21,7 @@ def test_index_get(client, user):
     assert response.status_code == 200
 
     # titles
-    assert INDEX_TITLE in data
+    assert "Employees" in data
     assert "Active Employees" in data
     assert "Suspended Employees" not in data
 
@@ -49,7 +39,7 @@ def test_index_get_with_employee(client, user, employee):
     assert response.status_code == 200
 
     # titles
-    assert INDEX_TITLE in data
+    assert "Employees" in data
     assert "Active Employees" in data
     assert "Suspended Employees" in data
 
@@ -79,13 +69,13 @@ def test_new_get(client, user):
     assert response.status_code == 200
 
     # titles
-    assert NEW_TITLE in data
+    assert "New Employee" in data
 
     # form
     for field in EmployeeForm()._fields.values():
         if isinstance(field, (HiddenField, SubmitField)):
             continue
-        assert field.label.text in data
+        assert field.id in data
     assert "Add" in data
 
     # links
@@ -126,13 +116,27 @@ def test_new_post_valid(client, user):
             assert getattr(employee, key) == request_data[key]
 
     # flash messege
-    assert NEW_SUCCESS.format(name=employee.full_name) in html.unescape(data)
+    assert f'New employee "{employee.full_name}" has been added.' in html.unescape(data)
 
 
 @pytest.mark.role("admin")
 @pytest.mark.role("admin")
-def test_new_post_invalid(client, user):
-    response = client.post(url_for("employee.new"), data={}, follow_redirects=True)
+def test_new_post_invalid(client, user, employee):
+    request_data = {
+        "first_name": "NEW",
+        "sex": "F",
+        "id_type": "passport",
+        "id_number": "1",
+        "id_validity": "2000-01-01",
+        "nationality": "US",
+        "total_salary": 1000,
+        "taxed_salary": 635.00,
+        "nif": 123123,
+        "niss": 321321,
+    }
+    response = client.post(
+        url_for("employee.new"), data=request_data, follow_redirects=True
+    )
     data = response.data.decode()
 
     # state code
@@ -141,9 +145,12 @@ def test_new_post_invalid(client, user):
     assert request.url.endswith(url_for("employee.new"))
     # form validation message
     assert "This field is required." in data
+    assert "ID has expired" in data
+    assert "This NIF already existe" in data
+    assert "This NISS already existe" in data
 
     # database data
-    assert db.session.query(Employee).count() == 0
+    assert db.session.query(Employee).count() == 2  # 2 employee created in fixture
 
 
 @pytest.mark.role("admin")
@@ -158,7 +165,7 @@ def test_detail_get(client, user, employee_with_file, id):
     # state code
     assert response.status_code == 200
     # titles
-    assert DETAIL_TITLE in data
+    assert "Employee Detail" in data
     assert "Files" in data
     if id == 2:
         assert "Suspended" in data
@@ -200,12 +207,12 @@ def test_update_get(client, user, employee, id):
     # state code
     assert response.status_code == 200
     # titles
-    assert UPDATE_TITLE in data
+    assert "Update Employee" in data
     # form
     for field in EmployeeForm()._fields.values():
         if isinstance(field, (HiddenField, SubmitField)):
             continue
-        assert field.label.text in data
+        assert field.id in data
 
     employee = Employee.get_or_404(id)
     for attr in Employee.__table__.columns:
@@ -254,7 +261,7 @@ def test_update_post_valid(client, user, employee, id):
             assert getattr(employee, key) == request_data[key]
 
     # flash messege
-    assert UPDATE_SUCCESS.format(name=employee.full_name) in html.unescape(data)
+    assert f'Employee "{employee.full_name}" has been updated.' in html.unescape(data)
 
 
 @pytest.mark.role("admin")
@@ -301,7 +308,7 @@ def test_activate_post(client, user, employee, id):
     assert response.status_code == 200
     assert request.url.endswith(url_for("employee.detail", employee_id=id))
     assert employee.active
-    assert ACTIVATE_SUCCESS.format(name=employee.full_name) in html.unescape(data)
+    assert f'Employee "{employee.full_name}" has been activated.' in html.unescape(data)
 
 
 @pytest.mark.role("admin")
@@ -326,7 +333,7 @@ def test_suspende_post(client, user, employee, id):
     assert response.status_code == 200
     assert request.url.endswith(url_for("employee.detail", employee_id=id))
     assert not employee.active
-    assert SUSPEND_SUCCESS.format(name=employee.full_name) in html.unescape(data)
+    assert f'Employee "{employee.full_name}" has been suspended.' in html.unescape(data)
 
 
 @pytest.mark.role("admin")
@@ -351,10 +358,9 @@ def test_upload_post_valid(client, user, employee, id):
         follow_redirects=True,
     )
     data = response.data.decode()
-
     assert response.status_code == 200
     assert request.url.endswith(url_for("employee.detail", employee_id=id))
-    assert UPLOAD_SUCCESS.format(name="test.jpg") in html.unescape(data)
+    assert 'File "test.jpg" has been uploaded.' in html.unescape(data)
     assert db.session.query(EmployeeFile).count() == 1
     f = db.session.query(EmployeeFile).get(1)
     assert f.full_name == "test.jpg"
@@ -377,7 +383,7 @@ def test_upload_post_invalid_format(client, user, employee, id):
 
     assert response.status_code == 200
     assert request.url.endswith(url_for("employee.detail", employee_id=id))
-    assert INVALID_FORMAT.format(format=".exe") in html.unescape(data)
+    assert 'Invalid file format ".exe".' in html.unescape(data)
 
 
 @pytest.mark.role("admin")
@@ -393,4 +399,4 @@ def test_upload_post_invalid_empty(client, user, employee, id):
 
     assert response.status_code == 200
     assert request.url.endswith(url_for("employee.detail", employee_id=id))
-    assert NO_FILE in html.unescape(data)
+    assert "No file has been uploaded." in html.unescape(data)

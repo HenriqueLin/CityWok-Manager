@@ -1,5 +1,3 @@
-import citywok_ms.file.messages as file_msg
-import citywok_ms.supplier.messages as supplier_msg
 from citywok_ms import db
 from citywok_ms.auth.permissions import manager, shareholder, visitor
 from citywok_ms.file.forms import FileForm
@@ -7,6 +5,7 @@ from citywok_ms.file.models import File, SupplierFile
 from citywok_ms.supplier.forms import SupplierForm
 from citywok_ms.supplier.models import Supplier
 from flask import Blueprint, flash, redirect, render_template, url_for
+from flask_babel import _
 
 supplier = Blueprint("supplier", __name__, url_prefix="/supplier")
 
@@ -16,7 +15,7 @@ supplier = Blueprint("supplier", __name__, url_prefix="/supplier")
 def index():
     return render_template(
         "supplier/index.html",
-        title=supplier_msg.INDEX_TITLE,
+        title=_("Suppliers"),
         suppliers=Supplier.get_all(),
     )
 
@@ -27,12 +26,12 @@ def new():
     form = SupplierForm()
     if form.validate_on_submit():
         supplier = Supplier.create_by_form(form)
-        flash(supplier_msg.NEW_SUCCESS.format(name=supplier.name), "success")
+        flash(
+            _('New supplier "%(name)s" has been added.', name=supplier.name), "success"
+        )
         db.session.commit()
         return redirect(url_for("supplier.index"))
-    return render_template(
-        "supplier/form.html", title=supplier_msg.NEW_TITLE, form=form
-    )
+    return render_template("supplier/form.html", title=_("New Supplier"), form=form)
 
 
 @supplier.route("/<int:supplier_id>")
@@ -40,7 +39,7 @@ def new():
 def detail(supplier_id):
     return render_template(
         "supplier/detail.html",
-        title=supplier_msg.DETAIL_TITLE,
+        title=_("Supplier Detail"),
         supplier=Supplier.get_or_404(supplier_id),
         file_form=FileForm(),
     )
@@ -54,7 +53,7 @@ def update(supplier_id):
     form.hide_id.data = supplier_id
     if form.validate_on_submit():
         supplier.update_by_form(form)
-        flash(supplier_msg.UPDATE_SUCCESS.format(name=supplier.name), "success")
+        flash(_('Supplier "%(name)s" has been updated.', name=supplier.name), "success")
         db.session.commit()
         return redirect(url_for("supplier.detail", supplier_id=supplier_id))
 
@@ -64,7 +63,7 @@ def update(supplier_id):
         "supplier/form.html",
         supplier=supplier,
         form=form,
-        title=supplier_msg.UPDATE_TITLE,
+        title=_("Update Supplier"),
     )
 
 
@@ -75,13 +74,15 @@ def upload(supplier_id):
     file = form.file.data
     if form.validate_on_submit():
         db_file = SupplierFile.create_by_form(form, Supplier.get_or_404(supplier_id))
-        flash(file_msg.UPLOAD_SUCCESS.format(name=db_file.full_name), "success")
+        flash(
+            _('File "%(name)s" has been uploaded.', name=db_file.full_name), "success"
+        )
         db.session.commit()
     elif file is not None:
         flash(
-            file_msg.INVALID_FORMAT.format(format=File.split_file_format(file)),
+            _('Invalid file format "%(format)s".', format=File.split_file_format(file)),
             "danger",
         )
     else:
-        flash(file_msg.NO_FILE, "danger")
+        flash(_("No file has been uploaded."), "danger")
     return redirect(url_for("supplier.detail", supplier_id=supplier_id))

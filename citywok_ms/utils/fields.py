@@ -55,7 +55,7 @@ class BlankCountry(Country):
     def validate(self, code):
         try:
             i18n.babel.Locale("en").territories[code]
-        except KeyError:
+        except KeyError:  # test: no cover
             if code == "":
                 pass
             else:

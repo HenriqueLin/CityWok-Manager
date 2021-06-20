@@ -1,0 +1,631 @@
+# Chinese translations for PROJECT.
+# Copyright (C) 2021 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2021-06-20 23:16+0100\n"
+"PO-Revision-Date: 2021-06-19 22:05+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh\n"
+"Language-Team: zh <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: citywok_ms/auth/forms.py:14 citywok_ms/auth/forms.py:70
+msgid "User Name"
+msgstr "用户名"
+
+#: citywok_ms/auth/forms.py:18 citywok_ms/auth/forms.py:78
+msgid "Password"
+msgstr "密码"
+
+#: citywok_ms/auth/forms.py:22 citywok_ms/auth/routes.py:57
+msgid "Login"
+msgstr "登录"
+
+#: citywok_ms/auth/forms.py:27
+msgid "Invitee's E-mail"
+msgstr "受邀人邮箱"
+
+#: citywok_ms/auth/forms.py:31
+msgid "Role"
+msgstr "权限"
+
+#: citywok_ms/auth/forms.py:37 citywok_ms/auth/routes.py:85
+#: citywok_ms/templates/layout.html:84
+msgid "Invite"
+msgstr "邀请"
+
+#: citywok_ms/auth/forms.py:41
+msgid "E-mail address already taken."
+msgstr "邮箱已被占用。"
+
+#: citywok_ms/auth/forms.py:46 citywok_ms/auth/forms.py:74
+msgid "Email"
+msgstr "邮箱"
+
+#: citywok_ms/auth/forms.py:49
+msgid "Submit"
+msgstr "提交"
+
+#: citywok_ms/auth/forms.py:53
+msgid "User with this e-mail address do not exist."
+msgstr "此邮箱不存在。"
+
+#: citywok_ms/auth/forms.py:58
+msgid "New Password"
+msgstr "新密码"
+
+#: citywok_ms/auth/forms.py:62 citywok_ms/auth/forms.py:82
+msgid "Repeat Password"
+msgstr "重复密码"
+
+#: citywok_ms/auth/forms.py:65
+msgid "Reset"
+msgstr "重置"
+
+#: citywok_ms/auth/forms.py:85 citywok_ms/auth/routes.py:120
+msgid "Register"
+msgstr "注册"
+
+#: citywok_ms/auth/forms.py:90
+msgid "Please use a different username."
+msgstr "请使用一个不同的用户名。"
+
+#: citywok_ms/auth/forms.py:95
+msgid "Please use a different email address."
+msgstr "请使用一个不同的邮箱。"
+
+#: citywok_ms/auth/models.py:13
+msgid "Admin"
+msgstr "管理员"
+
+#: citywok_ms/auth/models.py:14
+msgid "Manager"
+msgstr "主管"
+
+#: citywok_ms/auth/models.py:15
+msgid "Shareholder"
+msgstr "股东"
+
+#: citywok_ms/auth/models.py:16
+msgid "Worker"
+msgstr "员工"
+
+#: citywok_ms/auth/models.py:17
+msgid "Visitor"
+msgstr "访客"
+
+#: citywok_ms/auth/routes.py:48
+#, python-format
+msgid "Welcome %(name)s, you are logged in."
+msgstr "您好 %(name)s，你已成功登录。"
+
+#: citywok_ms/auth/routes.py:53
+msgid "Your e-mail hasn't been confirmed."
+msgstr "您的邮箱尚未被验证。"
+
+#: citywok_ms/auth/routes.py:56
+msgid "Please check your username/password."
+msgstr "请检查您的账号/密码是否正确。"
+
+#: citywok_ms/auth/routes.py:66
+msgid "You have been logged out."
+msgstr "您已成功登出。"
+
+#: citywok_ms/auth/routes.py:80
+msgid "A invite e-mail has been sent to the envitee."
+msgstr "邀请已发送至受邀人的邮箱。"
+
+#: citywok_ms/auth/routes.py:94 citywok_ms/auth/routes.py:128
+msgid "You are already logged in."
+msgstr "您已经登录过了"
+
+#: citywok_ms/auth/routes.py:98
+msgid "Invite link is invalid."
+msgstr "邀请链接无效。"
+
+#: citywok_ms/auth/routes.py:109
+#, python-format
+msgid "A confirmation e-mail has been sent to %(email)s."
+msgstr "验证邮件已发送至 %(email)s 。"
+
+#: citywok_ms/auth/routes.py:134
+msgid "Your e-mail address has already been confirmed."
+msgstr "您的邮箱已经验证过了。"
+
+#: citywok_ms/auth/routes.py:137
+msgid "Your e-mail address is now confirmed."
+msgstr "您的邮箱成功验证了。"
+
+#: citywok_ms/auth/routes.py:140
+msgid "Confirmation link is invalid."
+msgstr "验证链接无效。"
+
+#: citywok_ms/auth/routes.py:155
+#, python-format
+msgid "A e-mail to reset the password has been sent to %(email)s."
+msgstr "重置密码的邮件已发送至 %(email)s 。"
+
+#: citywok_ms/auth/routes.py:163
+msgid "Forget Password"
+msgstr "忘记密码"
+
+#: citywok_ms/auth/routes.py:176
+msgid "Your password has been reset."
+msgstr "您的密码已被重置。"
+
+#: citywok_ms/auth/routes.py:180
+msgid "Reset link is invalid."
+msgstr "重置链接无效。"
+
+#: citywok_ms/auth/routes.py:183
+msgid "Reset Password"
+msgstr "重置密码"
+
+#: citywok_ms/employee/forms.py:29 citywok_ms/templates/employee/index.html:17
+#: citywok_ms/templates/employee/index.html:55
+msgid "First Name"
+msgstr "名"
+
+#: citywok_ms/employee/forms.py:33 citywok_ms/templates/employee/index.html:18
+#: citywok_ms/templates/employee/index.html:56
+msgid "Last Name"
+msgstr "姓"
+
+#: citywok_ms/employee/forms.py:37 citywok_ms/templates/employee/detail.html:33
+#: citywok_ms/templates/employee/index.html:19
+#: citywok_ms/templates/employee/index.html:57
+msgid "Chinese Name"
+msgstr "中文名"
+
+#: citywok_ms/employee/forms.py:42 citywok_ms/templates/employee/detail.html:35
+#: citywok_ms/templates/employee/index.html:20
+#: citywok_ms/templates/employee/index.html:58
+msgid "Sex"
+msgstr "性别"
+
+#: citywok_ms/employee/forms.py:49 citywok_ms/templates/employee/detail.html:37
+msgid "Birthday"
+msgstr "生日"
+
+#: citywok_ms/employee/forms.py:53 citywok_ms/supplier/forms.py:24
+#: citywok_ms/templates/employee/detail.html:39
+#: citywok_ms/templates/supplier/detail.html:22
+#: citywok_ms/templates/supplier/index.html:21
+msgid "Contact"
+msgstr "联系方式"
+
+#: citywok_ms/employee/forms.py:56 citywok_ms/supplier/forms.py:29
+#: citywok_ms/templates/supplier/detail.html:24
+#: citywok_ms/templates/supplier/index.html:22
+msgid "E-mail"
+msgstr "邮箱"
+
+#: citywok_ms/employee/forms.py:61 citywok_ms/templates/employee/detail.html:45
+msgid "ID Type"
+msgstr "证件类型"
+
+#: citywok_ms/employee/forms.py:68 citywok_ms/templates/employee/detail.html:47
+msgid "ID Number"
+msgstr "证件号码"
+
+#: citywok_ms/employee/forms.py:72 citywok_ms/templates/employee/detail.html:49
+msgid "ID Validity"
+msgstr "证件有效期"
+
+#: citywok_ms/employee/forms.py:76 citywok_ms/templates/employee/detail.html:51
+msgid "Nationality"
+msgstr "国籍"
+
+#: citywok_ms/employee/forms.py:81 citywok_ms/supplier/forms.py:33
+#: citywok_ms/templates/employee/detail.html:53
+#: citywok_ms/templates/employee/index.html:21
+#: citywok_ms/templates/employee/index.html:59
+#: citywok_ms/templates/supplier/detail.html:28
+#: citywok_ms/templates/supplier/index.html:19
+msgid "NIF"
+msgstr "NIF"
+
+#: citywok_ms/employee/forms.py:85 citywok_ms/templates/employee/detail.html:55
+#: citywok_ms/templates/employee/index.html:22
+#: citywok_ms/templates/employee/index.html:60
+msgid "NISS"
+msgstr "NISS"
+
+#: citywok_ms/employee/forms.py:89
+msgid "Employment Date"
+msgstr "就职日期"
+
+#: citywok_ms/employee/forms.py:93 citywok_ms/templates/employee/detail.html:61
+msgid "Total Salary"
+msgstr "总工资"
+
+#: citywok_ms/employee/forms.py:97 citywok_ms/templates/employee/detail.html:63
+msgid "Taxed Salary"
+msgstr "纳税工资"
+
+#: citywok_ms/employee/forms.py:103 citywok_ms/file/forms.py:22
+#: citywok_ms/supplier/forms.py:55 citywok_ms/templates/employee/detail.html:67
+#: citywok_ms/templates/supplier/detail.html:38
+msgid "Remark"
+msgstr "备注"
+
+#: citywok_ms/employee/forms.py:108 citywok_ms/supplier/forms.py:59
+msgid "Add"
+msgstr "添加"
+
+#: citywok_ms/employee/forms.py:109 citywok_ms/file/forms.py:23
+#: citywok_ms/supplier/forms.py:60 citywok_ms/templates/employee/detail.html:12
+#: citywok_ms/templates/supplier/detail.html:9
+msgid "Update"
+msgstr "更新"
+
+#: citywok_ms/employee/forms.py:113
+msgid "ID has expired"
+msgstr "证件已过期"
+
+#: citywok_ms/employee/forms.py:118 citywok_ms/supplier/forms.py:65
+msgid "This NIF already existe"
+msgstr "NIF已存在"
+
+#: citywok_ms/employee/forms.py:123
+msgid "This NISS already existe"
+msgstr "NISS已存在"
+
+#: citywok_ms/employee/routes.py:18
+msgid "Employees"
+msgstr "员工"
+
+#: citywok_ms/employee/routes.py:31
+#, python-format
+msgid "New employee \"%(name)s\" has been added."
+msgstr "新员工 \"%(name)s\" 已添加。"
+
+#: citywok_ms/employee/routes.py:36
+msgid "New Employee"
+msgstr "添加员工"
+
+#: citywok_ms/employee/routes.py:44
+msgid "Employee Detail"
+msgstr "员工详情"
+
+#: citywok_ms/employee/routes.py:59
+#, python-format
+msgid "Employee \"%(name)s\" has been updated."
+msgstr "员工 \"%(name)s\" 已更新。"
+
+#: citywok_ms/employee/routes.py:71
+msgid "Update Employee"
+msgstr "更新员工"
+
+#: citywok_ms/employee/routes.py:81
+#, python-format
+msgid "Employee \"%(name)s\" has been suspended."
+msgstr "员工 \"%(name)s\" 冻结。"
+
+#: citywok_ms/employee/routes.py:93
+#, python-format
+msgid "Employee \"%(name)s\" has been activated."
+msgstr "员工 \"%(name)s\" 已激活。"
+
+#: citywok_ms/employee/routes.py:107 citywok_ms/supplier/routes.py:78
+#, python-format
+msgid "File \"%(name)s\" has been uploaded."
+msgstr "文件名已更新。"
+
+#: citywok_ms/employee/routes.py:112 citywok_ms/supplier/routes.py:83
+#, python-format
+msgid "Invalid file format \"%(format)s\"."
+msgstr "无效的文件格式 \"%(format)s\"。"
+
+#: citywok_ms/employee/routes.py:116 citywok_ms/supplier/routes.py:87
+msgid "No file has been uploaded."
+msgstr "未上传文件。"
+
+#: citywok_ms/error/handlers.py:11
+msgid "Please log in to access this page."
+msgstr "请登录以访问该页面。"
+
+#: citywok_ms/file/forms.py:12
+msgid "File"
+msgstr "文件"
+
+#: citywok_ms/file/forms.py:21 citywok_ms/templates/employee/detail.html:93
+#: citywok_ms/templates/employee/detail.html:137
+#: citywok_ms/templates/supplier/detail.html:64
+#: citywok_ms/templates/supplier/detail.html:108
+msgid "File Name"
+msgstr "文件名"
+
+#: citywok_ms/file/routes.py:30
+#, python-format
+msgid "File \"%(name)s\" has already been deleted."
+msgstr "文件 \"%(name)s\" 已被删除。"
+
+#: citywok_ms/file/routes.py:35
+#, python-format
+msgid "File \"%(name)s\" has been deleted."
+msgstr "文件 \"%(name)s\" 已删除。"
+
+#: citywok_ms/file/routes.py:45
+#, python-format
+msgid "File \"%(name)s\" hasn't been deleted."
+msgstr "文件 \"%(name)s\" 尚未被删除。"
+
+#: citywok_ms/file/routes.py:48
+#, python-format
+msgid "File \"%(name)s\" has been restored."
+msgstr "文件 \"%(name)s\" 已复原。"
+
+#: citywok_ms/file/routes.py:61
+#, python-format
+msgid "File \"%(name)s\" has been updated."
+msgstr "文件 \"%(name)s\" 已更新。"
+
+#: citywok_ms/file/routes.py:67
+msgid "Update File"
+msgstr "更新文件"
+
+#: citywok_ms/supplier/forms.py:12 citywok_ms/templates/supplier/detail.html:16
+#: citywok_ms/templates/supplier/index.html:16
+msgid "Company Name"
+msgstr "公司名称"
+
+#: citywok_ms/supplier/forms.py:16 citywok_ms/templates/supplier/detail.html:18
+#: citywok_ms/templates/supplier/index.html:18
+msgid "Abbreviation"
+msgstr "简称"
+
+#: citywok_ms/supplier/forms.py:20 citywok_ms/templates/supplier/detail.html:20
+#: citywok_ms/templates/supplier/index.html:17
+msgid "Principal"
+msgstr "负责人"
+
+#: citywok_ms/supplier/forms.py:37 citywok_ms/templates/supplier/detail.html:30
+#: citywok_ms/templates/supplier/index.html:20
+msgid "IBAN"
+msgstr "IBAN"
+
+#: citywok_ms/supplier/forms.py:42 citywok_ms/templates/supplier/detail.html:32
+msgid "Address"
+msgstr "地址"
+
+#: citywok_ms/supplier/forms.py:46 citywok_ms/templates/supplier/detail.html:34
+msgid "Postcode"
+msgstr "邮编"
+
+#: citywok_ms/supplier/forms.py:50 citywok_ms/templates/supplier/detail.html:36
+msgid "City"
+msgstr "城市"
+
+#: citywok_ms/supplier/forms.py:70
+msgid "This IBAN already existe"
+msgstr "IBAN已存在"
+
+#: citywok_ms/supplier/routes.py:18
+msgid "Suppliers"
+msgstr "供应商"
+
+#: citywok_ms/supplier/routes.py:30
+#, python-format
+msgid "New supplier \"%(name)s\" has been added."
+msgstr "新供应商 \"%(name)s\" 已添加。"
+
+#: citywok_ms/supplier/routes.py:34
+msgid "New Supplier"
+msgstr "添加供应商"
+
+#: citywok_ms/supplier/routes.py:42
+msgid "Supplier Detail"
+msgstr "供应商详情"
+
+#: citywok_ms/supplier/routes.py:56
+#, python-format
+msgid "Supplier \"%(name)s\" has been updated."
+msgstr "供应商 \"%(name)s\" 已更新。"
+
+#: citywok_ms/supplier/routes.py:66
+msgid "Update Supplier"
+msgstr "更新供应商"
+
+#: citywok_ms/templates/error/403.html:10
+#: citywok_ms/templates/error/404.html:10
+#: citywok_ms/templates/error/500.html:11 citywok_ms/templates/layout.html:33
+msgid "Home"
+msgstr "主页"
+
+#: citywok_ms/templates/layout.html:34
+msgid "Employee"
+msgstr "员工"
+
+#: citywok_ms/templates/layout.html:35
+msgid "Supplier"
+msgstr "供应商"
+
+#: citywok_ms/templates/layout.html:90
+msgid "Logout"
+msgstr "登出"
+
+#: citywok_ms/templates/auth/forget_password.html:18
+#: citywok_ms/templates/auth/invite.html:24
+#: citywok_ms/templates/auth/registration.html:36
+#: citywok_ms/templates/auth/reset_password.html:24
+#: citywok_ms/templates/employee/form.html:99
+#: citywok_ms/templates/employee/form.html:103
+#: citywok_ms/templates/file/update.html:37
+#: citywok_ms/templates/supplier/form.html:69
+#: citywok_ms/templates/supplier/form.html:73
+msgid "Cancle"
+msgstr "取消"
+
+#: citywok_ms/templates/auth/invite.html:36
+msgid "Invite link"
+msgstr "邀请链接"
+
+#: citywok_ms/templates/auth/invite.html:40
+msgid "Click"
+msgstr "点击"
+
+#: citywok_ms/templates/auth/invite.html:41
+msgid "here"
+msgstr "此处"
+
+#: citywok_ms/templates/auth/invite.html:42
+msgid "to registe, or click the button bellow to copy the link."
+msgstr "注册，或点击下方按钮以复制链接。"
+
+#: citywok_ms/templates/auth/invite.html:45
+msgid "Copy"
+msgstr "复制"
+
+#: citywok_ms/templates/auth/login.html:42
+msgid "Forgot Your Password?"
+msgstr "忘记密码"
+
+#: citywok_ms/templates/employee/detail.html:8
+msgid "Suspended"
+msgstr "冻结"
+
+#: citywok_ms/templates/employee/detail.html:16
+msgid "Suspend"
+msgstr "冻结"
+
+#: citywok_ms/templates/employee/detail.html:21
+msgid "Activate"
+msgstr "激活"
+
+#: citywok_ms/templates/employee/detail.html:29
+#: citywok_ms/templates/employee/index.html:16
+#: citywok_ms/templates/employee/index.html:54
+#: citywok_ms/templates/supplier/detail.html:14
+#: citywok_ms/templates/supplier/index.html:15
+msgid "ID"
+msgstr "ID"
+
+#: citywok_ms/templates/employee/detail.html:31
+msgid "Name"
+msgstr "姓名"
+
+#: citywok_ms/templates/employee/detail.html:41
+msgid "E-Mail"
+msgstr "邮箱"
+
+#: citywok_ms/templates/employee/detail.html:59
+msgid "Start date"
+msgstr "就职日期"
+
+#: citywok_ms/templates/employee/detail.html:72
+#: citywok_ms/templates/supplier/detail.html:43
+msgid "Files"
+msgstr "文件"
+
+#: citywok_ms/templates/employee/detail.html:78
+#: citywok_ms/templates/supplier/detail.html:49
+msgid "New File"
+msgstr "添加文件"
+
+#: citywok_ms/templates/employee/detail.html:84
+#: citywok_ms/templates/employee/detail.html:185
+#: citywok_ms/templates/supplier/detail.html:55
+#: citywok_ms/templates/supplier/detail.html:156
+msgid "Show deleted files"
+msgstr "显示已删除文件"
+
+#: citywok_ms/templates/employee/detail.html:94
+#: citywok_ms/templates/supplier/detail.html:65
+msgid "Upload Date"
+msgstr "上传日期"
+
+#: citywok_ms/templates/employee/detail.html:95
+#: citywok_ms/templates/employee/detail.html:139
+#: citywok_ms/templates/supplier/detail.html:66
+#: citywok_ms/templates/supplier/detail.html:110
+msgid "Size"
+msgstr "大小"
+
+#: citywok_ms/templates/employee/detail.html:96
+#: citywok_ms/templates/supplier/detail.html:67
+msgid "Edit"
+msgstr "编辑"
+
+#: citywok_ms/templates/employee/detail.html:97
+#: citywok_ms/templates/supplier/detail.html:68
+msgid "Delete"
+msgstr "删除"
+
+#: citywok_ms/templates/employee/detail.html:131
+#: citywok_ms/templates/supplier/detail.html:102
+msgid "Deleted Files"
+msgstr "已删除文件"
+
+#: citywok_ms/templates/employee/detail.html:138
+#: citywok_ms/templates/supplier/detail.html:109
+msgid "Deleted Date"
+msgstr "删除日期"
+
+#: citywok_ms/templates/employee/detail.html:140
+#: citywok_ms/templates/supplier/detail.html:111
+msgid "Restore"
+msgstr "复原"
+
+#: citywok_ms/templates/employee/detail.html:173
+#: citywok_ms/templates/supplier/detail.html:144
+msgid "These files will be permanente removed 30 days after being deleted"
+msgstr "这些文件将在被删除后30天后被彻底移除。"
+
+#: citywok_ms/templates/employee/detail.html:185
+#: citywok_ms/templates/supplier/detail.html:156
+msgid "Hide deleted files"
+msgstr "隐藏已删除文件"
+
+#: citywok_ms/templates/employee/index.html:7
+msgid "Active Employees"
+msgstr "激活员工"
+
+#: citywok_ms/templates/employee/index.html:9
+#: citywok_ms/templates/supplier/index.html:8
+msgid "New"
+msgstr "添加"
+
+#: citywok_ms/templates/employee/index.html:23
+#: citywok_ms/templates/employee/index.html:61
+#: citywok_ms/templates/supplier/index.html:23
+msgid "Detail"
+msgstr "详情"
+
+#: citywok_ms/templates/employee/index.html:49
+msgid "Suspended Employees"
+msgstr "冻结员工"
+
+#: citywok_ms/templates/error/403.html:7
+msgid "Ops, seems like you don't have the permission to visit this page."
+msgstr "您没有查看此页面的权限。"
+
+#: citywok_ms/templates/error/403.html:9 citywok_ms/templates/error/500.html:10
+msgid "Back"
+msgstr "返回"
+
+#: citywok_ms/templates/error/404.html:7
+msgid "File Not Found."
+msgstr "文件不存在。"
+
+#: citywok_ms/templates/error/404.html:8
+msgid "Please check if the url is correct."
+msgstr "请检查链接是否正确。"
+
+#: citywok_ms/templates/error/500.html:7
+msgid "An unexpected error has occurred"
+msgstr "发生未知错误"
+
+#: citywok_ms/templates/error/500.html:8
+msgid "The administrator has been notified."
+msgstr "已通知管理员。"
+

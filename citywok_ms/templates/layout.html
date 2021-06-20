@@ -30,9 +30,9 @@
 </head>
 
 {% set navbar = [
-('#','home','Home'),
-(url_for('employee.index'), 'employee', 'Employee'),
-(url_for('supplier.index'), 'supplier','Supplier')
+('#','home',_('Home')),
+(url_for('employee.index'), 'employee', _('Employee')),
+(url_for('supplier.index'), 'supplier',_('Supplier'))
 ] -%}
 
 {# ('#', 'supplier','Supplier'),
@@ -81,13 +81,13 @@
                 </li>#}
                 {% if current_user.role in ['admin','manager'] %}
                 <li class="nav-item">
-                    <a class="btn btn-primary" href="{{ url_for('auth.invite') }}">Invite</a>
+                    <a class="btn btn-primary" href="{{ url_for('auth.invite') }}">{{_('Invite')}}</a>
                 </li>
                 {% endif %}
                 <li class="nav-item">
                     <form action="{{url_for('auth.logout')}}" method="post" class="d-inline" novalidate>
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                        <input type="submit" value="Logout" class="btn btn-danger" />
+                        <input type="submit" value="{{_('Logout')}}" class="btn btn-danger" />
                     </form>
                 </li>
                 {% endif %}
