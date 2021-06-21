@@ -6,6 +6,74 @@
 ## Introduction
 A website base management system for a restaurante.
 
+## Usage
+### Prepare
+Create a `.env` file under root directory with following context
+```
+SECRET_KEY=...
+ADMIN_NAME=...
+ADMIN_EMAIL=...
+ADMIN_PASSWORD=...
+MAIL_USERNAME=...
+MAIL_PASSWORD=...
+DATABASE_URL=...
+```
+Change the `FLASK_ENV` in `.flaskenv` in production
+```
+...
+FLASK_ENV=production
+```
+### Install
+```sh
+# Upgrade pip
+$ python -m pip install --upgrade pip
+
+# Install libraries
+$ if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+```
+### Launch
+```
+$ flask run
+```
+### Test
+```sh
+# Test all files
+$ python -m pytest
+
+# Test with output
+$ python -m pytest -s
+
+# Test with coverage report
+$ python -m pytest --cov-report term-missing
+```
+### Database Migration
+Commands provided by `flask-migrate`
+```sh
+# Generate a migration
+flask db migrate
+# Apply the migration to the database
+flask db upgrade
+```
+
+### Utils
+Some utils commands created using `click`
+```sh
+# Create the database
+$ flask dev create
+# Load some example data
+$ flask dev load_example
+# Drop the database and filse
+$ flask dev drop
+# Add a new user
+$ flask dev add_user USERNAME EMAIL PASSWORD ROLE [CONFIRMED]
+
+# Initialize translation file for a language
+$ flask i18n init LANG
+# Update the translation file
+$ flask i18n update
+# Compile the translation file
+$ flask i18n compile
+```
 
 ## Tools
 - [Flask](https://flask.palletsprojects.com/en/2.0.x/)
