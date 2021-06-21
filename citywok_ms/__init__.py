@@ -1,17 +1,21 @@
+import logging
 import os
+from logging.handlers import RotatingFileHandler
+from pathlib import Path
 
 import flask_babel
 from config import Config
 from flask import Flask, current_app, request
+from flask.logging import default_handler
 from flask_babel import Babel
 from flask_login import LoginManager, current_user
 from flask_mail import Mail
+from flask_migrate import Migrate
 from flask_moment import Moment
 from flask_principal import Principal, RoleNeed, UserNeed, identity_loaded
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from sqlalchemy_utils import i18n
-from flask_migrate import Migrate
 
 csrf = CSRFProtect()
 db = SQLAlchemy()
@@ -61,6 +65,32 @@ def create_app(config_class=Config):
         app.register_blueprint(command)
         app.register_blueprint(main)
         app.register_blueprint(error)
+
+        app.logger.removeHandler(default_handler)
+        if not app.testing:
+            if app.debug:
+                stream_handler = logging.StreamHandler()
+                stream_handler.setFormatter(
+                    logging.Formatter(
+                        "%(levelname)s: %(message)s [%(pathname)s:%(lineno)d]"
+                    )
+                )
+                stream_handler.setLevel(logging.INFO)
+                app.logger.addHandler(stream_handler)
+            else:
+                Path("logs").mkdir(exist_ok=True)
+                file_handler = RotatingFileHandler(
+                    "logs/citywok_ms.log", maxBytes=20480, backupCount=10
+                )
+                file_handler.setFormatter(
+                    logging.Formatter(
+                        "%(asctime)s %(levelname)s: %(message)s "
+                        "[%(pathname)s:%(lineno)d]"
+                    )
+                )
+                file_handler.setLevel(logging.INFO)
+                app.logger.addHandler(file_handler)
+            app.logger.info("citywok_ms startup")
 
         @identity_loaded.connect_via(app)
         def on_identity_loaded(sender, identity):
