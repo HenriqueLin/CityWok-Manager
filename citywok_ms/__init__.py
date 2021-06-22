@@ -1,7 +1,6 @@
 import logging
 import os
 from logging.handlers import RotatingFileHandler
-from pathlib import Path
 
 import flask_babel
 from config import Config
@@ -16,6 +15,7 @@ from flask_principal import Principal, RoleNeed, UserNeed, identity_loaded
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from sqlalchemy_utils import i18n
+from citywok_ms.utils.logging import formatter, request_formatter
 
 csrf = CSRFProtect()
 db = SQLAlchemy()
@@ -30,7 +30,6 @@ migrate = Migrate()
 def create_app(config_class=Config):
     # create the app instance
     app = Flask(__name__)
-
     app.config.from_object(config_class)
 
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
@@ -67,30 +66,25 @@ def create_app(config_class=Config):
         app.register_blueprint(error)
 
         app.logger.removeHandler(default_handler)
-        if not app.testing:
+        if not app.testing:  # test: no cover
             if app.debug:
-                stream_handler = logging.StreamHandler()
-                stream_handler.setFormatter(
-                    logging.Formatter(
-                        "%(levelname)s: %(message)s [%(pathname)s:%(lineno)d]"
-                    )
-                )
-                stream_handler.setLevel(logging.INFO)
-                app.logger.addHandler(stream_handler)
+                log = logging.getLogger("werkzeug")
+                log.setLevel(logging.ERROR)
+
+                handler = logging.StreamHandler()
+                handler.setFormatter(formatter)
+                handler.setLevel(logging.INFO)
+                app.logger.addHandler(handler)
             else:
-                Path("logs").mkdir(exist_ok=True)
-                file_handler = RotatingFileHandler(
+                os.makedirs("logs", exist_ok=True)
+                handler = RotatingFileHandler(
                     "logs/citywok_ms.log", maxBytes=20480, backupCount=10
                 )
-                file_handler.setFormatter(
-                    logging.Formatter(
-                        "%(asctime)s %(levelname)s: %(message)s "
-                        "[%(pathname)s:%(lineno)d]"
-                    )
-                )
-                file_handler.setLevel(logging.INFO)
-                app.logger.addHandler(file_handler)
-            app.logger.info("citywok_ms startup")
+                handler.setFormatter(formatter)
+                handler.setLevel(logging.INFO)
+                app.logger.addHandler(handler)
+
+        app.logger.info("citywok_ms startup")
 
         @identity_loaded.connect_via(app)
         def on_identity_loaded(sender, identity):
@@ -120,6 +114,13 @@ def create_app(config_class=Config):
                 "EmployeeFile": EmployeeFile,
                 "SupplierFile": SupplierFile,
             }
+
+        @app.after_request
+        def after_request(response):
+            handler.setFormatter(request_formatter)
+            current_app.logger.info(response.status)
+            handler.setFormatter(formatter)
+            return response
 
         return app
 
