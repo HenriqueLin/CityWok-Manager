@@ -1,3 +1,4 @@
+from flask.globals import current_app
 from citywok_ms import db
 from citywok_ms.auth.permissions import manager, shareholder, visitor
 from citywok_ms.file.forms import FileForm
@@ -30,6 +31,7 @@ def new():
             _('New supplier "%(name)s" has been added.', name=supplier.name), "success"
         )
         db.session.commit()
+        current_app.logger.info(f"Create supplier {supplier}")
         return redirect(url_for("supplier.index"))
     return render_template("supplier/form.html", title=_("New Supplier"), form=form)
 
@@ -55,6 +57,7 @@ def update(supplier_id):
         supplier.update_by_form(form)
         flash(_('Supplier "%(name)s" has been updated.', name=supplier.name), "success")
         db.session.commit()
+        current_app.logger.info(f"Update supplier {supplier}")
         return redirect(url_for("supplier.detail", supplier_id=supplier_id))
 
     form.process(obj=supplier)
@@ -78,6 +81,7 @@ def upload(supplier_id):
             _('File "%(name)s" has been uploaded.', name=db_file.full_name), "success"
         )
         db.session.commit()
+        current_app.logger.info(f"Upload supplier file {db_file}")
     elif file is not None:
         flash(
             _('Invalid file format "%(format)s".', format=File.split_file_format(file)),

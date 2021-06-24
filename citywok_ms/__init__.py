@@ -15,7 +15,8 @@ from flask_principal import Principal, RoleNeed, UserNeed, identity_loaded
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from sqlalchemy_utils import i18n
-from citywok_ms.utils.logging import formatter, request_formatter
+
+from citywok_ms.utils.logging import formatter
 
 csrf = CSRFProtect()
 db = SQLAlchemy()
@@ -71,18 +72,18 @@ def create_app(config_class=Config):
                 log = logging.getLogger("werkzeug")
                 log.setLevel(logging.ERROR)
 
-                handler = logging.StreamHandler()
-                handler.setFormatter(formatter)
-                handler.setLevel(logging.INFO)
-                app.logger.addHandler(handler)
+                stream_handler = logging.StreamHandler()
+                stream_handler.setFormatter(formatter)
+                stream_handler.setLevel(logging.INFO)
+                app.logger.addHandler(stream_handler)
             else:
                 os.makedirs("logs", exist_ok=True)
-                handler = RotatingFileHandler(
+                file_handler = RotatingFileHandler(
                     "logs/citywok_ms.log", maxBytes=20480, backupCount=10
                 )
-                handler.setFormatter(formatter)
-                handler.setLevel(logging.INFO)
-                app.logger.addHandler(handler)
+                file_handler.setFormatter(formatter)
+                file_handler.setLevel(logging.INFO)
+                app.logger.addHandler(file_handler)
 
         app.logger.info("citywok_ms startup")
 
@@ -114,13 +115,6 @@ def create_app(config_class=Config):
                 "EmployeeFile": EmployeeFile,
                 "SupplierFile": SupplierFile,
             }
-
-        @app.after_request
-        def after_request(response):
-            handler.setFormatter(request_formatter)
-            current_app.logger.info(response.status)
-            handler.setFormatter(formatter)
-            return response
 
         return app
 

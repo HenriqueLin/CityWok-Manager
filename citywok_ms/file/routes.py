@@ -3,6 +3,7 @@ from citywok_ms.auth.permissions import manager, shareholder
 from citywok_ms.file.forms import FileUpdateForm
 from citywok_ms.file.models import File
 from flask import Blueprint, flash, redirect, render_template, url_for
+from flask import current_app
 from flask.helpers import send_file
 from flask_babel import _
 
@@ -18,6 +19,7 @@ def download(file_id, file_name=None):
         return redirect(
             url_for("file.download", file_id=file_id, file_name=f.full_name)
         )
+    current_app.logger.info(f"Download file {f}")
     return send_file(f.path, cache_timeout=0)
 
 
@@ -34,6 +36,7 @@ def delete(file_id):
         f.delete()
         flash(_('File "%(name)s" has been deleted.', name=f.full_name), "success")
         db.session.commit()
+        current_app.logger.info(f"Delete file {f}")
     return redirect(f.owner_url)
 
 
@@ -47,7 +50,7 @@ def restore(file_id):
         f.restore()
         flash(_('File "%(name)s" has been restored.', name=f.full_name), "success")
         db.session.commit()
-
+        current_app.logger.info(f"Restore file {f}")
     return redirect(f.owner_url)
 
 
@@ -60,6 +63,7 @@ def update(file_id):
         f.update_by_form(form)
         flash(_('File "%(name)s" has been updated.', name=f.full_name), "success")
         db.session.commit()
+        current_app.logger.info(f"Update file {f}")
         return redirect(f.owner_url)
     form.file_name.data = f.base_name
     form.remark.data = f.remark

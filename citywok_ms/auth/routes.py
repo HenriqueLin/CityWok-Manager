@@ -48,6 +48,7 @@ def login():
                     _("Welcome %(name)s, you are logged in.", name=user.username),
                     category="success",
                 )
+                current_app.logger.info("Log in")
                 return redirect(url_for("main.index"))
             else:
                 flash(_("Your e-mail hasn't been confirmed."), "warning")
@@ -59,6 +60,7 @@ def login():
 
 @auth.route("/logout", methods=["GET", "POST"])
 def logout():
+    current_app.logger.info("Log out")
     logout_user()
     identity_changed.send(
         current_app._get_current_object(), identity=AnonymousIdentity()
@@ -78,6 +80,7 @@ def invite(token=None):
         token = User.create_invite_token(form.role.data, form.email.data)
         send_invite_email(form.email.data, token)
         flash(_("A invite e-mail has been sent to the envitee."), "success")
+        current_app.logger.info(f"Invite {form.email.data} as {form.role.data}")
         return redirect(url_for("auth.invite", token=token))
 
     return render_template(
@@ -113,6 +116,7 @@ def registration(token):
                 category="success",
             )
             db.session.commit()
+            current_app.logger.info(f"{user} registe")
             return redirect(url_for("auth.login"))
 
     return render_template(
@@ -136,6 +140,7 @@ def confirmation(token):
             user.confirm()
             flash(_("Your e-mail address is now confirmed."), "success")
             db.session.commit()
+            current_app.logger.info(f"{user} confirm email")
     else:
         flash(_("Confirmation link is invalid."), "warning")
 
@@ -158,6 +163,7 @@ def forget_password():
             ),
             "success",
         )
+        current_app.logger.info(f"{user} forgot password")
         return redirect(url_for("auth.login"))
     return render_template(
         "auth/forget_password.html", title=_("Forget Password"), form=form
@@ -175,6 +181,7 @@ def reset_password(token):
             user.set_password(form.password.data)
             flash(_("Your password has been reset."), "success")
             db.session.commit()
+            current_app.logger.info(f"{user} reset password")
             return redirect(url_for("auth.login"))
     else:
         flash(_("Reset link is invalid."), "warning")

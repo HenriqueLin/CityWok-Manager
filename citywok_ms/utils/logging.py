@@ -29,11 +29,6 @@ class MyFormatter(logging.Formatter):  # test: no cover
 
 formatter = MyFormatter(
     "[{levelname} - {asctime}] {user} {remote_addr} at {pathname}:{lineno}\n"
-    "\t{message}",
-    style="{",
-)
-
-request_formatter = MyFormatter(
-    "[{levelname} - {asctime}] {user} {remote_addr}\n" "\t{method} {url} {message}",
+    "  {message}",
     style="{",
 )
