@@ -35,7 +35,6 @@ def user(client, mocker, request):
         email="user@mail.com",
         password=generate_password_hash("user"),
         role="user",
-        confirmed=True,
     )
     db.session.add(user)
     db.session.commit()
