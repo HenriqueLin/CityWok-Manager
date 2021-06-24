@@ -9,7 +9,7 @@ blinker==1.4
 certifi==2020.12.5
 chardet==4.0.0
 click==8.0.1
-coverage==5.4
+coverage==5.5
 decorator==4.4.2
 dnspython==2.0.0
 email-validator==1.1.2
