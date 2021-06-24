@@ -25,41 +25,4 @@
             </div>
         </div>
 </div>
-
-{% if token %}
-<!-- Modal -->
-<div class="modal fade" id="LinkModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="LinkModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="LinkModalLabel">{{_('Invite link')}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body style=" min-height: 500px"">
-                {{_('Click')}} <a id="link" href="{{ url_for('auth.registration',token=token, _external=True) }}"
-                    target="_blank">{{_('here')}}</a>
-                {{_('to registe, or click the button bellow to copy the link.')}}
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="copy()">{{_('Copy')}}</button>
-            </div>
-        </div>
-    </div>
-</div>
-{% endif %}
 {% endblock content %}
-
-{% if token %}
-{% block js %}
-<script type="text/javascript">
-    function copy() {
-        let link = document.getElementById("link").href
-        navigator.clipboard.writeText(link);
-    };
-    $(window).on('load', function () {
-        $('#LinkModal').modal('show');
-    });
-</script>
-{% endblock js %}
-{% endif %}

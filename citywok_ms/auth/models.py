@@ -2,9 +2,8 @@ from citywok_ms import db, login
 from citywok_ms.utils.models import CRUDMixin
 from flask import current_app
 from flask_login import UserMixin
-from itsdangerous import JSONWebSignatureSerializer as Serializer
 from itsdangerous import TimedJSONWebSignatureSerializer as TimedSerializer
-from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy import Column, Integer, String
 from sqlalchemy_utils import ChoiceType
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_babel import lazy_gettext as _l
@@ -29,7 +28,6 @@ class User(db.Model, UserMixin, CRUDMixin):
     email = Column(String, unique=True, nullable=True)
     password = Column(String, nullable=False)
     role = Column(ChoiceType(Role), nullable=False)
-    confirmed = Column(Boolean, default=False, nullable=False)
 
     def __repr__(self):
         return f"User({self.id}: {self.username}, {self.email}, {self.role.code})"
@@ -81,31 +79,6 @@ class User(db.Model, UserMixin, CRUDMixin):
             return
         user = db.session.query(User).filter_by(id=id, email=email).first()
         return user
-
-    def create_confirmation_token(self):
-        s = Serializer(current_app.secret_key)
-        return s.dumps(
-            {"id": self.id, "email": self.email, "username": self.username}
-        ).decode("utf-8")
-
-    @staticmethod
-    def verify_confirmation_token(token) -> "User":
-        s = Serializer(current_app.secret_key)
-        try:
-            id = s.loads(token)["id"]
-            email = s.loads(token)["email"]
-            username = s.loads(token)["username"]
-        except Exception:
-            return
-        user = (
-            db.session.query(User)
-            .filter_by(id=id, email=email, username=username)
-            .first()
-        )
-        return user
-
-    def confirm(self):
-        self.confirmed = True
 
     @classmethod
     def get_by_email(cls, email) -> "User":

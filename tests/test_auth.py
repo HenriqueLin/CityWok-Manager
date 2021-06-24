@@ -63,36 +63,6 @@ def test_login_post_valid(client, user):
     assert f"Welcome {user.username}, you are logged in." in html.unescape(data)
 
 
-def test_login_post_unconfirmed(client):
-    user = User(
-        username="test",
-        email="test@mail.com",
-        password=generate_password_hash("test"),
-        role="manager",
-        confirmed=False,
-    )
-    db.session.add(user)
-    db.session.commit()
-
-    request_data = {
-        "username": "test",
-        "password": "test",
-    }
-    response = client.post(
-        url_for("auth.login"),
-        data=request_data,
-        follow_redirects=True,
-    )
-    data = response.data.decode()
-
-    # state code
-    assert response.status_code == 200
-
-    assert request.url.endswith(url_for("auth.login"))
-
-    assert "Your e-mail hasn't been confirmed." in html.unescape(data)
-
-
 def test_login_post_invalid(client, user):
     request_data = {
         "username": "wrong",
@@ -183,11 +153,7 @@ def test_invite_post_valid(client, user):
 
     assert url_for("auth.invite") in request.url
 
-    # titles
-    assert "Invite link" in data
-
     assert "A invite e-mail has been sent to the envitee." in data
-    assert "Copy" in data
 
     # links
     assert url_for("main.index") in data
@@ -232,7 +198,6 @@ def test_registration_get(client):
     # titles
     assert "Register" in data
     assert "User Name" in data
-    assert "Email" in data
     assert "Password" in data
     assert "Repeat Password" in data
     assert "Regist" in data
@@ -283,7 +248,6 @@ def test_registration_get_invalid_token(client):
 def test_registration_post_valid(client):
     request_data = {
         "username": "test_user",
-        "email": "test@mail.com",
         "password": "password",
         "password2": "password",
     }
@@ -301,7 +265,7 @@ def test_registration_post_valid(client):
     assert response.status_code == 200
 
     # titles
-    assert "A confirmation e-mail has been sent to test@mail.com." in data
+    assert "You are now registed." in data
 
     assert request.url.endswith(url_for("auth.login"))
 
@@ -313,19 +277,52 @@ def test_registration_post_valid(client):
     )
 
 
+def test_registration_post_invalid_existed(client):
+    user = User(
+        username="test",
+        email="test@mail.com",
+        password=generate_password_hash("test"),
+        role="manager",
+    )
+    db.session.add(user)
+    db.session.commit()
+    request_data = {
+        "username": "test",
+        "password": "password",
+        "password2": "password",
+    }
+    response = client.post(
+        url_for(
+            "auth.registration",
+            token=User.create_invite_token("manager", "test@mail.com"),
+        ),
+        data=request_data,
+        follow_redirects=True,
+    )
+    data = response.data.decode()
+
+    # state code
+    assert response.status_code == 200
+
+    # titles
+    assert "You are now registed." not in data
+    assert "This email has already been registed." in data
+
+    assert db.session.query(User).filter_by(email="test@mail.com").count() == 1
+    assert request.url.endswith(url_for("auth.login"))
+
+
 def test_registration_post_invalid_username(client):
     user = User(
         username="test",
         email="test@mail.com",
         password=generate_password_hash("test"),
         role="manager",
-        confirmed=False,
     )
     db.session.add(user)
     db.session.commit()
     request_data = {
         "username": "test",
-        "email": "test2@mail.com",
         "password": "password",
         "password2": "password",
     }
@@ -342,170 +339,10 @@ def test_registration_post_invalid_username(client):
     assert response.status_code == 200
 
     # titles
-    assert "A confirmation e-mail has been sent to test2@mail.com." not in data
+    assert "You are now registed." not in data
     assert "Please use a different username." in data
 
     assert db.session.query(User).filter_by(email="test2@mail.com").count() == 0
-
-
-def test_registration_post_invalid_email(client):
-    user = User(
-        username="test",
-        email="test@mail.com",
-        password=generate_password_hash("test"),
-        role="manager",
-        confirmed=False,
-    )
-    db.session.add(user)
-    db.session.commit()
-    request_data = {
-        "username": "test2",
-        "email": "test@mail.com",
-        "password": "password",
-        "password2": "password",
-    }
-    response = client.post(
-        url_for(
-            "auth.registration",
-            token=User.create_invite_token("manager", "test@mail.com"),
-        ),
-        data=request_data,
-    )
-    data = response.data.decode()
-
-    # state code
-    assert response.status_code == 200
-
-    # titles
-    assert "A confirmation e-mail has been sent to test@mail.com." not in data
-    assert "Please use a different email address." in data
-    assert db.session.query(User).filter_by(username="test2").count() == 0
-
-
-def test_confirmation_get(client):
-    user = User(
-        username="test",
-        email="test@mail.com",
-        password=generate_password_hash("test"),
-        role="manager",
-        confirmed=False,
-    )
-    db.session.add(user)
-    db.session.commit()
-
-    response = client.get(
-        url_for(
-            "auth.confirmation",
-            token=user.create_confirmation_token(),
-        ),
-        follow_redirects=True,
-    )
-    data = response.data.decode()
-
-    # state code
-    assert response.status_code == 200
-
-    # titles
-    assert "Your e-mail address is now confirmed." in data
-
-    assert request.url.endswith(url_for("auth.login"))
-
-    assert user.confirmed
-
-
-@pytest.mark.role("admin")
-def test_confirmation_get_loggedin(client, user):
-    test = User(
-        username="test",
-        email="test@mail.com",
-        password=generate_password_hash("test"),
-        role="manager",
-        confirmed=False,
-    )
-    db.session.add(test)
-    db.session.commit()
-    response = client.get(
-        url_for(
-            "auth.confirmation",
-            token=test.create_confirmation_token(),
-        ),
-        follow_redirects=True,
-    )
-    data = response.data.decode()
-
-    # state code
-    assert response.status_code == 200
-
-    # titles
-    assert "You are already logged in." in data
-
-    assert request.url.endswith(url_for("main.index"))
-
-
-def test_confirmation_get_confirmed(client):
-    user = User(
-        username="test",
-        email="test@mail.com",
-        password=generate_password_hash("test"),
-        role="manager",
-        confirmed=True,
-    )
-    db.session.add(user)
-    db.session.commit()
-    response = client.get(
-        url_for(
-            "auth.confirmation",
-            token=user.create_confirmation_token(),
-        ),
-        follow_redirects=True,
-    )
-    data = response.data.decode()
-
-    # state code
-    assert response.status_code == 200
-
-    # titles
-    assert "Your e-mail address has already been confirmed." in data
-
-    assert request.url.endswith(url_for("auth.login"))
-
-
-def test_confirmation_get_invalid_token(client):
-    response = client.get(
-        url_for(
-            "auth.confirmation",
-            token="xxx",
-        ),
-        follow_redirects=True,
-    )
-    data = response.data.decode()
-
-    # state code
-    assert response.status_code == 200
-
-    # titles
-    assert "Confirmation link is invalid." in data
-
-    assert request.url.endswith(url_for("auth.login"))
-
-
-def test_confirmation_post(client):
-    user = User(
-        username="test",
-        email="test@mail.com",
-        password=generate_password_hash("test"),
-        role="manager",
-        confirmed=False,
-    )
-    db.session.add(user)
-    db.session.commit()
-    response = client.post(
-        url_for(
-            "auth.confirmation",
-            token=user.create_confirmation_token(),
-        )
-    )
-    assert response.status_code == 405
 
 
 def test_forget_password_get(client):
@@ -530,7 +367,6 @@ def test_forget_password_post_valid(client):
         email="test@mail.com",
         password=generate_password_hash("test"),
         role="manager",
-        confirmed=False,
     )
     db.session.add(user)
     db.session.commit()
@@ -556,7 +392,6 @@ def test_forget_password_post_invalid_email(client):
         email="test@mail.com",
         password=generate_password_hash("test"),
         role="manager",
-        confirmed=False,
     )
     db.session.add(user)
     db.session.commit()
@@ -582,7 +417,6 @@ def test_reset_password_get(client):
         email="test@mail.com",
         password=generate_password_hash("test"),
         role="manager",
-        confirmed=True,
     )
     db.session.add(user)
     db.session.commit()
@@ -614,7 +448,6 @@ def test_reset_password_get_invalid_token(client):
         email="test@mail.com",
         password=generate_password_hash("test"),
         role="manager",
-        confirmed=True,
     )
     db.session.add(user)
     db.session.commit()
@@ -642,7 +475,6 @@ def test_reset_password_post_valid(client):
         email="test@mail.com",
         password=generate_password_hash("test"),
         role="manager",
-        confirmed=True,
     )
     db.session.add(user)
     db.session.commit()

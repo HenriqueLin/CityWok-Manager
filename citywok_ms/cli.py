@@ -31,7 +31,6 @@ def create():
         email=current_app.config["ADMIN_EMAIL"],
         password=generate_password_hash(current_app.config["ADMIN_PASSWORD"]),
         role="admin",
-        confirmed=True,
     )
     db.session.add(admin)
     db.session.commit()
@@ -124,8 +123,7 @@ def load_example():
 @click.argument("email", nargs=1)
 @click.argument("password", nargs=1)
 @click.argument("role", nargs=1)
-@click.argument("confirmed", nargs=1, type=click.BOOL, default=True)
-def add_user(username, email, password, role, confirmed):
+def add_user(username, email, password, role):
     "Add a user"
     try:
         user = User(
@@ -133,7 +131,6 @@ def add_user(username, email, password, role, confirmed):
             email=email,
             password=generate_password_hash(password),
             role=role,
-            confirmed=confirmed,
         )
         db.session.add(user)
         db.session.commit()
