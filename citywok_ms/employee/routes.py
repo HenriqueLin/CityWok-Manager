@@ -4,7 +4,7 @@ from citywok_ms.employee.forms import EmployeeForm
 from citywok_ms.employee.models import Employee
 from citywok_ms.file.forms import FileForm
 from citywok_ms.file.models import EmployeeFile, File
-from flask import Blueprint, flash, redirect, render_template, url_for
+from flask import Blueprint, current_app, flash, redirect, render_template, url_for
 from flask_babel import _
 
 employee = Blueprint("employee", __name__, url_prefix="/employee")
@@ -32,6 +32,7 @@ def new():
             "success",
         )
         db.session.commit()
+        current_app.logger.info(f"Create employee {employee}")
         return redirect(url_for("employee.index"))
     return render_template("employee/form.html", title=_("New Employee"), form=form)
 
@@ -60,6 +61,7 @@ def update(employee_id):
             "success",
         )
         db.session.commit()
+        current_app.logger.info(f"Update employee {employee}")
         return redirect(url_for("employee.detail", employee_id=employee_id))
 
     form.process(obj=employee)
@@ -81,6 +83,7 @@ def suspend(employee_id):
         _('Employee "%(name)s" has been suspended.', name=employee.full_name), "success"
     )
     db.session.commit()
+    current_app.logger.info(f"Suspend employee {employee}")
     return redirect(url_for("employee.detail", employee_id=employee_id))
 
 
@@ -93,6 +96,7 @@ def activate(employee_id):
         _('Employee "%(name)s" has been activated.', name=employee.full_name), "success"
     )
     db.session.commit()
+    current_app.logger.info(f"Activate employee {employee}")
     return redirect(url_for("employee.detail", employee_id=employee_id))
 
 
@@ -107,6 +111,7 @@ def upload(employee_id):
             _('File "%(name)s" has been uploaded.', name=db_file.full_name), "success"
         )
         db.session.commit()
+        current_app.logger.info(f"Upload employee file {db_file}")
     elif file is not None:
         flash(
             _('Invalid file format "%(format)s".', format=File.split_file_format(file)),

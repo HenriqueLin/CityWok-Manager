@@ -1,17 +1,23 @@
+import logging
 import os
+from logging.handlers import RotatingFileHandler
 
 import flask_babel
 from config import Config
 from flask import Flask, current_app, request
+from flask.logging import default_handler
 from flask_babel import Babel
 from flask_login import LoginManager, current_user
 from flask_mail import Mail
+from flask_migrate import Migrate
 from flask_moment import Moment
 from flask_principal import Principal, RoleNeed, UserNeed, identity_loaded
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from sqlalchemy_utils import i18n
-from flask_migrate import Migrate
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
+from citywok_ms.utils.logging import formatter
 
 csrf = CSRFProtect()
 db = SQLAlchemy()
@@ -26,7 +32,6 @@ migrate = Migrate()
 def create_app(config_class=Config):
     # create the app instance
     app = Flask(__name__)
-
     app.config.from_object(config_class)
 
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
@@ -42,6 +47,14 @@ def create_app(config_class=Config):
     principal.init_app(app)
     mail.init_app(app)
     migrate.init_app(app, db)
+
+    if not app.testing and not app.debug:  # test: no cover
+        sentry_sdk.init(
+            dsn=app.config["SENTRY_DNS"],
+            integrations=[FlaskIntegration()],
+            traces_sample_rate=app.config["SENTRY_RATE"],
+            environment="production",
+        )
 
     with app.app_context():
         # imports
@@ -61,6 +74,27 @@ def create_app(config_class=Config):
         app.register_blueprint(command)
         app.register_blueprint(main)
         app.register_blueprint(error)
+
+        app.logger.removeHandler(default_handler)
+        if not app.testing:  # test: no cover
+            if app.debug:
+                log = logging.getLogger("werkzeug")
+                log.setLevel(logging.ERROR)
+
+                stream_handler = logging.StreamHandler()
+                stream_handler.setFormatter(formatter)
+                stream_handler.setLevel(logging.INFO)
+                app.logger.addHandler(stream_handler)
+            else:
+                os.makedirs("logs", exist_ok=True)
+                file_handler = RotatingFileHandler(
+                    "logs/citywok_ms.log", maxBytes=20480, backupCount=10
+                )
+                file_handler.setFormatter(formatter)
+                file_handler.setLevel(logging.INFO)
+                app.logger.addHandler(file_handler)
+
+        app.logger.info("citywok_ms startup")
 
         @identity_loaded.connect_via(app)
         def on_identity_loaded(sender, identity):

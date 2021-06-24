@@ -33,7 +33,7 @@ class Employee(db.Model, CRUDMixin):
     files = relationship("EmployeeFile")
 
     def __repr__(self):
-        return f"Employee({self.id}: {self.first_name} {self.last_name})"
+        return f"Employee({self.id}: {self.full_name})"
 
     @hybrid_property
     def full_name(self) -> str:

@@ -30,6 +30,10 @@ class Config(object):
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
     MAIL_DEFAULT_SENDER = os.environ.get("ADMIN_EMAIL")
 
+    # sentry
+    SENTRY_DNS = os.environ.get("SENTRY_DNS")
+    SENTRY_RATE = 1.0
+
 
 class TestConfig(Config):
     TESTING = True
