@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-06-20 23:16+0100\n"
+"POT-Creation-Date: 2021-06-24 18:29+0100\n"
 "PO-Revision-Date: 2021-06-19 22:05+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -22,11 +22,11 @@ msgstr ""
 msgid "User Name"
 msgstr "用户名"
 
-#: citywok_ms/auth/forms.py:18 citywok_ms/auth/forms.py:78
+#: citywok_ms/auth/forms.py:18 citywok_ms/auth/forms.py:74
 msgid "Password"
 msgstr "密码"
 
-#: citywok_ms/auth/forms.py:22 citywok_ms/auth/routes.py:57
+#: citywok_ms/auth/forms.py:22 citywok_ms/auth/routes.py:53
 msgid "Login"
 msgstr "登录"
 
@@ -38,7 +38,7 @@ msgstr "受邀人邮箱"
 msgid "Role"
 msgstr "权限"
 
-#: citywok_ms/auth/forms.py:37 citywok_ms/auth/routes.py:85
+#: citywok_ms/auth/forms.py:37 citywok_ms/auth/routes.py:83
 #: citywok_ms/templates/layout.html:84
 msgid "Invite"
 msgstr "邀请"
@@ -47,7 +47,7 @@ msgstr "邀请"
 msgid "E-mail address already taken."
 msgstr "邮箱已被占用。"
 
-#: citywok_ms/auth/forms.py:46 citywok_ms/auth/forms.py:74
+#: citywok_ms/auth/forms.py:46
 msgid "Email"
 msgstr "邮箱"
 
@@ -63,7 +63,7 @@ msgstr "此邮箱不存在。"
 msgid "New Password"
 msgstr "新密码"
 
-#: citywok_ms/auth/forms.py:62 citywok_ms/auth/forms.py:82
+#: citywok_ms/auth/forms.py:62 citywok_ms/auth/forms.py:78
 msgid "Repeat Password"
 msgstr "重复密码"
 
@@ -71,102 +71,85 @@ msgstr "重复密码"
 msgid "Reset"
 msgstr "重置"
 
-#: citywok_ms/auth/forms.py:85 citywok_ms/auth/routes.py:120
+#: citywok_ms/auth/forms.py:81 citywok_ms/auth/routes.py:115
 msgid "Register"
 msgstr "注册"
 
-#: citywok_ms/auth/forms.py:90
+#: citywok_ms/auth/forms.py:86
 msgid "Please use a different username."
 msgstr "请使用一个不同的用户名。"
 
-#: citywok_ms/auth/forms.py:95
-msgid "Please use a different email address."
-msgstr "请使用一个不同的邮箱。"
-
-#: citywok_ms/auth/models.py:13
+#: citywok_ms/auth/models.py:12
 msgid "Admin"
 msgstr "管理员"
 
-#: citywok_ms/auth/models.py:14
+#: citywok_ms/auth/models.py:13
 msgid "Manager"
 msgstr "主管"
 
-#: citywok_ms/auth/models.py:15
+#: citywok_ms/auth/models.py:14
 msgid "Shareholder"
 msgstr "股东"
 
-#: citywok_ms/auth/models.py:16
+#: citywok_ms/auth/models.py:15
 msgid "Worker"
 msgstr "员工"
 
-#: citywok_ms/auth/models.py:17
+#: citywok_ms/auth/models.py:16
 msgid "Visitor"
 msgstr "访客"
 
-#: citywok_ms/auth/routes.py:48
+#: citywok_ms/auth/routes.py:46
 #, python-format
 msgid "Welcome %(name)s, you are logged in."
 msgstr "您好 %(name)s，你已成功登录。"
 
-#: citywok_ms/auth/routes.py:53
-msgid "Your e-mail hasn't been confirmed."
-msgstr "您的邮箱尚未被验证。"
-
-#: citywok_ms/auth/routes.py:56
+#: citywok_ms/auth/routes.py:52
 msgid "Please check your username/password."
 msgstr "请检查您的账号/密码是否正确。"
 
-#: citywok_ms/auth/routes.py:66
+#: citywok_ms/auth/routes.py:63
 msgid "You have been logged out."
 msgstr "您已成功登出。"
 
-#: citywok_ms/auth/routes.py:80
+#: citywok_ms/auth/routes.py:77
 msgid "A invite e-mail has been sent to the envitee."
 msgstr "邀请已发送至受邀人的邮箱。"
 
-#: citywok_ms/auth/routes.py:94 citywok_ms/auth/routes.py:128
+#: citywok_ms/auth/routes.py:92
 msgid "You are already logged in."
 msgstr "您已经登录过了"
 
-#: citywok_ms/auth/routes.py:98
+#: citywok_ms/auth/routes.py:96
 msgid "Invite link is invalid."
 msgstr "邀请链接无效。"
 
-#: citywok_ms/auth/routes.py:109
-#, python-format
-msgid "A confirmation e-mail has been sent to %(email)s."
-msgstr "验证邮件已发送至 %(email)s 。"
+#: citywok_ms/auth/routes.py:99
+msgid "This email has already been registed."
+msgstr "此邮箱已被注册。"
 
-#: citywok_ms/auth/routes.py:134
-msgid "Your e-mail address has already been confirmed."
-msgstr "您的邮箱已经验证过了。"
+#: citywok_ms/auth/routes.py:106
+msgid "You are now registed."
+msgstr "注册成功。"
 
-#: citywok_ms/auth/routes.py:137
-msgid "Your e-mail address is now confirmed."
-msgstr "您的邮箱成功验证了。"
-
-#: citywok_ms/auth/routes.py:140
-msgid "Confirmation link is invalid."
-msgstr "验证链接无效。"
-
-#: citywok_ms/auth/routes.py:155
+#: citywok_ms/auth/routes.py:130
 #, python-format
 msgid "A e-mail to reset the password has been sent to %(email)s."
 msgstr "重置密码的邮件已发送至 %(email)s 。"
 
-#: citywok_ms/auth/routes.py:163
+#: citywok_ms/auth/routes.py:139
 msgid "Forget Password"
 msgstr "忘记密码"
 
-#: citywok_ms/auth/routes.py:176
+#: citywok_ms/auth/routes.py:152
 msgid "Your password has been reset."
 msgstr "您的密码已被重置。"
 
-#: citywok_ms/auth/routes.py:180
+#: citywok_ms/auth/routes.py:157
 msgid "Reset link is invalid."
 msgstr "重置链接无效。"
 
-#: citywok_ms/auth/routes.py:183
+#: citywok_ms/auth/routes.py:160
 msgid "Reset Password"
 msgstr "重置密码"
 
@@ -289,44 +272,44 @@ msgstr "员工"
 msgid "New employee \"%(name)s\" has been added."
 msgstr "新员工 \"%(name)s\" 已添加。"
 
-#: citywok_ms/employee/routes.py:36
+#: citywok_ms/employee/routes.py:37
 msgid "New Employee"
 msgstr "添加员工"
 
-#: citywok_ms/employee/routes.py:44
+#: citywok_ms/employee/routes.py:45
 msgid "Employee Detail"
 msgstr "员工详情"
 
-#: citywok_ms/employee/routes.py:59
+#: citywok_ms/employee/routes.py:60
 #, python-format
 msgid "Employee \"%(name)s\" has been updated."
 msgstr "员工 \"%(name)s\" 已更新。"
 
-#: citywok_ms/employee/routes.py:71
+#: citywok_ms/employee/routes.py:73
 msgid "Update Employee"
 msgstr "更新员工"
 
-#: citywok_ms/employee/routes.py:81
+#: citywok_ms/employee/routes.py:83
 #, python-format
 msgid "Employee \"%(name)s\" has been suspended."
 msgstr "员工 \"%(name)s\" 冻结。"
 
-#: citywok_ms/employee/routes.py:93
+#: citywok_ms/employee/routes.py:96
 #, python-format
 msgid "Employee \"%(name)s\" has been activated."
 msgstr "员工 \"%(name)s\" 已激活。"
 
-#: citywok_ms/employee/routes.py:107 citywok_ms/supplier/routes.py:78
+#: citywok_ms/employee/routes.py:111 citywok_ms/supplier/routes.py:81
 #, python-format
 msgid "File \"%(name)s\" has been uploaded."
 msgstr "文件名已更新。"
 
-#: citywok_ms/employee/routes.py:112 citywok_ms/supplier/routes.py:83
+#: citywok_ms/employee/routes.py:117 citywok_ms/supplier/routes.py:87
 #, python-format
 msgid "Invalid file format \"%(format)s\"."
 msgstr "无效的文件格式 \"%(format)s\"。"
 
-#: citywok_ms/employee/routes.py:116 citywok_ms/supplier/routes.py:87
+#: citywok_ms/employee/routes.py:121 citywok_ms/supplier/routes.py:91
 msgid "No file has been uploaded."
 msgstr "未上传文件。"
 
@@ -345,32 +328,32 @@ msgstr "文件"
 msgid "File Name"
 msgstr "文件名"
 
-#: citywok_ms/file/routes.py:30
+#: citywok_ms/file/routes.py:32
 #, python-format
 msgid "File \"%(name)s\" has already been deleted."
 msgstr "文件 \"%(name)s\" 已被删除。"
 
-#: citywok_ms/file/routes.py:35
+#: citywok_ms/file/routes.py:37
 #, python-format
 msgid "File \"%(name)s\" has been deleted."
 msgstr "文件 \"%(name)s\" 已删除。"
 
-#: citywok_ms/file/routes.py:45
+#: citywok_ms/file/routes.py:48
 #, python-format
 msgid "File \"%(name)s\" hasn't been deleted."
 msgstr "文件 \"%(name)s\" 尚未被删除。"
 
-#: citywok_ms/file/routes.py:48
+#: citywok_ms/file/routes.py:51
 #, python-format
 msgid "File \"%(name)s\" has been restored."
 msgstr "文件 \"%(name)s\" 已复原。"
 
-#: citywok_ms/file/routes.py:61
+#: citywok_ms/file/routes.py:64
 #, python-format
 msgid "File \"%(name)s\" has been updated."
 msgstr "文件 \"%(name)s\" 已更新。"
 
-#: citywok_ms/file/routes.py:67
+#: citywok_ms/file/routes.py:71
 msgid "Update File"
 msgstr "更新文件"
 
@@ -410,29 +393,29 @@ msgstr "城市"
 msgid "This IBAN already existe"
 msgstr "IBAN已存在"
 
-#: citywok_ms/supplier/routes.py:18
+#: citywok_ms/supplier/routes.py:19
 msgid "Suppliers"
 msgstr "供应商"
 
-#: citywok_ms/supplier/routes.py:30
+#: citywok_ms/supplier/routes.py:31
 #, python-format
 msgid "New supplier \"%(name)s\" has been added."
 msgstr "新供应商 \"%(name)s\" 已添加。"
 
-#: citywok_ms/supplier/routes.py:34
+#: citywok_ms/supplier/routes.py:36
 msgid "New Supplier"
 msgstr "添加供应商"
 
-#: citywok_ms/supplier/routes.py:42
+#: citywok_ms/supplier/routes.py:44
 msgid "Supplier Detail"
 msgstr "供应商详情"
 
-#: citywok_ms/supplier/routes.py:56
+#: citywok_ms/supplier/routes.py:58
 #, python-format
 msgid "Supplier \"%(name)s\" has been updated."
 msgstr "供应商 \"%(name)s\" 已更新。"
 
-#: citywok_ms/supplier/routes.py:66
+#: citywok_ms/supplier/routes.py:69
 msgid "Update Supplier"
 msgstr "更新供应商"
 
@@ -456,7 +439,7 @@ msgstr "登出"
 
 #: citywok_ms/templates/auth/forget_password.html:18
 #: citywok_ms/templates/auth/invite.html:24
-#: citywok_ms/templates/auth/registration.html:36
+#: citywok_ms/templates/auth/registration.html:30
 #: citywok_ms/templates/auth/reset_password.html:24
 #: citywok_ms/templates/employee/form.html:99
 #: citywok_ms/templates/employee/form.html:103
@@ -628,4 +611,22 @@ msgstr "发生未知错误"
 #: citywok_ms/templates/error/500.html:8
 msgid "The administrator has been notified."
 msgstr "已通知管理员。"
+
+#~ msgid "Please use a different email address."
+#~ msgstr "请使用一个不同的邮箱。"
+
+#~ msgid "Your e-mail hasn't been confirmed."
+#~ msgstr "您的邮箱尚未被验证。"
+
+#~ msgid "A confirmation e-mail has been sent to %(email)s."
+#~ msgstr "验证邮件已发送至 %(email)s 。"
+
+#~ msgid "Your e-mail address has already been confirmed."
+#~ msgstr "您的邮箱已经验证过了。"
+
+#~ msgid "Your e-mail address is now confirmed."
+#~ msgstr "您的邮箱成功验证了。"
+
+#~ msgid "Confirmation link is invalid."
+#~ msgstr "验证链接无效。"
 
