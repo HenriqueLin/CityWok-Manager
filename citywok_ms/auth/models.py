@@ -32,7 +32,7 @@ class User(db.Model, UserMixin, CRUDMixin):
     confirmed = Column(Boolean, default=False, nullable=False)
 
     def __repr__(self):
-        return f"User('{self.role}','{self.username}','{self.email}')"
+        return f"User({self.id}: {self.username}, {self.email}, {self.role.code})"
 
     @classmethod
     def create_by_form(cls, form, role: str) -> "User":
