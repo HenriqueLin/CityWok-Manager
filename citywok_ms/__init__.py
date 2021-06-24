@@ -46,7 +46,7 @@ def create_app(config_class=Config):
     login.init_app(app)
     principal.init_app(app)
     mail.init_app(app)
-    migrate.init_app(app, db)
+    migrate.init_app(app, db, render_as_batch=True)
 
     if not app.testing and not app.debug:  # test: no cover
         sentry_sdk.init(
