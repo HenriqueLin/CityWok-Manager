@@ -25,7 +25,7 @@ Flask-SQLAlchemy==2.5.1
 Flask-WTF==0.15.1
 greenlet==1.1.0
 humanize==3.9.0
-idna==2.10
+idna==3.2
 infinity==1.5
 iniconfig==1.1.1
 intervals==0.9.1
