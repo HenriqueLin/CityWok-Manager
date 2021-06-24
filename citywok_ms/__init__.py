@@ -15,7 +15,8 @@ from flask_principal import Principal, RoleNeed, UserNeed, identity_loaded
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from sqlalchemy_utils import i18n
-
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
 from citywok_ms.utils.logging import formatter
 
 csrf = CSRFProtect()
@@ -46,6 +47,13 @@ def create_app(config_class=Config):
     principal.init_app(app)
     mail.init_app(app)
     migrate.init_app(app, db)
+    if app.config["ENV"] == "production":
+        sentry_sdk.init(
+            dsn=app.config["SENTRY_DNS"],
+            integrations=[FlaskIntegration()],
+            traces_sample_rate=app.config["SENTRY_RATE"],
+            environment="production",
+        )
 
     with app.app_context():
         # imports
