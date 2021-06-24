@@ -47,7 +47,8 @@ def create_app(config_class=Config):
     principal.init_app(app)
     mail.init_app(app)
     migrate.init_app(app, db)
-    if app.config["ENV"] == "production":
+
+    if not app.testing and not app.debug:  # test: no cover
         sentry_sdk.init(
             dsn=app.config["SENTRY_DNS"],
             integrations=[FlaskIntegration()],
