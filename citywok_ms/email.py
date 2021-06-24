@@ -27,19 +27,6 @@ def send_invite_email(invitee, token):
     )
 
 
-def send_confirmation_email(target, token, username):
-    send_email(
-        "[CityWok-Manager] Confirmation",
-        recipients=[target],
-        text_body=render_template(
-            "email/confirmation.txt", token=token, username=username
-        ),
-        html_body=render_template(
-            "email/confirmation.html", token=token, username=username
-        ),
-    )
-
-
 def send_async_email(app, msg):
     with app.app_context():
         mail.send(msg)

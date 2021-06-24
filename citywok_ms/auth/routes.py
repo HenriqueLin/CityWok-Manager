@@ -9,7 +9,6 @@ from citywok_ms.auth.forms import (
 from citywok_ms.auth.models import User
 from citywok_ms.auth.permissions import manager
 from citywok_ms.email import (
-    send_confirmation_email,
     send_invite_email,
     send_password_reset_email,
 )
@@ -39,20 +38,16 @@ def login():
             username=form.username.data, password=form.password.data
         )
         if user:
-            if user.confirmed:
-                login_user(user)
-                identity_changed.send(
-                    current_app._get_current_object(), identity=Identity(user.id)
-                )
-                flash(
-                    _("Welcome %(name)s, you are logged in.", name=user.username),
-                    category="success",
-                )
-                current_app.logger.info("Log in")
-                return redirect(url_for("main.index"))
-            else:
-                flash(_("Your e-mail hasn't been confirmed."), "warning")
-                return redirect(url_for("auth.login"))
+            login_user(user)
+            identity_changed.send(
+                current_app._get_current_object(), identity=Identity(user.id)
+            )
+            flash(
+                _("Welcome %(name)s, you are logged in.", name=user.username),
+                category="success",
+            )
+            current_app.logger.info("Log in")
+            return redirect(url_for("main.index"))
         else:
             flash(_("Please check your username/password."), category="danger")
     return render_template("auth/login.html", title=_("Login"), form=form)
@@ -100,51 +95,26 @@ def registration(token):
     if not role:
         flash(_("Invite link is invalid."), "warning")
         return redirect(url_for("auth.login"))
+    if User.get_by_email(email) is not None:
+        flash(_("This email has already been registed."), "warning")
+        return redirect(url_for("auth.login"))
     form = RegistrationForm()
-    if request.method == "GET":
-        form.email.data = email
-    elif request.method == "POST":
-        if form.validate_on_submit():
-            user = User.create_by_form(form, role)
-            token = user.create_confirmation_token()
-            send_confirmation_email(user.email, token, user.username)
-            flash(
-                _(
-                    "A confirmation e-mail has been sent to %(email)s.",
-                    email=form.email.data,
-                ),
-                category="success",
-            )
-            db.session.commit()
-            current_app.logger.info(f"{user} registe")
-            return redirect(url_for("auth.login"))
+    if form.validate_on_submit():
+        user = User.create_by_form(form, role)
+        user.email = email
+        flash(
+            _("You are now registed."),
+            category="success",
+        )
+        db.session.commit()
+        current_app.logger.info(f"{user} registe")
+        return redirect(url_for("auth.login"))
 
     return render_template(
         "auth/registration.html",
         title=_("Register"),
         form=form,
     )
-
-
-@auth.route("/confirmation/<token>")
-def confirmation(token):
-    if current_user.is_authenticated:
-        flash(_("You are already logged in."), "warning")
-        return redirect(url_for("main.index"))
-
-    user = User.verify_confirmation_token(token)
-    if user:
-        if user.confirmed:
-            flash(_("Your e-mail address has already been confirmed."), "info")
-        else:
-            user.confirm()
-            flash(_("Your e-mail address is now confirmed."), "success")
-            db.session.commit()
-            current_app.logger.info(f"{user} confirm email")
-    else:
-        flash(_("Confirmation link is invalid."), "warning")
-
-    return redirect(url_for("auth.login"))
 
 
 @auth.route("/forget_password", methods=["GET", "POST"])
