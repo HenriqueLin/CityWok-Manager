@@ -18,7 +18,6 @@ from flask import (
     flash,
     redirect,
     render_template,
-    request,
     url_for,
 )
 from flask_babel import _
@@ -65,24 +64,20 @@ def logout():
 
 
 @auth.route("/invite", methods=["GET", "POST"])
-@auth.route("/invite/<token>", methods=["GET", "POST"])
 @manager.require(403)
-def invite(token=None):
+def invite():
     form = InviteForm()
-    if request.method == "POST":
-        token = None
     if form.validate_on_submit():
         token = User.create_invite_token(form.role.data, form.email.data)
         send_invite_email(form.email.data, token)
         flash(_("A invite e-mail has been sent to the envitee."), "success")
         current_app.logger.info(f"Invite {form.email.data} as {form.role.data}")
-        return redirect(url_for("auth.invite", token=token))
+        return redirect(url_for("auth.invite"))
 
     return render_template(
         "auth/invite.html",
         title=_("Invite"),
         form=form,
-        token=token,
     )
 
 
