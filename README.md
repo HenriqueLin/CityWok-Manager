@@ -96,6 +96,7 @@ $ flask i18n compile
 - [Pytest-Mock](https://github.com/pytest-dev/pytest-mock/)
 - [Pytest-Cov](https://github.com/pytest-dev/pytest-cov)
 - [Pytest-flask](https://pytest-flask.readthedocs.io/en/latest/)
+- [Sentry.io](https://docs.sentry.io/platforms/python/guides/flask/)
 
 ## References
 - Miguel Grinberg's [The Flask Mega-Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)
