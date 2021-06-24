@@ -23,7 +23,7 @@ Flask-Moment==0.11.0
 Flask-Principal==0.4.0
 Flask-SQLAlchemy==2.4.4
 Flask-WTF==0.14.3
-humanize==3.2.0
+humanize==3.9.0
 idna==2.10
 infinity==1.5
 iniconfig==1.1.1
