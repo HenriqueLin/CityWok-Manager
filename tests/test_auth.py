@@ -153,11 +153,7 @@ def test_invite_post_valid(client, user):
 
     assert url_for("auth.invite") in request.url
 
-    # titles
-    assert "Invite link" in data
-
     assert "A invite e-mail has been sent to the envitee." in data
-    assert "Copy" in data
 
     # links
     assert url_for("main.index") in data
