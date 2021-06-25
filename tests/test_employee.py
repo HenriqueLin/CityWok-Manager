@@ -133,6 +133,7 @@ def test_new_post_invalid(client, user, employee):
         "taxed_salary": 635.00,
         "nif": 123123,
         "niss": 321321,
+        "iban": "PT50123123",
     }
     response = client.post(
         url_for("employee.new"), data=request_data, follow_redirects=True
@@ -148,6 +149,7 @@ def test_new_post_invalid(client, user, employee):
     assert "ID has expired" in data
     assert "This NIF already existe" in data
     assert "This NISS already existe" in data
+    assert "This IBAN already existe" in data
 
     # database data
     assert db.session.query(Employee).count() == 2  # 2 employee created in fixture
