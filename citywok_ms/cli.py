@@ -13,7 +13,7 @@ from citywok_ms.supplier.models import Supplier
 from sqlalchemy.exc import IntegrityError, OperationalError
 from werkzeug.security import generate_password_hash
 
-command = Blueprint("command", __name__, cli_group=None)
+command_bp = Blueprint("command_bp", __name__, cli_group=None)
 
 
 dev = AppGroup("dev")
@@ -193,5 +193,5 @@ def compile(quiet):
         raise RuntimeError("compile command failed")  # test: no cover
 
 
-command.cli.add_command(dev)
-command.cli.add_command(i18n)
+command_bp.cli.add_command(dev)
+command_bp.cli.add_command(i18n)

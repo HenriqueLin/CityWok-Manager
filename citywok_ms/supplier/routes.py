@@ -8,10 +8,10 @@ from citywok_ms.supplier.models import Supplier
 from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_babel import _
 
-supplier = Blueprint("supplier", __name__, url_prefix="/supplier")
+supplier_bp = Blueprint("supplier", __name__, url_prefix="/supplier")
 
 
-@supplier.route("/")
+@supplier_bp.route("/")
 @visitor.require(401)
 def index():
     return render_template(
@@ -21,7 +21,7 @@ def index():
     )
 
 
-@supplier.route("/new", methods=["GET", "POST"])
+@supplier_bp.route("/new", methods=["GET", "POST"])
 @manager.require(403)
 def new():
     form = SupplierForm()
@@ -36,7 +36,7 @@ def new():
     return render_template("supplier/form.html", title=_("New Supplier"), form=form)
 
 
-@supplier.route("/<int:supplier_id>")
+@supplier_bp.route("/<int:supplier_id>")
 @shareholder.require(403)
 def detail(supplier_id):
     return render_template(
@@ -47,7 +47,7 @@ def detail(supplier_id):
     )
 
 
-@supplier.route("/<int:supplier_id>/update", methods=["GET", "POST"])
+@supplier_bp.route("/<int:supplier_id>/update", methods=["GET", "POST"])
 @manager.require(403)
 def update(supplier_id):
     supplier = Supplier.get_or_404(supplier_id)
@@ -70,7 +70,7 @@ def update(supplier_id):
     )
 
 
-@supplier.route("/<int:supplier_id>/upload", methods=["POST"])
+@supplier_bp.route("/<int:supplier_id>/upload", methods=["POST"])
 @manager.require(403)
 def upload(supplier_id):
     form = FileForm()
