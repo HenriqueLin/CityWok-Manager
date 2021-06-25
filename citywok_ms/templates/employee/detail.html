@@ -8,17 +8,17 @@
     <p class="text-warning mb-2">{{_('Suspended')}}</p>
     {% endif %}
     <div class="d-print-none">
-        <a href="{{url_for('employee.update',employee_id=employee.id)}}" class="btn btn-primary "
+        <a href="{{url_for('employee.update',employee_id=employee.id)}}" class="btn btn-outline-primary "
             id="update_button">{{_('Update')}}</a>
         {% if employee.active %}
         <form action="{{url_for('employee.suspend',employee_id=employee.id)}}" method="post" class="d-inline">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <input type="submit" value="{{_('Suspend')}}" class="btn btn-danger">
+            <input type="submit" value="{{_('Suspend')}}" class="btn btn-outline-danger">
         </form>
         {% else %}
         <form action="{{url_for('employee.activate',employee_id=employee.id)}}" method="post" class="d-inline">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <input type="submit" value="{{_('Activate')}}" class="btn btn-success">
+            <input type="submit" value="{{_('Activate')}}" class="btn btn-outline-success">
         </form>
         {% endif %}
     </div>
@@ -77,12 +77,12 @@
                 enctype='multipart/form-data' class="d-inline" novalidate>
                 {{ file_form.hidden_tag() }}
                 {{ file_form.file(id="selectedFile", style="display:none", onchange="form.submit()") }}
-                <input type="button" value="{{_('New File')}}" class="btn btn-success"
+                <input type="button" value="{{_('New File')}}" class="btn btn-outline-success"
                     onclick="document.getElementById('selectedFile').click();" />
             </form>
             {% if employee.deleted_files %}
-            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#deletedFiles"
-                aria-expanded="false" aria-controls="deletedFiles" id="fileButton">
+            <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse"
+                data-bs-target="#deletedFiles" aria-expanded="false" aria-controls="deletedFiles" id="fileButton">
                 {{_('Show deleted files')}}
             </button>
             {% endif %}

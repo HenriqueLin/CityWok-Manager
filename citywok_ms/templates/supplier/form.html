@@ -65,10 +65,10 @@
             </div>
             <div class="d-print-none">
                 {% if request.endpoint == 'supplier.new' %}
-                {{ form.submit(class="btn btn-success float-end ms-1") }}
+                {{ form.submit(class="btn btn-outline-success float-end ms-1") }}
                 <a href="{{url_for('supplier.index')}}" class="btn btn-secondary float-end">{{_('Cancle')}}</a>
                 {% elif request.endpoint == 'supplier.update' %}
-                {{ form.update(class="btn btn-primary float-end ms-1") }}
+                {{ form.update(class="btn btn-outline-primary float-end ms-1") }}
                 <a href="{{url_for('supplier.detail',supplier_id=supplier.id)}}"
                     class="btn btn-secondary float-end">{{_('Cancle')}}</a>
                 {% endif %}

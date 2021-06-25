@@ -5,7 +5,7 @@
     <!-- title -->
     <h1>{{title}}</h1>
     <div class="d-print-none">
-        <a href="{{url_for('supplier.update',supplier_id=supplier.id)}}" class="btn btn-primary d-print-none"
+        <a href="{{url_for('supplier.update',supplier_id=supplier.id)}}" class="btn btn-outline-primary d-print-none"
             id="update_button">{{_('Update')}}</a>
     </div>
     <hr>
@@ -46,12 +46,12 @@
                 enctype='multipart/form-data' class="d-inline" novalidate>
                 {{ file_form.hidden_tag() }}
                 {{ file_form.file(id="selectedFile", style="display:none", onchange="form.submit()") }}
-                <input type="button" value="{{_('New File')}}" class="btn btn-success"
+                <input type="button" value="{{_('New File')}}" class="btn btn-outline-success"
                     onclick="document.getElementById('selectedFile').click();" />
             </form>
             {% if supplier.deleted_files %}
-            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#deletedFiles"
-                aria-expanded="false" aria-controls="deletedFiles" id="fileButton">
+            <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse"
+                data-bs-target="#deletedFiles" aria-expanded="false" aria-controls="deletedFiles" id="fileButton">
                 {{_('Show deleted files')}}
             </button>
             {% endif %}
