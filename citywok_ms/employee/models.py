@@ -24,6 +24,7 @@ class Employee(db.Model, CRUDMixin):
     nationality = Column(CountryType, nullable=False)
     nif = Column(Integer, unique=True)
     niss = Column(Integer, unique=True)
+    iban = Column(String, unique=True)
     employment_date = Column(Date)
     total_salary = Column(SqliteDecimal(2))
     taxed_salary = Column(SqliteDecimal(2))
