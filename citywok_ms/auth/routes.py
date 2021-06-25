@@ -24,10 +24,10 @@ from flask_babel import _
 from flask_login import current_user, login_user, logout_user
 from flask_principal import AnonymousIdentity, Identity, identity_changed
 
-auth = Blueprint("auth", __name__)
+auth_bp = Blueprint("auth", __name__)
 
 
-@auth.route("/login", methods=["GET", "POST"])
+@auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
     if current_user.is_authenticated:
@@ -52,7 +52,7 @@ def login():
     return render_template("auth/login.html", title=_("Login"), form=form)
 
 
-@auth.route("/logout", methods=["GET", "POST"])
+@auth_bp.route("/logout", methods=["GET", "POST"])
 def logout():
     current_app.logger.info("Log out")
     logout_user()
@@ -63,7 +63,7 @@ def logout():
     return redirect(url_for("auth.login"))
 
 
-@auth.route("/invite", methods=["GET", "POST"])
+@auth_bp.route("/invite", methods=["GET", "POST"])
 @manager.require(403)
 def invite():
     form = InviteForm()
@@ -81,7 +81,7 @@ def invite():
     )
 
 
-@auth.route("/registration/<token>", methods=["GET", "POST"])
+@auth_bp.route("/registration/<token>", methods=["GET", "POST"])
 def registration(token):
     if current_user.is_authenticated:
         flash(_("You are already logged in."), "warning")
@@ -112,7 +112,7 @@ def registration(token):
     )
 
 
-@auth.route("/forget_password", methods=["GET", "POST"])
+@auth_bp.route("/forget_password", methods=["GET", "POST"])
 def forget_password():
     if current_user.is_authenticated:
         return redirect(url_for("main.index"))
@@ -135,7 +135,7 @@ def forget_password():
     )
 
 
-@auth.route("/reset_password/<token>", methods=["GET", "POST"])
+@auth_bp.route("/reset_password/<token>", methods=["GET", "POST"])
 def reset_password(token):
     if current_user.is_authenticated:
         return redirect(url_for("main.index"))

@@ -7,11 +7,11 @@ from flask import current_app
 from flask.helpers import send_file
 from flask_babel import _
 
-file = Blueprint("file", __name__, url_prefix="/file")
+file_bp = Blueprint("file", __name__, url_prefix="/file")
 
 
-@file.route("/<file_id>/download", strict_slashes=False)
-@file.route("/<file_id>/download/<file_name>", strict_slashes=False)
+@file_bp.route("/<file_id>/download", strict_slashes=False)
+@file_bp.route("/<file_id>/download/<file_name>", strict_slashes=False)
 @shareholder.require(403)
 def download(file_id, file_name=None):
     f: File = File.get_or_404(file_id)
@@ -23,7 +23,7 @@ def download(file_id, file_name=None):
     return send_file(f.path, cache_timeout=0)
 
 
-@file.route("/<file_id>/delete", methods=["POST"])
+@file_bp.route("/<file_id>/delete", methods=["POST"])
 @manager.require(403)
 def delete(file_id):
     f: File = File.get_or_404(file_id)
@@ -40,7 +40,7 @@ def delete(file_id):
     return redirect(f.owner_url)
 
 
-@file.route("/<file_id>/restore", methods=["POST"])
+@file_bp.route("/<file_id>/restore", methods=["POST"])
 @manager.require(403)
 def restore(file_id):
     f: File = File.get_or_404(file_id)
@@ -54,7 +54,7 @@ def restore(file_id):
     return redirect(f.owner_url)
 
 
-@file.route("/<file_id>/update", methods=["GET", "POST"])
+@file_bp.route("/<file_id>/update", methods=["GET", "POST"])
 @manager.require(403)
 def update(file_id):
     f: File = File.get_or_404(file_id)

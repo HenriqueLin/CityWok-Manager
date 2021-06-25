@@ -7,10 +7,10 @@ from citywok_ms.file.models import EmployeeFile, File
 from flask import Blueprint, current_app, flash, redirect, render_template, url_for
 from flask_babel import _
 
-employee = Blueprint("employee", __name__, url_prefix="/employee")
+employee_bp = Blueprint("employee", __name__, url_prefix="/employee")
 
 
-@employee.route("/")
+@employee_bp.route("/")
 @visitor.require(401)
 def index():
     return render_template(
@@ -21,7 +21,7 @@ def index():
     )
 
 
-@employee.route("/new", methods=["GET", "POST"])
+@employee_bp.route("/new", methods=["GET", "POST"])
 @manager.require(403)
 def new():
     form = EmployeeForm()
@@ -37,7 +37,7 @@ def new():
     return render_template("employee/form.html", title=_("New Employee"), form=form)
 
 
-@employee.route("/<int:employee_id>")
+@employee_bp.route("/<int:employee_id>")
 @shareholder.require(403)
 def detail(employee_id):
     return render_template(
@@ -48,7 +48,7 @@ def detail(employee_id):
     )
 
 
-@employee.route("/<int:employee_id>/update", methods=["GET", "POST"])
+@employee_bp.route("/<int:employee_id>/update", methods=["GET", "POST"])
 @manager.require(403)
 def update(employee_id):
     employee = Employee.get_or_404(employee_id)
@@ -74,7 +74,7 @@ def update(employee_id):
     )
 
 
-@employee.route("/<int:employee_id>/suspend", methods=["POST"])
+@employee_bp.route("/<int:employee_id>/suspend", methods=["POST"])
 @manager.require(403)
 def suspend(employee_id):
     employee = Employee.get_or_404(employee_id)
@@ -87,7 +87,7 @@ def suspend(employee_id):
     return redirect(url_for("employee.detail", employee_id=employee_id))
 
 
-@employee.route("/<int:employee_id>/activate", methods=["POST"])
+@employee_bp.route("/<int:employee_id>/activate", methods=["POST"])
 @manager.require(403)
 def activate(employee_id):
     employee = Employee.get_or_404(employee_id)
@@ -100,7 +100,7 @@ def activate(employee_id):
     return redirect(url_for("employee.detail", employee_id=employee_id))
 
 
-@employee.route("/<int:employee_id>/upload", methods=["POST"])
+@employee_bp.route("/<int:employee_id>/upload", methods=["POST"])
 @manager.require(403)
 def upload(employee_id):
     form = FileForm()
