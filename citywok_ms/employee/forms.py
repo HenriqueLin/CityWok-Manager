@@ -85,6 +85,11 @@ class EmployeeForm(FlaskForm):
         label=_l("NISS"),
         validators=[Optional()],
     )
+    iban = StringField(
+        label=_l("IBAN"),
+        validators=[Optional()],
+        filters=[lambda x: x or None],
+    )
     employment_date = DateField(
         label=_l("Employment Date"),
         validators=[Optional()],
@@ -121,3 +126,8 @@ class EmployeeForm(FlaskForm):
         e = Employee.query.filter_by(niss=niss.data).first()
         if niss.data and e and (e.id != self.hide_id.data):
             raise ValidationError(_("This NISS already existe"))
+
+    def validate_iban(self, iban):
+        e = Employee.query.filter_by(iban=iban.data).first()
+        if iban.data and e and (e.id != self.hide_id.data):
+            raise ValidationError(_("This IBAN already existe"))

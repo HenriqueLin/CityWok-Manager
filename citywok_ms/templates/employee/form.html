@@ -74,6 +74,11 @@
                 {% endwith %}
             </div>
             <div class="col-sm-6">
+                {% with field=form.iban %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <div class="col-sm-6">
                 {% with field=form.employment_date %}
                 {% include 'field.html' %}
                 {% endwith %}
