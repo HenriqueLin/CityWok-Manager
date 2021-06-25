@@ -18,8 +18,9 @@ from flask_wtf.csrf import CSRFProtect
 from sentry_sdk.integrations.flask import FlaskIntegration
 from sqlalchemy import MetaData
 from sqlalchemy_utils import i18n
-
+from flask_admin import Admin
 from citywok_ms.utils.logging import formatter
+from citywok_ms.utils.admin import MyAdminIndexView
 
 convention = {
     "ix": "ix_%(column_0_label)s",
@@ -38,6 +39,7 @@ login = LoginManager()
 principal = Principal()
 mail = Mail()
 migrate = Migrate()
+f_admin = Admin(template_mode="bootstrap4", index_view=MyAdminIndexView())
 
 
 def create_app(config_class=Config):
@@ -58,6 +60,7 @@ def create_app(config_class=Config):
     principal.init_app(app)
     mail.init_app(app)
     migrate.init_app(app, db, render_as_batch=True)
+    f_admin.init_app(app)
 
     if not app.testing and not app.debug:  # test: no cover
         sentry_sdk.init(
@@ -76,6 +79,7 @@ def create_app(config_class=Config):
         from citywok_ms.file.routes import file_bp
         from citywok_ms.main.routes import main_bp
         from citywok_ms.supplier.routes import supplier_bp
+        from citywok_ms.admin.routes import admin_bp
 
         # blueprints
         app.register_blueprint(auth_bp)
@@ -85,6 +89,7 @@ def create_app(config_class=Config):
         app.register_blueprint(command_bp)
         app.register_blueprint(main_bp)
         app.register_blueprint(error_bp)
+        app.register_blueprint(admin_bp)
 
         app.logger.removeHandler(default_handler)
         if not app.testing:  # test: no cover

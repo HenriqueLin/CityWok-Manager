@@ -13,7 +13,7 @@ from citywok_ms.supplier.models import Supplier
 from sqlalchemy.exc import IntegrityError, OperationalError
 from werkzeug.security import generate_password_hash
 
-command_bp = Blueprint("command_bp", __name__, cli_group=None)
+command_bp = Blueprint("command", __name__, cli_group=None)
 
 
 dev = AppGroup("dev")
