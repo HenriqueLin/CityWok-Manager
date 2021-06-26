@@ -1,0 +1,2 @@
+FLASK_APP=citywok_ms
+FLASK_ENV=development

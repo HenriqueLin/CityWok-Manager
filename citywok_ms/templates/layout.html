@@ -20,79 +20,60 @@
     <!-- Chart.js -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.css">
 
-
-
     <!-- costum css -->
     <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet" type="text/css">
+
+    <!-- favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
 
     <title>{{ title }} - CityWok Manager</title>
 </head>
 
 {% set navbar = [
-('#','home','Home'),
-(url_for('employee.index'), 'employee', 'Employee'),
-(url_for('supplier.index'), 'supplier','Supplier')
+(url_for('employee.index'), 'employee', _('Employee')),
+(url_for('supplier.index'), 'supplier',_('Supplier'))
 ] -%}
 
-{# ('#', 'supplier','Supplier'),
-('#', 'registry','Registry') #}
 
 <body class='mb-5'>
-    <header class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-        <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse"
-            data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId" aria-expanded="false"
-            aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="collapsibleNavId">
-
-            <!-- navbar-left -->
-            <ul class="navbar-nav me-auto mt-2 mt-lg-0">
-                {% for href, name, caption in navbar %}
-                <li class="nav-item"></li>
-                <a {% if name==active_page %} class="nav-link active" {% else %} class="nav-link" {% endif %}
-                    href="{{ href }}">{{ caption }}</a>
-                {% endfor %}
-                </li>
-                {#<li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-bs-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                    <div class="dropdown-menu  bg-light" aria-labelledby="dropdownId">
-                        <a class="dropdown-item" href="#">Action 1</a>
-                        <a class="dropdown-item" href="#">Action 2</a>
-                    </div>
-                </li>
-            </ul>
-
-            <!-- navbar-right -->
-            {# <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
-                {% if current_user.is_authenticated %}
-                <li class="nav-item dropdown me-2">
-                    <a {% if active_page=='account' %} class="nav-link active dropdown-toggle" {% else %}
-                        class="nav-link dropdown-toggle" {% endif %} href="#" id="accountMenu" data-bs-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">{{ current_user.username
-                        }}</a>
-                    <div class="dropdown-menu" aria-labelledby="accountMenu">
-                        <a class="dropdown-item" href="{{ url_for('user.account') }}">账户</a>
-                        <a class="dropdown-item" href="{{ url_for('user.invite') }}">邀请</a>
-                        <a class="dropdown-item" href="{{ url_for('main.setting') }}">设置</a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-danger" href="{{ url_for('user.logout') }}">登出</a>
-                </li>
-                {% endif %}
-            </ul>#}
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{url_for('main.index')}}">CityWok-Manager</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
+                aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {% for href, name, caption in navbar %}
+                    <li class="nav-item"></li>
+                    <a {% if name==active_page %} class="nav-link active" {% else %} class="nav-link" {% endif %}
+                        href="{{ href }}">{{ caption }}</a>
+                    {% endfor %}
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item d-grid gap-2 d-md-block">
+                        {% if current_user.role in ['admin','manager'] %}
+                        <a class="btn btn-outline-primary" href="{{ url_for('auth.invite') }}">{{_('Invite')}}</a>
+                        {% endif %}
+                        <a class="btn btn-outline-danger" href="{{ url_for('auth.logout') }}">{{_('Logout')}}</a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
         </div>
-    </header>
+    </nav>
 
-    <main class="container" role="main">
-        <div class="py-3 text-center">
+    <main class="container pt-2" role="main">
+        <div class="px-3 text-center d-print-none fixed-top" id="message">
             {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
             {% for category, message in messages %}
-            <div class="alert alert-{{ category }} w-100">
+            <div class="alert alert-{{ category }} alert-dismissible" role="alert">
                 {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {% endfor %}
             {% endif %}

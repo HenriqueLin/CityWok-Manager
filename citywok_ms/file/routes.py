@@ -1,71 +1,72 @@
-from datetime import datetime
-
-from flask.helpers import send_file
-
 from citywok_ms import db
+from citywok_ms.auth.permissions import manager, shareholder
 from citywok_ms.file.forms import FileUpdateForm
-from citywok_ms.models import File
-from flask import (Blueprint, current_app, flash, redirect, render_template,
-                   request, send_from_directory, url_for)
+from citywok_ms.file.models import File
+from flask import Blueprint, flash, redirect, render_template, url_for
+from flask import current_app
+from flask.helpers import send_file
+from flask_babel import _
 
-file = Blueprint('file', __name__, url_prefix="/file")
+file_bp = Blueprint("file", __name__, url_prefix="/file")
 
 
-@file.route('/<file_id>/download', strict_slashes=False)
-@file.route('/<file_id>/download/<file_name>', strict_slashes=False)
+@file_bp.route("/<file_id>/download", strict_slashes=False)
+@file_bp.route("/<file_id>/download/<file_name>", strict_slashes=False)
+@shareholder.require(403)
 def download(file_id, file_name=None):
-    '''
-    View to download the file
-    '''
-    f: File = db.session.query(File).get_or_404(file_id)
+    f: File = File.get_or_404(file_id)
     if f.full_name != file_name:
-        return redirect(url_for('file.download', file_id=file_id, file_name=f.full_name))
-    return send_file(f.file_path,
-                     cache_timeout=0)
+        return redirect(
+            url_for("file.download", file_id=file_id, file_name=f.full_name)
+        )
+    current_app.logger.info(f"Download file {f}")
+    return send_file(f.path, cache_timeout=0)
 
 
-@file.route('/<file_id>/delete', methods=['POST'])
+@file_bp.route("/<file_id>/delete", methods=["POST"])
+@manager.require(403)
 def delete(file_id):
-    '''
-    View to delete(move to trash bin and removed later) a file
-    '''
-    f: File = db.session.query(File).get_or_404(file_id)
+    f: File = File.get_or_404(file_id)
     if f.delete_date:
-        flash('File has already been deleted', 'info')
+        flash(
+            _('File "%(name)s" has already been deleted.', name=f.full_name),
+            "info",
+        )
     else:
         f.delete()
-        flash('File has been move to trash bin', 'success')
+        flash(_('File "%(name)s" has been deleted.', name=f.full_name), "success")
+        db.session.commit()
+        current_app.logger.info(f"Delete file {f}")
     return redirect(f.owner_url)
 
 
-@file.route('/<file_id>/restore', methods=['POST'])
+@file_bp.route("/<file_id>/restore", methods=["POST"])
+@manager.require(403)
 def restore(file_id):
-    '''
-    View to restore the file form trash bin
-    '''
-    f: File = db.session.query(File).get_or_404(file_id)
+    f: File = File.get_or_404(file_id)
     if not f.delete_date:
-        flash("File hasn't been deleted", 'info')
+        flash(_('File "%(name)s" hasn\'t been deleted.', name=f.full_name), "info")
     else:
         f.restore()
-        flash('File has been restore', 'success')
+        flash(_('File "%(name)s" has been restored.', name=f.full_name), "success")
+        db.session.commit()
+        current_app.logger.info(f"Restore file {f}")
     return redirect(f.owner_url)
 
 
-@file.route('/<file_id>/update', methods=["GET", "POST"])
+@file_bp.route("/<file_id>/update", methods=["GET", "POST"])
+@manager.require(403)
 def update(file_id):
-    '''
-    View to update the file's information
-    '''
-    f: File = db.session.query(File).get_or_404(file_id)
+    f: File = File.get_or_404(file_id)
     form = FileUpdateForm()
     if form.validate_on_submit():
-        f.update(form)
-        flash("File has been update", "success")
+        f.update_by_form(form)
+        flash(_('File "%(name)s" has been updated.', name=f.full_name), "success")
+        db.session.commit()
+        current_app.logger.info(f"Update file {f}")
         return redirect(f.owner_url)
-    form.file_name.data = f.file_name
+    form.file_name.data = f.base_name
     form.remark.data = f.remark
-    return render_template('file/update.html',
-                           title="Update File",
-                           form=form,
-                           file=f)
+    return render_template(
+        "file/update.html", title=_("Update File"), form=form, file=f
+    )

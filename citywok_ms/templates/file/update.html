@@ -11,7 +11,7 @@
                 {{ form.file_name.label (class="fw-bold form-label") }}
                 <div class="input-group">
                     {% if form.file_name.errors %}
-                    {{ field(class="form-control is-invalid")}}
+                    {{ form.file_name(class="form-control is-invalid")}}
                     <div class="invalid-feedback">
                         {% for error in form.file_name.errors %}
                         <span>{{ error }}</span>
@@ -21,7 +21,7 @@
                     {{ form.file_name(class="form-control") }}
                     {% endif %}
                     <div class="input-group-append">
-                        <span class="input-group-text">{{file.file_extension}}</span>
+                        <span class="input-group-text">{{file.format}}</span>
                     </div>
                 </div>
             </div>
@@ -32,8 +32,9 @@
                 {% endwith %}
             </div>
             <div class="w-100 my-0"></div>
-            <div class="col-sm-6">
-                {{ form.update(class="btn btn-primary float-end") }}
+            <div class="gx-3 col-sm-6">
+                {{ form.update(class="btn btn-outline-primary ms-1 float-end") }}
+                <a href="{{file.owner_url}}" class="btn btn-secondary float-end">{{_('Cancle')}}</a>
             </div>
         </div>
 </div>

@@ -1,5 +1,6 @@
-main {
-  padding-top: 60px;
+#message {
+  top: 65px;
+  opacity: 0.9;
 }
 
 .table th, .table td {

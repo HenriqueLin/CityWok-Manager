@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+{% set active_page = "employee" %}
+{% block content %}
+<div class="px-4 py-5 my-5 text-center">
+    <h1 class="display-5 fw-bold">403</h1>
+    <div class="col-sm-6 mx-auto">
+        <h3 class="mb-4">{{_("Ops, seems like you don't have the permission to visit this page.")}}</h3>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a href="{{ request.referrer }}" class="btn btn-secondary px-4">{{_('Back')}}</a>
+            <a href="{{ url_for('main.index') }}" class="btn btn-outline-primary px-4">{{_('Home')}}</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

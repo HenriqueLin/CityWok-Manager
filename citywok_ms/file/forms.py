@@ -4,23 +4,20 @@ from wtforms import StringField, TextAreaField
 from wtforms.fields.simple import SubmitField
 from wtforms.validators import InputRequired, Optional
 from citywok_ms.utils import FILEALLOWED
+from flask_babel import lazy_gettext as _l
 
 
 class FileForm(FlaskForm):
-    '''
-    Form to upload a new File
-    '''
-    file = FileField(label='File',
-                     validators=[FileRequired(),
-                                 FileAllowed(FILEALLOWED)])
+    file = FileField(
+        label=_l("File"),
+        validators=[
+            FileRequired(),
+            FileAllowed(FILEALLOWED),
+        ],
+    )
 
 
 class FileUpdateForm(FlaskForm):
-    '''
-    Form to update information of a File
-    '''
-    file_name = StringField(label='File Name',
-                            validators=[InputRequired()])
-    remark = TextAreaField(label='Remark',
-                           validators=[Optional()])
-    update = SubmitField(label='Update')
+    file_name = StringField(label=_l("File Name"), validators=[InputRequired()])
+    remark = TextAreaField(label=_l("Remark"), validators=[Optional()])
+    update = SubmitField(label=_l("Update"))

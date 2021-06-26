@@ -1,106 +1,122 @@
 from citywok_ms import db
-from citywok_ms.models import Employee, EmployeeFile, File
+from citywok_ms.auth.permissions import manager, shareholder, visitor
 from citywok_ms.employee.forms import EmployeeForm
+from citywok_ms.employee.models import Employee
 from citywok_ms.file.forms import FileForm
-from flask import Blueprint, flash, redirect, render_template, url_for
+from citywok_ms.file.models import EmployeeFile, File
+from flask import Blueprint, current_app, flash, redirect, render_template, url_for
+from flask_babel import _
+
+employee_bp = Blueprint("employee", __name__, url_prefix="/employee")
 
 
-employee = Blueprint('employee', __name__, url_prefix="/employee")
-
-
-@employee.route("/")
+@employee_bp.route("/")
+@visitor.require(401)
 def index():
-    '''
-    View which shows a resume of all employee
-    '''
-    employees = db.session.query(Employee).filter_by(active=True).all()
-    i_employees = db.session.query(Employee).filter_by(active=False).all()
-    return render_template('employee/index.html',
-                           title='Employees',
-                           employees=employees,
-                           i_employees=i_employees)
+    return render_template(
+        "employee/index.html",
+        title=_("Employees"),
+        active_employees=Employee.get_active(),
+        suspended_employees=Employee.get_suspended(),
+    )
 
 
-@employee.route("/new", methods=['GET', 'POST'])
+@employee_bp.route("/new", methods=["GET", "POST"])
+@manager.require(403)
 def new():
-    '''
-    View which creates a new Employee
-    '''
     form = EmployeeForm()
     if form.validate_on_submit():
-        Employee.new(form)
-        flash('Successfully added new employee', 'success')
-        return redirect(url_for('employee.index'))
-    return render_template('employee/form.html',
-                           title='New Employee',
-                           form=form)
+        employee = Employee.create_by_form(form)
+        flash(
+            _('New employee "%(name)s" has been added.', name=employee.full_name),
+            "success",
+        )
+        db.session.commit()
+        current_app.logger.info(f"Create employee {employee}")
+        return redirect(url_for("employee.index"))
+    return render_template("employee/form.html", title=_("New Employee"), form=form)
 
 
-@employee.route("/<int:employee_id>")
+@employee_bp.route("/<int:employee_id>")
+@shareholder.require(403)
 def detail(employee_id):
-    '''
-    View which shows detail information of a Employee
-    '''
-    return render_template('employee/detail.html',
-                           title='Employee Detail',
-                           employee=Employee.query.get_or_404(employee_id),
-                           file_form=FileForm())
+    return render_template(
+        "employee/detail.html",
+        title=_("Employee Detail"),
+        employee=Employee.get_or_404(employee_id),
+        file_form=FileForm(),
+    )
 
 
-@employee.route("/<int:employee_id>/update", methods=['GET', 'POST'])
+@employee_bp.route("/<int:employee_id>/update", methods=["GET", "POST"])
+@manager.require(403)
 def update(employee_id):
-    '''
-    View which updates information of a Employee
-    '''
-    employee = db.session.query(Employee).get_or_404(employee_id)
+    employee = Employee.get_or_404(employee_id)
     form = EmployeeForm()
     form.hide_id.data = employee_id
     if form.validate_on_submit():
-        employee.update(form)
-        flash('Employee information has been updated', 'success')
-        return redirect(url_for('employee.detail', employee_id=employee_id))
+        employee.update_by_form(form)
+        flash(
+            _('Employee "%(name)s" has been updated.', name=employee.full_name),
+            "success",
+        )
+        db.session.commit()
+        current_app.logger.info(f"Update employee {employee}")
+        return redirect(url_for("employee.detail", employee_id=employee_id))
 
     form.process(obj=employee)
 
-    return render_template('employee/form.html',
-                           employee=employee,
-                           form=form,
-                           title='Update employee')
+    return render_template(
+        "employee/form.html",
+        employee=employee,
+        form=form,
+        title=_("Update Employee"),
+    )
 
 
-@employee.route("/<int:employee_id>/inactivate", methods=['POST'])
-def inactivate(employee_id):
-    '''
-    View which inactivates a Employee
-    '''
-    employee = db.session.query(Employee).get_or_404(employee_id)
-    employee.inactivate()
-    flash('Employee has been inactivated', 'success')
-    return redirect(url_for('employee.detail', employee_id=employee_id))
+@employee_bp.route("/<int:employee_id>/suspend", methods=["POST"])
+@manager.require(403)
+def suspend(employee_id):
+    employee = Employee.get_or_404(employee_id)
+    employee.suspend()
+    flash(
+        _('Employee "%(name)s" has been suspended.', name=employee.full_name), "success"
+    )
+    db.session.commit()
+    current_app.logger.info(f"Suspend employee {employee}")
+    return redirect(url_for("employee.detail", employee_id=employee_id))
 
 
-@employee.route("/<int:employee_id>/activate", methods=['POST'])
+@employee_bp.route("/<int:employee_id>/activate", methods=["POST"])
+@manager.require(403)
 def activate(employee_id):
-    '''
-    View which activates a Employee
-    '''
-    employee = db.session.query(Employee).get_or_404(employee_id)
+    employee = Employee.get_or_404(employee_id)
     employee.activate()
-    flash('Employee has been activated', 'success')
-    return redirect(url_for('employee.detail', employee_id=employee_id))
+    flash(
+        _('Employee "%(name)s" has been activated.', name=employee.full_name), "success"
+    )
+    db.session.commit()
+    current_app.logger.info(f"Activate employee {employee}")
+    return redirect(url_for("employee.detail", employee_id=employee_id))
 
 
-@employee.route("/<int:employee_id>/upload", methods=['POST'])
+@employee_bp.route("/<int:employee_id>/upload", methods=["POST"])
+@manager.require(403)
 def upload(employee_id):
-    '''
-    View which uploads a file of a Employee
-    '''
     form = FileForm()
     file = form.file.data
     if form.validate_on_submit():
-        Employee.save_file(file=file, employee_id=employee_id)
-        flash('File has been submited', 'success')
-    else:
+        db_file = EmployeeFile.create_by_form(form, Employee.get_or_404(employee_id))
         flash(
-            f'Invalid File Format: "{File.split_ext(file)}"', 'danger')
-    return redirect(url_for('employee.detail', employee_id=employee_id))
+            _('File "%(name)s" has been uploaded.', name=db_file.full_name), "success"
+        )
+        db.session.commit()
+        current_app.logger.info(f"Upload employee file {db_file}")
+    elif file is not None:
+        flash(
+            _('Invalid file format "%(format)s".', format=File.split_file_format(file)),
+            "danger",
+        )
+    else:
+        flash(_("No file has been uploaded."), "danger")
+    return redirect(url_for("employee.detail", employee_id=employee_id))
