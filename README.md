@@ -3,6 +3,7 @@
 [![Tests](https://github.com/HenriqueLin/CityWok-Manager/actions/workflows/tests.yml/badge.svg)](https://github.com/HenriqueLin/CityWok-Manager/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/HenriqueLin/CityWok-Manager/branch/develop/graph/badge.svg?token=PCSK7B85XY)](https://codecov.io/gh/HenriqueLin/CityWok-Manager)
 ![license](https://img.shields.io/github/license/HenriqueLin/CityWok-Manager)
+![Uptime Robot status](https://img.shields.io/uptimerobot/status/m788531133-9727a88c922e36fa09bd5a3a)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ## Introduction
