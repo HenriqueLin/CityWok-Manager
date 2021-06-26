@@ -32,7 +32,7 @@ class Config(object):
 
     # sentry
     SENTRY_DNS = os.environ.get("SENTRY_DNS")
-    SENTRY_RATE = 1.0
+    SENTRY_RATE = os.environ.get("SENTRY_RATE")
 
 
 class TestConfig(Config):

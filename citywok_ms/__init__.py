@@ -102,9 +102,10 @@ def create_app(config_class=Config):
                 stream_handler.setLevel(logging.INFO)
                 app.logger.addHandler(stream_handler)
             else:
+                app.logger.setLevel(logging.INFO)
                 os.makedirs("logs", exist_ok=True)
                 file_handler = RotatingFileHandler(
-                    "logs/citywok_ms.log", maxBytes=20480, backupCount=10
+                    "logs/citywok_ms.log", maxBytes=5 * 1024 * 1024, backupCount=10
                 )
                 file_handler.setFormatter(formatter)
                 file_handler.setLevel(logging.INFO)

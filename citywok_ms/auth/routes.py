@@ -27,6 +27,7 @@ from flask_principal import AnonymousIdentity, Identity, identity_changed
 auth_bp = Blueprint("auth", __name__)
 
 
+@auth_bp.route("/", methods=["GET", "POST"])
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
