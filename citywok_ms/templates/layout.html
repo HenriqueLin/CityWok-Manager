@@ -30,7 +30,6 @@
 </head>
 
 {% set navbar = [
-(url_for('main.index'),'home',_('Home')),
 (url_for('employee.index'), 'employee', _('Employee')),
 (url_for('supplier.index'), 'supplier',_('Supplier'))
 ] -%}
@@ -39,7 +38,7 @@
 <body class='mb-5'>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">CityWok-Manager</a>
+            <a class="navbar-brand" href="{{url_for('main.index')}}">CityWok-Manager</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
                 aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
