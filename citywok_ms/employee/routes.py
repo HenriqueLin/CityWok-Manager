@@ -4,7 +4,7 @@ from citywok_ms.employee.forms import EmployeeForm
 from citywok_ms.employee.models import Employee
 from citywok_ms.file.forms import FileForm
 from citywok_ms.file.models import EmployeeFile, File
-from citywok_ms.tasks import compress_file
+from citywok_ms.task import compress_file
 from flask import Blueprint, current_app, flash, redirect, render_template, url_for
 from flask_babel import _
 
