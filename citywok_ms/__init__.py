@@ -7,20 +7,22 @@ import sentry_sdk
 from config import Config
 from flask import Flask, current_app, request
 from flask.logging import default_handler
+from flask_admin import Admin
 from flask_babel import Babel
 from flask_login import LoginManager, current_user
 from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_moment import Moment
 from flask_principal import Principal, RoleNeed, UserNeed, identity_loaded
+from flask_rq2 import RQ
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from sentry_sdk.integrations.flask import FlaskIntegration
 from sqlalchemy import MetaData
 from sqlalchemy_utils import i18n
-from flask_admin import Admin
-from citywok_ms.utils.logging import formatter
+
 from citywok_ms.utils.admin import MyAdminIndexView
+from citywok_ms.utils.logging import formatter
 
 convention = {
     "ix": "ix_%(column_0_label)s",
@@ -40,6 +42,7 @@ principal = Principal()
 mail = Mail()
 migrate = Migrate()
 f_admin = Admin(template_mode="bootstrap4", index_view=MyAdminIndexView())
+rq = RQ()
 
 
 def create_app(config_class=Config):
@@ -60,6 +63,7 @@ def create_app(config_class=Config):
     principal.init_app(app)
     mail.init_app(app)
     migrate.init_app(app, db, render_as_batch=True)
+    rq.init_app(app)
     f_admin.init_app(app)
 
     if not app.testing and not app.debug:  # test: no cover
@@ -72,6 +76,7 @@ def create_app(config_class=Config):
 
     with app.app_context():
         # imports
+        from citywok_ms.admin.routes import admin_bp
         from citywok_ms.auth.routes import auth_bp
         from citywok_ms.cli import command_bp
         from citywok_ms.employee.routes import employee_bp
@@ -79,7 +84,6 @@ def create_app(config_class=Config):
         from citywok_ms.file.routes import file_bp
         from citywok_ms.main.routes import main_bp
         from citywok_ms.supplier.routes import supplier_bp
-        from citywok_ms.admin.routes import admin_bp
 
         # blueprints
         app.register_blueprint(auth_bp)
