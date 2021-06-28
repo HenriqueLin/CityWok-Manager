@@ -38,6 +38,10 @@ class EmployeeForm(FlaskForm):
         filters=[lambda x: x or None],
         validators=[Optional()],
     )
+    accountant_id = IntegerField(
+        label=_l("Accountant ID"),
+        validators=[Optional()],
+    )
     sex = BlankSelectField(
         label=_l("Sex"),
         choices=SEX,
@@ -131,3 +135,8 @@ class EmployeeForm(FlaskForm):
         e = Employee.query.filter_by(iban=iban.data).first()
         if iban.data and e and (e.id != self.hide_id.data):
             raise ValidationError(_("This IBAN already existe"))
+
+    def validate_accountant_id(self, accountant_id):
+        e = Employee.query.filter_by(iban=accountant_id.data).first()
+        if accountant_id.data and e and (e.id != self.hide_id.data):
+            raise ValidationError(_("This Accountant ID already existe"))
