@@ -14,6 +14,7 @@ class Employee(db.Model, CRUDMixin):
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
     zh_name = Column(String)
+    accountant_id = Column(Integer, unique=True)
     sex = Column(ChoiceType(SEX, String()), nullable=False)
     birthday = Column(Date)
     contact = Column(String)
