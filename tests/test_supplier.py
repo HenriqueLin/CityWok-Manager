@@ -269,7 +269,7 @@ def test_upload_get(client, user, supplier, id):
 @pytest.mark.parametrize("id", [1, 2])
 def test_upload_post_valid(client, user, supplier, id):
     request_data = {
-        "file": (io.BytesIO(b"test"), "test.jpg"),
+        "file": (io.BytesIO(b"test"), "test.pdf"),
     }
     response = client.post(
         url_for("supplier.upload", supplier_id=id),
@@ -281,10 +281,10 @@ def test_upload_post_valid(client, user, supplier, id):
 
     assert response.status_code == 200
     assert request.url.endswith(url_for("supplier.detail", supplier_id=id))
-    assert 'File "test.jpg" has been uploaded.' in html.unescape(data)
+    assert 'File "test.pdf" has been uploaded.' in html.unescape(data)
     assert db.session.query(SupplierFile).count() == 1
     f = db.session.query(SupplierFile).get(1)
-    assert f.full_name == "test.jpg"
+    assert f.full_name == "test.pdf"
     assert os.path.isfile(f.path)
 
 

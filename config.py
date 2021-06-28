@@ -43,3 +43,5 @@ class TestConfig(Config):
     ADMIN_NAME = "admin"
     ADMIN_EMAIL = "admin@mail.com"
     ADMIN_PASSWORD = "admin_password"
+    RQ_CONNECTION_CLASS = "fakeredis.FakeStrictRedis"
+    RQ_ASYNC = False

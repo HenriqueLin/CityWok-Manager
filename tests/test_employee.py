@@ -349,9 +349,9 @@ def test_upload_get(client, user, employee, id):
 
 @pytest.mark.role("admin")
 @pytest.mark.parametrize("id", [1, 2])
-def test_upload_post_valid(client, user, employee, id):
+def test_upload_post_valid(client, user, employee, id, image):
     request_data = {
-        "file": (io.BytesIO(b"test"), "test.jpg"),
+        "file": (image, "test.jpg"),
     }
     response = client.post(
         url_for("employee.upload", employee_id=id),

@@ -128,7 +128,7 @@ def create_app(config_class=Config):
 
             # Update the identity with the roles that the user provides
             if hasattr(current_user, "role"):
-                identity.provides.add(RoleNeed(current_user.role.code))
+                identity.provides.add(RoleNeed(current_user.role))
 
         @app.shell_context_processor
         def make_shell_context():

@@ -11,7 +11,7 @@ from citywok_ms.file.models import File
 @rq.job
 def compress_file(file_id):
     f = db.session.query(File).get(file_id)
-    if f is None:
+    if f is None:  # test: no cover
         return
 
     if f.format == ".pdf":
@@ -33,7 +33,7 @@ def compress_file(file_id):
 
 
 @rq.exception_handler
-def error(job, *exc_info):
+def error(job, *exc_info):  # test: no cover
     db.session.rollback()
     job.cancel()
     current_app.logger.error(f"task {job} error.", exc_info=exc_info)
