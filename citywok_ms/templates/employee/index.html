@@ -17,6 +17,7 @@
                     <th scope="col">{{_('First Name')}}</th>
                     <th scope="col">{{_('Last Name')}}</th>
                     <th scope="col">{{_('Chinese Name')}}</th>
+                    <th scope="col">{{_('Accountant ID')}}</th>
                     <th scope="col">{{_('Sex')}}</th>
                     <th scope="col">{{_('NIF')}}</th>
                     <th scope="col">{{_('NISS')}}</th>
@@ -32,6 +33,7 @@
                     <td class='align-middle'>{{ employee.first_name }}</td>
                     <td>{{ employee.last_name }}</td>
                     <td>{{ employee.zh_name or '-'}}</td>
+                    <td>{{ employee.accountant_id or '-' }}</td>
                     <td>{{ employee.sex }}</td>
                     <td>{{ employee.nif or '-'}}</td>
                     <td>{{ employee.niss or '-'}}</td>
@@ -55,6 +57,7 @@
                     <th scope="col">{{_('First Name')}}</th>
                     <th scope="col">{{_('Last Name')}}</th>
                     <th scope="col">{{_('Chinese Name')}}</th>
+                    <th scope="col">{{_('Accountant ID')}}</th>
                     <th scope="col">{{_('Sex')}}</th>
                     <th scope="col">{{_('NIF')}}</th>
                     <th scope="col">{{_('NISS')}}</th>
@@ -70,6 +73,7 @@
                     <td>{{ employee.first_name }}</td>
                     <td>{{ employee.last_name }}</td>
                     <td>{{ employee.zh_name or '-'}}</td>
+                    <td>{{ employee.accountant_id or '-' }}</td>
                     <td>{{ employee.sex }}</td>
                     <td>{{ employee.nif or '-'}}</td>
                     <td>{{ employee.niss or '-'}}</td>

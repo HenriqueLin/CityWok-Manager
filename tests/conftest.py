@@ -92,6 +92,7 @@ def employee():
         first_name="SUSPENDED",
         last_name="SUSPENDED",
         zh_name="中文",
+        accountant_id=1,
         sex="F",
         birthday=date(2000, 1, 1),
         contact="123123123",
