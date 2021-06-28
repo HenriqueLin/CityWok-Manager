@@ -1,4 +1,5 @@
 import datetime
+from io import BytesIO
 import os
 from datetime import date
 from tempfile import TemporaryDirectory
@@ -13,6 +14,7 @@ from config import TestConfig
 from flask_login import login_user
 from flask_principal import Identity
 from werkzeug.security import generate_password_hash
+from PIL import Image, ImageDraw
 
 
 @pytest.fixture
@@ -36,13 +38,14 @@ def user(client, mocker, request):
         password=generate_password_hash("user"),
         role="user",
     )
-    db.session.add(user)
-    db.session.commit()
+    session = db.create_scoped_session({"expire_on_commit": False})
+    session.add(user)
+    session.commit()
     if marker is None or not marker.args[0]:
         user.role = "admin"
     else:
         user.role = marker.args[0]
-    db.session.commit()
+    session.commit()
 
     if marker is not None and marker.args[0]:
         login_user(user)
@@ -178,3 +181,16 @@ def supplier_with_file(supplier):
     f.size = os.path.getsize(f.path)
     f.delete_date = datetime.datetime.now()
     db.session.commit()
+
+
+@pytest.fixture
+def image():
+    image = Image.new("RGB", (300, 50))
+    draw = ImageDraw.Draw(image)
+    draw.text((0, 0), "This text is drawn on image")
+
+    byte_io = BytesIO()
+
+    image.save(byte_io, "JPEG")
+    byte_io.seek(0)
+    return byte_io

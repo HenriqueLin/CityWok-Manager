@@ -1,3 +1,4 @@
+from citywok_ms.task import compress_file
 from flask.globals import current_app
 from citywok_ms import db
 from citywok_ms.auth.permissions import manager, shareholder, visitor
@@ -82,6 +83,8 @@ def upload(supplier_id):
         )
         db.session.commit()
         current_app.logger.info(f"Upload supplier file {db_file}")
+        compress_file.queue(db_file.id)
+
     elif file is not None:
         flash(
             _('Invalid file format "%(format)s".', format=File.split_file_format(file)),

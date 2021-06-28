@@ -4,6 +4,7 @@ from citywok_ms.employee.forms import EmployeeForm
 from citywok_ms.employee.models import Employee
 from citywok_ms.file.forms import FileForm
 from citywok_ms.file.models import EmployeeFile, File
+from citywok_ms.task import compress_file
 from flask import Blueprint, current_app, flash, redirect, render_template, url_for
 from flask_babel import _
 
@@ -112,6 +113,8 @@ def upload(employee_id):
         )
         db.session.commit()
         current_app.logger.info(f"Upload employee file {db_file}")
+        compress_file.queue(db_file.id)
+
     elif file is not None:
         flash(
             _('Invalid file format "%(format)s".', format=File.split_file_format(file)),
