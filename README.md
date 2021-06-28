@@ -28,6 +28,8 @@ FLASK_ENV=production
 ```
 ### Install
 ```sh
+$ sudo apt install ghostscript redis-server
+
 # Upgrade pip
 $ python -m pip install --upgrade pip
 
