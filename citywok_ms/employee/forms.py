@@ -137,6 +137,6 @@ class EmployeeForm(FlaskForm):
             raise ValidationError(_("This IBAN already existe"))
 
     def validate_accountant_id(self, accountant_id):
-        e = Employee.query.filter_by(iban=accountant_id.data).first()
+        e = Employee.query.filter_by(accountant_id=accountant_id.data).first()
         if accountant_id.data and e and (e.id != self.hide_id.data):
             raise ValidationError(_("This Accountant ID already existe"))
