@@ -20,7 +20,7 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.8
-    - name: Install linux deoendencies
+    - name: Install linux dependencies
       run: |
         sudo apt-get install redis-server ghostscript
     - name: Cache pip
