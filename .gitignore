@@ -10,3 +10,4 @@ uploads
 logs
 .flaskenv
 dump.rdb
+*.mo
