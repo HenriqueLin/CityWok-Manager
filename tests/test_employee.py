@@ -125,6 +125,7 @@ def test_new_post_invalid(client, user, employee):
     request_data = {
         "first_name": "NEW",
         "sex": "F",
+        "accountant_id": 1,
         "id_type": "passport",
         "id_number": "1",
         "id_validity": "2000-01-01",
@@ -150,6 +151,7 @@ def test_new_post_invalid(client, user, employee):
     assert "This NIF already existe" in data
     assert "This NISS already existe" in data
     assert "This IBAN already existe" in data
+    assert "This Accountant ID already existe" in data
 
     # database data
     assert db.session.query(Employee).count() == 2  # 2 employee created in fixture
