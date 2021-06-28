@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-06-28 16:11+0100\n"
+"POT-Creation-Date: 2021-06-28 16:32+0100\n"
 "PO-Revision-Date: 2021-06-19 22:05+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -594,6 +594,34 @@ msgstr "发生未知错误"
 #: citywok_ms/templates/error/500.html:8
 msgid "The administrator has been notified."
 msgstr "已通知管理员."
+
+#: citywok_ms/utils/__init__.py:3
+msgid "Male"
+msgstr "男"
+
+#: citywok_ms/utils/__init__.py:3
+msgid "Female"
+msgstr "女"
+
+#: citywok_ms/utils/__init__.py:6
+msgid "Passport"
+msgstr "护照"
+
+#: citywok_ms/utils/__init__.py:7
+msgid "ID Card"
+msgstr "身份证"
+
+#: citywok_ms/utils/__init__.py:8
+msgid "Permanent Resident Card"
+msgstr "永久居留卡"
+
+#: citywok_ms/utils/__init__.py:9
+msgid "Residence Permit"
+msgstr "居留卡"
+
+#: citywok_ms/utils/__init__.py:10
+msgid "Other"
+msgstr "其他"
 
 #~ msgid "Please use a different email address."
 #~ msgstr "请使用一个不同的邮箱."
