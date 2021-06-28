@@ -23,6 +23,11 @@
                 {% endwith %}
             </div>
             <div class="col-sm-6">
+                {% with field=form.accountant_id %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <div class="col-sm-6">
                 {% with field=form.sex %}
                 {% include 'field.html' %}
                 {% endwith %}
@@ -62,7 +67,6 @@
                 {% include 'field.html' %}
                 {% endwith %}
             </div>
-            <div class="col-sm-6"></div>
             <div class="col-sm-6">
                 {% with field=form.nif %}
                 {% include 'field.html' %}
