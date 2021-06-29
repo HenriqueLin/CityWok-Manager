@@ -9,82 +9,16 @@
         <a href="{{url_for('employee.new')}}" class="btn btn-outline-success">{{_('New')}}</a>
     </div>
     {% if active_employees %}
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered text-nowrap text-center">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">{{_('ID')}}</th>
-                    <th scope="col">{{_('First Name')}}</th>
-                    <th scope="col">{{_('Last Name')}}</th>
-                    <th scope="col">{{_('Chinese Name')}}</th>
-                    <th scope="col">{{_('Accountant ID')}}</th>
-                    <th scope="col">{{_('Sex')}}</th>
-                    <th scope="col">{{_('NIF')}}</th>
-                    <th scope="col">{{_('NISS')}}</th>
-                    <th scope="col">{{_('Detail')}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for employee in active_employees %}
-                <tr>
-                    <th>
-                        <strong>{{ employee.id }}</strong>
-                    </th>
-                    <td class='align-middle'>{{ employee.first_name }}</td>
-                    <td>{{ employee.last_name }}</td>
-                    <td>{{ employee.zh_name or '-'}}</td>
-                    <td>{{ employee.accountant_id or '-' }}</td>
-                    <td>{{ employee.sex }}</td>
-                    <td>{{ employee.nif or '-'}}</td>
-                    <td>{{ employee.niss or '-'}}</td>
-                    <td><a href="{{url_for('employee.detail',employee_id=employee.id)}}"><span class="material-icons">
-                                more_vert
-                            </span></a></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    {% with employees=active_employees %}
+    {% include 'employee/index_table.html' %}
+    {% endwith %}
     {% endif %}
     {% if suspended_employees %}
     <hr>
     <h3>{{_('Suspended Employees')}}</h3>
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered text-nowrap text-center">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">{{_('ID')}}</th>
-                    <th scope="col">{{_('First Name')}}</th>
-                    <th scope="col">{{_('Last Name')}}</th>
-                    <th scope="col">{{_('Chinese Name')}}</th>
-                    <th scope="col">{{_('Accountant ID')}}</th>
-                    <th scope="col">{{_('Sex')}}</th>
-                    <th scope="col">{{_('NIF')}}</th>
-                    <th scope="col">{{_('NISS')}}</th>
-                    <th scope="col">{{_('Detail')}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for employee in suspended_employees %}
-                <tr>
-                    <th>
-                        <strong>{{ employee.id }}</strong>
-                    </th>
-                    <td>{{ employee.first_name }}</td>
-                    <td>{{ employee.last_name }}</td>
-                    <td>{{ employee.zh_name or '-'}}</td>
-                    <td>{{ employee.accountant_id or '-' }}</td>
-                    <td>{{ employee.sex }}</td>
-                    <td>{{ employee.nif or '-'}}</td>
-                    <td>{{ employee.niss or '-'}}</td>
-                    <td><a href="{{url_for('employee.detail',employee_id=employee.id)}}"><span class="material-icons">
-                                more_vert
-                            </span></a></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    {% with employees=suspended_employees %}
+    {% include 'employee/index_table.html' %}
+    {% endwith %}
     {% endif %}
 </div>
 

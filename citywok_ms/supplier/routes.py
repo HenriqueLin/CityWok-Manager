@@ -6,7 +6,7 @@ from citywok_ms.file.forms import FileForm
 from citywok_ms.file.models import File, SupplierFile
 from citywok_ms.supplier.forms import SupplierForm
 from citywok_ms.supplier.models import Supplier
-from flask import Blueprint, flash, redirect, render_template, url_for
+from flask import Blueprint, flash, redirect, render_template, url_for, request
 from flask_babel import _
 
 supplier_bp = Blueprint("supplier", __name__, url_prefix="/supplier")
@@ -15,10 +15,25 @@ supplier_bp = Blueprint("supplier", __name__, url_prefix="/supplier")
 @supplier_bp.route("/")
 @visitor.require(401)
 def index():
+    keys = (
+        ("id", _("ID")),
+        ("name", _("Company Name")),
+        ("principal", _("Principal")),
+        ("abbreviation", _("Abbreviation")),
+        ("nif", _("NIF")),
+        ("iban", _("IBAN")),
+        ("contact", _("Contact")),
+        ("email", _("E-mail")),
+    )
+    sort = request.args.get("sort") or "id"
+    desc = request.args.get("desc") or False
     return render_template(
         "supplier/index.html",
         title=_("Suppliers"),
-        suppliers=Supplier.get_all(),
+        suppliers=Supplier.get_all(sort, desc),
+        keys=keys,
+        sort=sort,
+        desc=desc,
     )
 
 
