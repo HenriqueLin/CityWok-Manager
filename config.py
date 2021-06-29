@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(basedir, ".env"))
@@ -10,6 +11,7 @@ class Config(object):
     SECRET_KEY = os.environ.get("SECRET_KEY") or "you-will-never-guess"
     LANGUAGES = ["en", "zh"]
     UPLOAD_FOLDER = os.environ.get("UPLOAD_FOLDER") or os.path.join(basedir, "uploads")
+    PERMANENT_SESSION_LIFETIME = timedelta(hours=1)
 
     # sqlalchemy
     SQLALCHEMY_DATABASE_URI = os.environ.get(
