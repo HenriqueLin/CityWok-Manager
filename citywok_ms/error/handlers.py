@@ -6,6 +6,12 @@ from flask_babel import _
 error_bp = Blueprint("error", __name__)
 
 
+@error_bp.app_errorhandler(400)
+def bad_request(error):
+    flash(_("Session expired, please log in again."), "warning")
+    return redirect(url_for("auth.login"))
+
+
 @error_bp.app_errorhandler(401)
 def unauthorized(error):
     flash(_("Please log in to access this page."), "info")

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-06-28 17:20+0100\n"
+"POT-Creation-Date: 2021-06-29 18:10+0100\n"
 "PO-Revision-Date: 2021-06-19 22:05+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -26,7 +26,7 @@ msgstr "用户名"
 msgid "Password"
 msgstr "密码"
 
-#: citywok_ms/auth/forms.py:22 citywok_ms/auth/routes.py:53
+#: citywok_ms/auth/forms.py:22 citywok_ms/auth/routes.py:55
 msgid "Login"
 msgstr "登录"
 
@@ -38,7 +38,7 @@ msgstr "受邀人邮箱"
 msgid "Role"
 msgstr "权限"
 
-#: citywok_ms/auth/forms.py:37 citywok_ms/auth/routes.py:80
+#: citywok_ms/auth/forms.py:37 citywok_ms/auth/routes.py:82
 #: citywok_ms/templates/layout.html:59
 msgid "Invite"
 msgstr "邀请"
@@ -71,7 +71,7 @@ msgstr "重复密码"
 msgid "Reset"
 msgstr "重置"
 
-#: citywok_ms/auth/forms.py:81 citywok_ms/auth/routes.py:111
+#: citywok_ms/auth/forms.py:81 citywok_ms/auth/routes.py:113
 msgid "Register"
 msgstr "注册"
 
@@ -99,57 +99,57 @@ msgstr "员工"
 msgid "Visitor"
 msgstr "访客"
 
-#: citywok_ms/auth/routes.py:46
+#: citywok_ms/auth/routes.py:48
 #, python-format
 msgid "Welcome %(name)s, you are logged in."
 msgstr "您好 %(name)s，你已成功登录."
 
-#: citywok_ms/auth/routes.py:52
+#: citywok_ms/auth/routes.py:54
 msgid "Please check your username/password."
 msgstr "请检查您的账号/密码是否正确."
 
-#: citywok_ms/auth/routes.py:63
+#: citywok_ms/auth/routes.py:65
 msgid "You have been logged out."
 msgstr "您已成功登出."
 
-#: citywok_ms/auth/routes.py:74
+#: citywok_ms/auth/routes.py:76
 msgid "A invite e-mail has been sent to the envitee."
 msgstr "邀请已发送至受邀人的邮箱."
 
-#: citywok_ms/auth/routes.py:88
+#: citywok_ms/auth/routes.py:90
 msgid "You are already logged in."
 msgstr "您已经登录过了"
 
-#: citywok_ms/auth/routes.py:92
+#: citywok_ms/auth/routes.py:94
 msgid "Invite link is invalid."
 msgstr "邀请链接无效."
 
-#: citywok_ms/auth/routes.py:95
+#: citywok_ms/auth/routes.py:97
 msgid "This email has already been registed."
 msgstr "此邮箱已被注册."
 
-#: citywok_ms/auth/routes.py:102
+#: citywok_ms/auth/routes.py:104
 msgid "You are now registed."
 msgstr "注册成功."
 
-#: citywok_ms/auth/routes.py:126
+#: citywok_ms/auth/routes.py:128
 #, python-format
 msgid "A e-mail to reset the password has been sent to %(email)s."
 msgstr "重置密码的邮件已发送至%(email)s."
 
-#: citywok_ms/auth/routes.py:135
+#: citywok_ms/auth/routes.py:137
 msgid "Forget Password"
 msgstr "忘记密码"
 
-#: citywok_ms/auth/routes.py:148
+#: citywok_ms/auth/routes.py:150
 msgid "Your password has been reset."
 msgstr "您的密码已被重置."
 
-#: citywok_ms/auth/routes.py:153
+#: citywok_ms/auth/routes.py:155
 msgid "Reset link is invalid."
 msgstr "重置链接无效."
 
-#: citywok_ms/auth/routes.py:156
+#: citywok_ms/auth/routes.py:158
 msgid "Reset Password"
 msgstr "重置密码"
 
@@ -337,6 +337,10 @@ msgid "No file has been uploaded."
 msgstr "未上传文件."
 
 #: citywok_ms/error/handlers.py:11
+msgid "Session expired, please log in again."
+msgstr "会话已过期，请重新登录."
+
+#: citywok_ms/error/handlers.py:17
 msgid "Please log in to access this page."
 msgstr "请登录以访问该页面."
 
