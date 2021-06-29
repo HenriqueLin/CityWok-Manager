@@ -13,6 +13,7 @@ from flask import (
     render_template,
     url_for,
     request,
+    send_file,
 )
 from flask_babel import _
 
@@ -146,3 +147,16 @@ def upload(employee_id):
     else:
         flash(_("No file has been uploaded."), "danger")
     return redirect(url_for("employee.detail", employee_id=employee_id))
+
+
+@employee_bp.route("/export/<export_format>")
+@manager.require(403)
+def export(export_format):
+    if export_format == "csv":
+        return send_file(
+            Employee.export_to_csv(), cache_timeout=0, download_name="Employees.csv"
+        )
+    elif export_format == "excel":
+        return send_file(
+            Employee.export_to_excel(), cache_timeout=0, download_name="Employees.xlsx"
+        )

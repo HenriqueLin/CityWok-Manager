@@ -1,10 +1,9 @@
 from decimal import Decimal
 
-from sqlalchemy.sql.expression import nullslast
-
 from citywok_ms import db
 from flask_wtf import FlaskForm
 from sqlalchemy import Integer
+from sqlalchemy.sql.expression import nullslast
 from sqlalchemy.types import TypeDecorator
 
 

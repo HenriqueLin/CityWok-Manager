@@ -1,12 +1,14 @@
-from citywok_ms.file.models import EmployeeFile
 from typing import List
+
 from citywok_ms import db
+from citywok_ms.file.models import EmployeeFile
 from citywok_ms.utils import ID, SEX
 from citywok_ms.utils.models import CRUDMixin, SqliteDecimal
+from flask_babel import lazy_gettext as _l
 from sqlalchemy import Boolean, Column, Date, Integer, String, Text
-from sqlalchemy.sql.expression import nullslast
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship, validates
+from sqlalchemy.sql.expression import nullslast
 from sqlalchemy_utils import ChoiceType, CountryType
 
 
@@ -34,6 +36,30 @@ class Employee(db.Model, CRUDMixin):
     active = Column(Boolean, default=True)
 
     files = relationship("EmployeeFile")
+
+    columns_name = {
+        "id": _l("ID"),
+        "first_name": _l("First Name"),
+        "last_name": _l("Last Name"),
+        "zh_name": _l("Chinese Name"),
+        "accountant_id": _l("Accountant ID"),
+        "sex": _l("Sex"),
+        "birthday": _l("Birthday"),
+        "contact": _l("Contact"),
+        "email": _l("E-mail"),
+        "id_type": _l("ID Type"),
+        "id_number": _l("ID Number"),
+        "id_validity": _l("ID Validity"),
+        "nationality": _l("Nationality"),
+        "nif": _l("NIF"),
+        "niss": _l("NISS"),
+        "iban": _l("IBAN"),
+        "employment_date": _l("Employment Date"),
+        "total_salary": _l("Total Salary"),
+        "taxed_salary": _l("Taxed Salary"),
+        "remark": _l("Remark"),
+        "active": _l("Active"),
+    }
 
     def __repr__(self):
         return f"Employee({self.id}: {self.full_name})"

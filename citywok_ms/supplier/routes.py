@@ -6,7 +6,15 @@ from citywok_ms.file.forms import FileForm
 from citywok_ms.file.models import File, SupplierFile
 from citywok_ms.supplier.forms import SupplierForm
 from citywok_ms.supplier.models import Supplier
-from flask import Blueprint, flash, redirect, render_template, url_for, request
+from flask import (
+    Blueprint,
+    flash,
+    redirect,
+    render_template,
+    url_for,
+    request,
+    send_file,
+)
 from flask_babel import _
 
 supplier_bp = Blueprint("supplier", __name__, url_prefix="/supplier")
@@ -108,3 +116,16 @@ def upload(supplier_id):
     else:
         flash(_("No file has been uploaded."), "danger")
     return redirect(url_for("supplier.detail", supplier_id=supplier_id))
+
+
+@supplier_bp.route("/export/<export_format>")
+@manager.require(403)
+def export(export_format):
+    if export_format == "csv":
+        return send_file(
+            Supplier.export_to_csv(), cache_timeout=0, download_name="Suppliers.csv"
+        )
+    elif export_format == "excel":
+        return send_file(
+            Supplier.export_to_excel(), cache_timeout=0, download_name="Suppliers.xlsx"
+        )

@@ -6,6 +6,16 @@
     <hr>
     <div class="mb-2 d-print-none">
         <a href="{{url_for('supplier.new')}}" class="btn btn-outline-success">{{_('New')}}</a>
+        <div class="btn-group">
+            <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                {{ _("Export") }}
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{{url_for('supplier.export',export_format='csv')}}">CSV</a></li>
+                <li><a class="dropdown-item" href="{{url_for('supplier.export',export_format='excel')}}">Excel</a></li>
+            </ul>
+        </div>
     </div>
     {% if suppliers %}
     <div class="table-responsive">
