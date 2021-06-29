@@ -34,6 +34,11 @@ def internal_error(error):
     return render_template("error/500.html"), 500
 
 
+@error_bp.route("/400")
+def _400():
+    abort(400)
+
+
 @error_bp.route("/401")
 def _401():
     abort(401)
