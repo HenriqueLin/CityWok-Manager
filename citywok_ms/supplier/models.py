@@ -1,7 +1,3 @@
-import csv
-import io
-
-import pandas as pd
 from citywok_ms.utils.models import CRUDMixin
 from citywok_ms.file.models import SupplierFile
 from typing import List
@@ -66,24 +62,3 @@ class Supplier(db.Model, CRUDMixin):
             )
             .all()
         )
-
-    @classmethod
-    def export_to_csv(cls) -> io.BytesIO:
-        sio = io.StringIO()
-        writer = csv.writer(sio)
-        writer.writerow(cls.columns_name.values())
-        for e in cls.query.all():
-            writer.writerow([getattr(e, col) or "-" for col in cls.columns_name.keys()])
-        bio = io.BytesIO()
-        bio.write(sio.getvalue().encode("utf_8_sig"))
-        bio.seek(0)
-        return bio
-
-    @classmethod
-    def export_to_excel(cls):
-        bio = io.BytesIO()
-        df = pd.read_sql(db.session.query(cls).statement, db.session.bind)
-        df.columns = cls.columns_name.values()
-        df.to_excel(bio, index=False)
-        bio.seek(0)
-        return bio
