@@ -19,6 +19,7 @@ from flask import (
     redirect,
     render_template,
     url_for,
+    session,
 )
 from flask_babel import _
 from flask_login import current_user, login_user, logout_user
@@ -42,6 +43,7 @@ def login():
             identity_changed.send(
                 current_app._get_current_object(), identity=Identity(user.id)
             )
+            session.permanent = True
             flash(
                 _("Welcome %(name)s, you are logged in.", name=user.username),
                 category="success",
