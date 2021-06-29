@@ -5,7 +5,15 @@ from citywok_ms.employee.models import Employee
 from citywok_ms.file.forms import FileForm
 from citywok_ms.file.models import EmployeeFile, File
 from citywok_ms.task import compress_file
-from flask import Blueprint, current_app, flash, redirect, render_template, url_for
+from flask import (
+    Blueprint,
+    current_app,
+    flash,
+    redirect,
+    render_template,
+    url_for,
+    request,
+)
 from flask_babel import _
 
 employee_bp = Blueprint("employee", __name__, url_prefix="/employee")
@@ -14,11 +22,26 @@ employee_bp = Blueprint("employee", __name__, url_prefix="/employee")
 @employee_bp.route("/")
 @visitor.require(401)
 def index():
+    keys = (
+        ("id", _("ID")),
+        ("first_name", _("First Name")),
+        ("last_name", _("Last Name")),
+        ("zh_name", _("Chinese Name")),
+        ("accountant_id", _("Accountant ID")),
+        ("sex", _("Sex")),
+        ("nif", _("NIF")),
+        ("niss", _("NISS")),
+    )
+    sort = request.args.get("sort") or "id"
+    desc = request.args.get("desc") or False
     return render_template(
         "employee/index.html",
         title=_("Employees"),
-        active_employees=Employee.get_active(),
-        suspended_employees=Employee.get_suspended(),
+        active_employees=Employee.get_active(sort, desc),
+        suspended_employees=Employee.get_suspended(sort, desc),
+        keys=keys,
+        sort=sort,
+        desc=desc,
     )
 
 

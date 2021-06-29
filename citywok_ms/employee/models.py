@@ -4,6 +4,7 @@ from citywok_ms import db
 from citywok_ms.utils import ID, SEX
 from citywok_ms.utils.models import CRUDMixin, SqliteDecimal
 from sqlalchemy import Boolean, Column, Date, Integer, String, Text
+from sqlalchemy.sql.expression import nullslast
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship, validates
 from sqlalchemy_utils import ChoiceType, CountryType
@@ -49,12 +50,22 @@ class Employee(db.Model, CRUDMixin):
             return sex
 
     @staticmethod
-    def get_active() -> List["Employee"]:
-        return db.session.query(Employee).filter_by(active=True).all()
+    def get_active(sort, desc) -> List["Employee"]:
+        result = db.session.query(Employee).filter_by(active=True)
+        if desc:
+            result = result.order_by(nullslast(getattr(Employee, sort).desc())).all()
+        else:
+            result = result.order_by(nullslast(getattr(Employee, sort))).all()
+        return result
 
     @staticmethod
-    def get_suspended() -> List["Employee"]:
-        return db.session.query(Employee).filter_by(active=False).all()
+    def get_suspended(sort, desc) -> List["Employee"]:
+        result = db.session.query(Employee).filter_by(active=False)
+        if desc:
+            result = result.order_by(nullslast(getattr(Employee, sort).desc())).all()
+        else:
+            result = result.order_by(nullslast(getattr(Employee, sort))).all()
+        return result
 
     def activate(self):
         self.active = True

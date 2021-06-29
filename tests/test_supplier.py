@@ -14,7 +14,7 @@ from wtforms.fields.simple import HiddenField, SubmitField
 
 @pytest.mark.role("admin")
 def test_index_get(client, user):
-    response = client.get(url_for("supplier.index"))
+    response = client.get(url_for("supplier.index", desc=True))
     data = response.data.decode()
 
     # state code
