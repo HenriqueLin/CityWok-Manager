@@ -6,12 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ## [Unreleased]
 
 ### Added
-- Add accountant_id field to employee model to keep track the employee's id in accountant's system
+- Add accountant_id field to employee model to keep track the employee's id in accountant's system ([#63](https://github.com/HenriqueLin/CityWok-Manager/pull/63]))
 ### Changed
-- Now uploaded `.pdf`, `.png` and `.jpeg` files will be compressed to reduce the disk usage
+- Now uploaded `.pdf`, `.png` and `.jpeg` files will be compressed to reduce the disk usage ([#62](https://github.com/HenriqueLin/CityWok-Manager/pull/62))
 
 ### Fixed
-- Fix missing ZH translation of `SEX` and `ID` in `utils/__init__.py`
+- Fix missing ZH translation of `SEX` and `ID` in `utils/__init__.py` ([#61](https://github.com/HenriqueLin/CityWok-Manager/pull/61))
+
 
 ## [0.1.0] - 2021-06-25
 ### Added
