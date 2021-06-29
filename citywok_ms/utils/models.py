@@ -1,5 +1,7 @@
 from decimal import Decimal
 
+from sqlalchemy.sql.expression import nullslast
+
 from citywok_ms import db
 from flask_wtf import FlaskForm
 from sqlalchemy import Integer
@@ -47,8 +49,13 @@ class CRUDMixin(object):
         form.populate_obj(self)
 
     @classmethod
-    def get_all(cls):
-        return db.session.query(cls).all()
+    def get_all(cls, sort, desc):
+        result = db.session.query(cls)
+        if desc:
+            result = result.order_by(nullslast(getattr(cls, sort).desc())).all()
+        else:
+            result = result.order_by(nullslast(getattr(cls, sort))).all()
+        return result
 
     @classmethod
     def get_or_404(cls, id: int):
