@@ -32,7 +32,7 @@ def test_index_get(client, user):
 
 @pytest.mark.role("admin")
 def test_index_get_with_employee(client, user, employee):
-    response = client.get(url_for("employee.index"))
+    response = client.get(url_for("employee.index", desc=True))
     data = response.data.decode()
 
     # state code
