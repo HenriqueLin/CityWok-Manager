@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-06-28 17:20+0100\n"
+"POT-Creation-Date: 2021-06-29 17:18+0100\n"
 "PO-Revision-Date: 2021-06-19 22:05+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -153,31 +153,26 @@ msgstr "重置链接无效."
 msgid "Reset Password"
 msgstr "重置密码"
 
-#: citywok_ms/employee/forms.py:29 citywok_ms/templates/employee/index.html:17
-#: citywok_ms/templates/employee/index.html:57
+#: citywok_ms/employee/forms.py:29 citywok_ms/employee/routes.py:27
 msgid "First Name"
 msgstr "名"
 
-#: citywok_ms/employee/forms.py:33 citywok_ms/templates/employee/index.html:18
-#: citywok_ms/templates/employee/index.html:58
+#: citywok_ms/employee/forms.py:33 citywok_ms/employee/routes.py:28
 msgid "Last Name"
 msgstr "姓"
 
-#: citywok_ms/employee/forms.py:37 citywok_ms/templates/employee/detail.html:33
-#: citywok_ms/templates/employee/index.html:19
-#: citywok_ms/templates/employee/index.html:59
+#: citywok_ms/employee/forms.py:37 citywok_ms/employee/routes.py:29
+#: citywok_ms/templates/employee/detail.html:33
 msgid "Chinese Name"
 msgstr "中文名"
 
-#: citywok_ms/employee/forms.py:42 citywok_ms/templates/employee/detail.html:35
-#: citywok_ms/templates/employee/index.html:20
-#: citywok_ms/templates/employee/index.html:60
+#: citywok_ms/employee/forms.py:42 citywok_ms/employee/routes.py:30
+#: citywok_ms/templates/employee/detail.html:35
 msgid "Accountant ID"
 msgstr "账房 ID"
 
-#: citywok_ms/employee/forms.py:46 citywok_ms/templates/employee/detail.html:37
-#: citywok_ms/templates/employee/index.html:21
-#: citywok_ms/templates/employee/index.html:61
+#: citywok_ms/employee/forms.py:46 citywok_ms/employee/routes.py:31
+#: citywok_ms/templates/employee/detail.html:37
 msgid "Sex"
 msgstr "性别"
 
@@ -186,15 +181,15 @@ msgid "Birthday"
 msgstr "生日"
 
 #: citywok_ms/employee/forms.py:57 citywok_ms/supplier/forms.py:24
+#: citywok_ms/supplier/routes.py:25
 #: citywok_ms/templates/employee/detail.html:41
 #: citywok_ms/templates/supplier/detail.html:22
-#: citywok_ms/templates/supplier/index.html:21
 msgid "Contact"
 msgstr "联系方式"
 
 #: citywok_ms/employee/forms.py:60 citywok_ms/supplier/forms.py:29
+#: citywok_ms/supplier/routes.py:26
 #: citywok_ms/templates/supplier/detail.html:24
-#: citywok_ms/templates/supplier/index.html:22
 msgid "E-mail"
 msgstr "邮箱"
 
@@ -214,25 +209,22 @@ msgstr "证件有效期"
 msgid "Nationality"
 msgstr "国籍"
 
-#: citywok_ms/employee/forms.py:85 citywok_ms/supplier/forms.py:33
+#: citywok_ms/employee/forms.py:85 citywok_ms/employee/routes.py:32
+#: citywok_ms/supplier/forms.py:33 citywok_ms/supplier/routes.py:23
 #: citywok_ms/templates/employee/detail.html:55
-#: citywok_ms/templates/employee/index.html:22
-#: citywok_ms/templates/employee/index.html:62
 #: citywok_ms/templates/supplier/detail.html:28
-#: citywok_ms/templates/supplier/index.html:19
 msgid "NIF"
 msgstr "NIF"
 
-#: citywok_ms/employee/forms.py:89 citywok_ms/templates/employee/detail.html:57
-#: citywok_ms/templates/employee/index.html:23
-#: citywok_ms/templates/employee/index.html:63
+#: citywok_ms/employee/forms.py:89 citywok_ms/employee/routes.py:33
+#: citywok_ms/templates/employee/detail.html:57
 msgid "NISS"
 msgstr "NISS"
 
 #: citywok_ms/employee/forms.py:93 citywok_ms/supplier/forms.py:37
+#: citywok_ms/supplier/routes.py:24
 #: citywok_ms/templates/employee/detail.html:59
 #: citywok_ms/templates/supplier/detail.html:30
-#: citywok_ms/templates/supplier/index.html:20
 msgid "IBAN"
 msgstr "IBAN"
 
@@ -286,53 +278,59 @@ msgstr "IBAN已存在"
 msgid "This Accountant ID already existe"
 msgstr "账房ID已存在"
 
-#: citywok_ms/employee/routes.py:19
+#: citywok_ms/employee/routes.py:26 citywok_ms/supplier/routes.py:19
+#: citywok_ms/templates/employee/detail.html:29
+#: citywok_ms/templates/supplier/detail.html:14
+msgid "ID"
+msgstr "ID"
+
+#: citywok_ms/employee/routes.py:39
 msgid "Employees"
 msgstr "员工"
 
-#: citywok_ms/employee/routes.py:32
+#: citywok_ms/employee/routes.py:55
 #, python-format
 msgid "New employee \"%(name)s\" has been added."
 msgstr "新员工 \"%(name)s\" 已添加."
 
-#: citywok_ms/employee/routes.py:38
+#: citywok_ms/employee/routes.py:61
 msgid "New Employee"
 msgstr "添加员工"
 
-#: citywok_ms/employee/routes.py:46
+#: citywok_ms/employee/routes.py:69
 msgid "Employee Detail"
 msgstr "员工详情"
 
-#: citywok_ms/employee/routes.py:61
+#: citywok_ms/employee/routes.py:84
 #, python-format
 msgid "Employee \"%(name)s\" has been updated."
 msgstr "员工 \"%(name)s\" 已更新."
 
-#: citywok_ms/employee/routes.py:74
+#: citywok_ms/employee/routes.py:97
 msgid "Update Employee"
 msgstr "更新员工"
 
-#: citywok_ms/employee/routes.py:84
+#: citywok_ms/employee/routes.py:107
 #, python-format
 msgid "Employee \"%(name)s\" has been suspended."
 msgstr "员工 \"%(name)s\" 冻结."
 
-#: citywok_ms/employee/routes.py:97
+#: citywok_ms/employee/routes.py:120
 #, python-format
 msgid "Employee \"%(name)s\" has been activated."
 msgstr "员工 \"%(name)s\" 已激活."
 
-#: citywok_ms/employee/routes.py:112 citywok_ms/supplier/routes.py:82
+#: citywok_ms/employee/routes.py:135 citywok_ms/supplier/routes.py:97
 #, python-format
 msgid "File \"%(name)s\" has been uploaded."
 msgstr "文件成功上传."
 
-#: citywok_ms/employee/routes.py:120 citywok_ms/supplier/routes.py:90
+#: citywok_ms/employee/routes.py:143 citywok_ms/supplier/routes.py:105
 #, python-format
 msgid "Invalid file format \"%(format)s\"."
 msgstr "无效的文件格式 \"%(format)s\"."
 
-#: citywok_ms/employee/routes.py:124 citywok_ms/supplier/routes.py:94
+#: citywok_ms/employee/routes.py:147 citywok_ms/supplier/routes.py:109
 msgid "No file has been uploaded."
 msgstr "未上传文件."
 
@@ -380,18 +378,18 @@ msgstr "文件 \"%(name)s\" 已更新."
 msgid "Update File"
 msgstr "更新文件"
 
-#: citywok_ms/supplier/forms.py:12 citywok_ms/templates/supplier/detail.html:16
-#: citywok_ms/templates/supplier/index.html:16
+#: citywok_ms/supplier/forms.py:12 citywok_ms/supplier/routes.py:20
+#: citywok_ms/templates/supplier/detail.html:16
 msgid "Company Name"
 msgstr "公司名称"
 
-#: citywok_ms/supplier/forms.py:16 citywok_ms/templates/supplier/detail.html:18
-#: citywok_ms/templates/supplier/index.html:18
+#: citywok_ms/supplier/forms.py:16 citywok_ms/supplier/routes.py:22
+#: citywok_ms/templates/supplier/detail.html:18
 msgid "Abbreviation"
 msgstr "简称"
 
-#: citywok_ms/supplier/forms.py:20 citywok_ms/templates/supplier/detail.html:20
-#: citywok_ms/templates/supplier/index.html:17
+#: citywok_ms/supplier/forms.py:20 citywok_ms/supplier/routes.py:21
+#: citywok_ms/templates/supplier/detail.html:20
 msgid "Principal"
 msgstr "负责人"
 
@@ -407,29 +405,29 @@ msgstr "邮编"
 msgid "City"
 msgstr "城市"
 
-#: citywok_ms/supplier/routes.py:20
+#: citywok_ms/supplier/routes.py:32
 msgid "Suppliers"
 msgstr "供应商"
 
-#: citywok_ms/supplier/routes.py:32
+#: citywok_ms/supplier/routes.py:47
 #, python-format
 msgid "New supplier \"%(name)s\" has been added."
 msgstr "新供应商 \"%(name)s\" 已添加."
 
-#: citywok_ms/supplier/routes.py:37
+#: citywok_ms/supplier/routes.py:52
 msgid "New Supplier"
 msgstr "添加供应商"
 
-#: citywok_ms/supplier/routes.py:45
+#: citywok_ms/supplier/routes.py:60
 msgid "Supplier Detail"
 msgstr "供应商详情"
 
-#: citywok_ms/supplier/routes.py:59
+#: citywok_ms/supplier/routes.py:74
 #, python-format
 msgid "Supplier \"%(name)s\" has been updated."
 msgstr "供应商 \"%(name)s\" 已更新."
 
-#: citywok_ms/supplier/routes.py:70
+#: citywok_ms/supplier/routes.py:85
 msgid "Update Supplier"
 msgstr "更新供应商"
 
@@ -472,14 +470,6 @@ msgstr "冻结"
 #: citywok_ms/templates/employee/detail.html:21
 msgid "Activate"
 msgstr "激活"
-
-#: citywok_ms/templates/employee/detail.html:29
-#: citywok_ms/templates/employee/index.html:16
-#: citywok_ms/templates/employee/index.html:56
-#: citywok_ms/templates/supplier/detail.html:14
-#: citywok_ms/templates/supplier/index.html:15
-msgid "ID"
-msgstr "ID"
 
 #: citywok_ms/templates/employee/detail.html:31
 msgid "Name"
@@ -566,15 +556,14 @@ msgstr "激活员工"
 msgid "New"
 msgstr "添加"
 
-#: citywok_ms/templates/employee/index.html:24
-#: citywok_ms/templates/employee/index.html:64
-#: citywok_ms/templates/supplier/index.html:23
-msgid "Detail"
-msgstr "详情"
-
-#: citywok_ms/templates/employee/index.html:51
+#: citywok_ms/templates/employee/index.html:18
 msgid "Suspended Employees"
 msgstr "冻结员工"
+
+#: citywok_ms/templates/employee/index_table.html:34
+#: citywok_ms/templates/supplier/index.html:44
+msgid "Detail"
+msgstr "详情"
 
 #: citywok_ms/templates/error/403.html:7
 msgid "Ops, seems like you don't have the permission to visit this page."
