@@ -152,6 +152,7 @@ def upload(employee_id):
 @employee_bp.route("/export/<export_format>")
 @manager.require(403)
 def export(export_format):
+    current_app.logger.info(f"Export employee {export_format} file")
     if export_format == "csv":
         return send_file(
             Employee.export_to_csv(), cache_timeout=0, download_name="Employees.csv"

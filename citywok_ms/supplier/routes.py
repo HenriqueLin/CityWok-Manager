@@ -121,6 +121,7 @@ def upload(supplier_id):
 @supplier_bp.route("/export/<export_format>")
 @manager.require(403)
 def export(export_format):
+    current_app.logger.info(f"Export supplier {export_format} file")
     if export_format == "csv":
         return send_file(
             Supplier.export_to_csv(), cache_timeout=0, download_name="Suppliers.csv"
