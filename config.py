@@ -36,6 +36,9 @@ class Config(object):
     SENTRY_DNS = os.environ.get("SENTRY_DNS")
     SENTRY_RATE = os.environ.get("SENTRY_RATE")
 
+    # rq
+    RQ_SCHEDULER_INTERVAL = 30 * 60  # seconds
+
 
 class TestConfig(Config):
     TESTING = True

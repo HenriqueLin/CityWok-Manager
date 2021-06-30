@@ -1,11 +1,11 @@
 import os
 import tempfile
-
 from flask import current_app
 from PIL import Image
 
 from citywok_ms import db, rq
 from citywok_ms.file.models import File
+import datetime
 
 
 @rq.job
@@ -30,6 +30,27 @@ def compress_file(file_id):
     f.size = os.path.getsize(f.path)
     db.session.commit()
     current_app.logger.info(f"Compress {f} to {f.size} bytes")
+
+
+@rq.job
+def delete_file():
+    time = datetime.datetime.utcnow() - datetime.timedelta(days=30)
+    files = (
+        db.session.query(File)
+        .filter(
+            File.delete_date.isnot(None),
+            File.delete_date < time,
+        )
+        .all()
+    )
+    for f in files:
+        os.unlink(f.path)
+        db.session.delete(f)
+        db.session.commit()
+        current_app.logger.info(f"Delete {f} from system")
+
+
+delete_file.cron("0 5 * * *", "delete_file")
 
 
 @rq.exception_handler

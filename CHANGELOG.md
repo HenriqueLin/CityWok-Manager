@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ## [Unreleased]
 
 ### Added
+- Add schedule job to remove files that has been 'deleted' by user more than 30 days ([#77](https://github.com/HenriqueLin/CityWok-Manager/pull/77))
 - Add functionality to export employee and supplier data to csv and excel file ([#74](https://github.com/HenriqueLin/CityWok-Manager/pull/74))
 - Add accountant_id field to employee model to keep track the employee's id in accountant's system ([#63](https://github.com/HenriqueLin/CityWok-Manager/pull/63))
 ### Changed
