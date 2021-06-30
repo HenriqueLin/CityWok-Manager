@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(basedir, ".env"))
@@ -10,6 +11,7 @@ class Config(object):
     SECRET_KEY = os.environ.get("SECRET_KEY") or "you-will-never-guess"
     LANGUAGES = ["en", "zh"]
     UPLOAD_FOLDER = os.environ.get("UPLOAD_FOLDER") or os.path.join(basedir, "uploads")
+    PERMANENT_SESSION_LIFETIME = timedelta(hours=1)
 
     # sqlalchemy
     SQLALCHEMY_DATABASE_URI = os.environ.get(
@@ -34,6 +36,9 @@ class Config(object):
     SENTRY_DNS = os.environ.get("SENTRY_DNS")
     SENTRY_RATE = os.environ.get("SENTRY_RATE")
 
+    # rq
+    RQ_SCHEDULER_INTERVAL = 30 * 60  # seconds
+
 
 class TestConfig(Config):
     TESTING = True
@@ -43,3 +48,5 @@ class TestConfig(Config):
     ADMIN_NAME = "admin"
     ADMIN_EMAIL = "admin@mail.com"
     ADMIN_PASSWORD = "admin_password"
+    RQ_CONNECTION_CLASS = "fakeredis.FakeStrictRedis"
+    RQ_ASYNC = False

@@ -1,0 +1,57 @@
+<div class="table-responsive">
+    <table class="table table-striped table-bordered text-nowrap text-center">
+        <thead class="table-dark">
+            <tr>
+                {% for c,name in keys %}
+                {% if c==sort %}
+                {% if desc %}
+                <th scope="col">
+                    <a href="{{url_for('employee.index', sort=c)}}" class="link-light head">
+                        {{ name }}
+                    </a>
+                    <span class="material-icons">
+                        arrow_drop_up
+                    </span>
+                </th>
+                {% else %}
+                <th scope="col">
+                    <a href="{{url_for('employee.index', sort=c, desc=True)}}" class="link-light head">
+                        {{ name }}
+                    </a>
+                    <span class="material-icons">
+                        arrow_drop_down
+                    </span>
+                </th>
+                {% endif %}
+                {% else %}
+                <th scope="col">
+                    <a href="{{url_for('employee.index', sort=c)}}" class="link-light head">
+                        {{ name }}
+                    </a>
+                </th>
+                {% endif %}
+                {% endfor %}
+                <th scope="col">{{_('Detail')}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+            <tr>
+                {% for c,_ in keys %}
+                {% if c=="id" %}
+                <th>
+                    <strong>{{ employee.id }}</strong>
+                </th>
+                {% else %}
+                <td>{{ employee[c] or '-' }}</td>
+                {% endif %}
+                {% endfor %}
+
+                <td><a href="{{url_for('employee.detail',employee_id=employee.id)}}"><span class="material-icons">
+                            more_vert
+                        </span></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

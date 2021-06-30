@@ -8,23 +8,35 @@ on:
     branches: [ develop ]
   pull_request:
     branches: [ develop ]
+    types: [ready_for_review, opened, synchronize, reopened]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
+    if: github.event.pull_request.draft == false
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
       with:
         python-version: 3.8
-    - name: Install dependencies
+    - name: Install linux dependencies
+      run: |
+        sudo apt-get install redis-server ghostscript
+    - name: Cache pip
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/pip
+        # Look to see if there is a cache hit for the corresponding requirements file
+        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+          ${{ runner.os }}-
+    - name: Install python dependencies
       run: |
         python -m pip install --upgrade pip
         pip install flake8 pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        pip install -r requirements.txt
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names

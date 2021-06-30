@@ -2,6 +2,7 @@ import datetime
 import html
 import io
 import os
+import pandas as pd
 
 import pytest
 from citywok_ms import db
@@ -14,7 +15,7 @@ from wtforms.fields.simple import HiddenField, SubmitField
 
 @pytest.mark.role("admin")
 def test_index_get(client, user):
-    response = client.get(url_for("supplier.index"))
+    response = client.get(url_for("supplier.index", desc=True))
     data = response.data.decode()
 
     # state code
@@ -269,7 +270,7 @@ def test_upload_get(client, user, supplier, id):
 @pytest.mark.parametrize("id", [1, 2])
 def test_upload_post_valid(client, user, supplier, id):
     request_data = {
-        "file": (io.BytesIO(b"test"), "test.jpg"),
+        "file": (io.BytesIO(b"test"), "test.pdf"),
     }
     response = client.post(
         url_for("supplier.upload", supplier_id=id),
@@ -281,10 +282,10 @@ def test_upload_post_valid(client, user, supplier, id):
 
     assert response.status_code == 200
     assert request.url.endswith(url_for("supplier.detail", supplier_id=id))
-    assert 'File "test.jpg" has been uploaded.' in html.unescape(data)
+    assert 'File "test.pdf" has been uploaded.' in html.unescape(data)
     assert db.session.query(SupplierFile).count() == 1
     f = db.session.query(SupplierFile).get(1)
-    assert f.full_name == "test.jpg"
+    assert f.full_name == "test.pdf"
     assert os.path.isfile(f.path)
 
 
@@ -321,3 +322,35 @@ def test_upload_post_invalid_empty(client, user, supplier, id):
     assert response.status_code == 200
     assert request.url.endswith(url_for("supplier.detail", supplier_id=id))
     assert "No file has been uploaded." in html.unescape(data)
+
+
+@pytest.mark.role("admin")
+def test_export_csv(client, user, supplier):
+    response = client.get(
+        url_for("supplier.export", export_format="csv"),
+        follow_redirects=True,
+    )
+    data = response.data.decode()
+    assert response.status_code == 200
+    for name in Supplier.columns_name.values():
+        assert str(name) in data
+    for supplier in Supplier.get_all(sort="id", desc=False):
+        for attr in Supplier.__table__.columns:
+            assert str(getattr(supplier, attr.name) or "-") in data
+
+
+@pytest.mark.role("admin")
+def test_export_excel(client, user, supplier):
+    response = client.get(
+        url_for("supplier.export", export_format="excel"),
+        follow_redirects=True,
+    )
+    data = pd.read_excel(response.data)
+    assert response.status_code == 200
+    for name in Supplier.columns_name.values():
+        assert str(name) in data
+
+    for supplier in Supplier.get_all(sort="id", desc=False):
+        for attr in ("name", "id"):
+            value = getattr(supplier, attr)
+            assert value in data.values

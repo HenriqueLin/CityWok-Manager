@@ -1,4 +1,9 @@
+import csv
 from decimal import Decimal
+import io
+import pandas as pd
+
+from sqlalchemy.sql.expression import nullslast
 
 from citywok_ms import db
 from flask_wtf import FlaskForm
@@ -47,9 +52,35 @@ class CRUDMixin(object):
         form.populate_obj(self)
 
     @classmethod
-    def get_all(cls):
-        return db.session.query(cls).all()
+    def get_all(cls, sort, desc):
+        result = db.session.query(cls)
+        if desc:
+            result = result.order_by(nullslast(getattr(cls, sort).desc())).all()
+        else:
+            result = result.order_by(nullslast(getattr(cls, sort))).all()
+        return result
 
     @classmethod
     def get_or_404(cls, id: int):
         return db.session.query(cls).get_or_404(id)
+
+    @classmethod
+    def export_to_csv(cls) -> io.BytesIO:
+        sio = io.StringIO()
+        writer = csv.writer(sio)
+        writer.writerow(cls.columns_name.values())
+        for e in cls.query.all():
+            writer.writerow([getattr(e, col) or "-" for col in cls.columns_name.keys()])
+        bio = io.BytesIO()
+        bio.write(sio.getvalue().encode("utf_8_sig"))
+        bio.seek(0)
+        return bio
+
+    @classmethod
+    def export_to_excel(cls):
+        bio = io.BytesIO()
+        df = pd.read_sql(db.session.query(cls).statement, db.session.bind)
+        df.columns = cls.columns_name.values()
+        df.to_excel(bio, index=False)
+        bio.seek(0)
+        return bio

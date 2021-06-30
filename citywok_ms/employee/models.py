@@ -1,11 +1,14 @@
-from citywok_ms.file.models import EmployeeFile
 from typing import List
+
 from citywok_ms import db
+from citywok_ms.file.models import EmployeeFile
 from citywok_ms.utils import ID, SEX
 from citywok_ms.utils.models import CRUDMixin, SqliteDecimal
+from flask_babel import lazy_gettext as _l
 from sqlalchemy import Boolean, Column, Date, Integer, String, Text
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship, validates
+from sqlalchemy.sql.expression import nullslast
 from sqlalchemy_utils import ChoiceType, CountryType
 
 
@@ -14,6 +17,7 @@ class Employee(db.Model, CRUDMixin):
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
     zh_name = Column(String)
+    accountant_id = Column(Integer, unique=True)
     sex = Column(ChoiceType(SEX, String()), nullable=False)
     birthday = Column(Date)
     contact = Column(String)
@@ -33,6 +37,30 @@ class Employee(db.Model, CRUDMixin):
 
     files = relationship("EmployeeFile")
 
+    columns_name = {
+        "id": _l("ID"),
+        "first_name": _l("First Name"),
+        "last_name": _l("Last Name"),
+        "zh_name": _l("Chinese Name"),
+        "accountant_id": _l("Accountant ID"),
+        "sex": _l("Sex"),
+        "birthday": _l("Birthday"),
+        "contact": _l("Contact"),
+        "email": _l("E-mail"),
+        "id_type": _l("ID Type"),
+        "id_number": _l("ID Number"),
+        "id_validity": _l("ID Validity"),
+        "nationality": _l("Nationality"),
+        "nif": _l("NIF"),
+        "niss": _l("NISS"),
+        "iban": _l("IBAN"),
+        "employment_date": _l("Employment Date"),
+        "total_salary": _l("Total Salary"),
+        "taxed_salary": _l("Taxed Salary"),
+        "remark": _l("Remark"),
+        "active": _l("Active"),
+    }
+
     def __repr__(self):
         return f"Employee({self.id}: {self.full_name})"
 
@@ -48,12 +76,22 @@ class Employee(db.Model, CRUDMixin):
             return sex
 
     @staticmethod
-    def get_active() -> List["Employee"]:
-        return db.session.query(Employee).filter_by(active=True).all()
+    def get_active(sort, desc) -> List["Employee"]:
+        result = db.session.query(Employee).filter_by(active=True)
+        if desc:
+            result = result.order_by(nullslast(getattr(Employee, sort).desc())).all()
+        else:
+            result = result.order_by(nullslast(getattr(Employee, sort))).all()
+        return result
 
     @staticmethod
-    def get_suspended() -> List["Employee"]:
-        return db.session.query(Employee).filter_by(active=False).all()
+    def get_suspended(sort, desc) -> List["Employee"]:
+        result = db.session.query(Employee).filter_by(active=False)
+        if desc:
+            result = result.order_by(nullslast(getattr(Employee, sort).desc())).all()
+        else:
+            result = result.order_by(nullslast(getattr(Employee, sort))).all()
+        return result
 
     def activate(self):
         self.active = True
