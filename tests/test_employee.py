@@ -10,6 +10,7 @@ from citywok_ms.employee.models import Employee
 from citywok_ms.file.models import EmployeeFile
 from flask import request, url_for
 from wtforms.fields.simple import HiddenField, SubmitField
+import pandas as pd
 
 
 @pytest.mark.role("admin")
@@ -404,3 +405,35 @@ def test_upload_post_invalid_empty(client, user, employee, id):
     assert response.status_code == 200
     assert request.url.endswith(url_for("employee.detail", employee_id=id))
     assert "No file has been uploaded." in html.unescape(data)
+
+
+@pytest.mark.role("admin")
+def test_export_csv(client, user, employee):
+    response = client.get(
+        url_for("employee.export", export_format="csv"),
+        follow_redirects=True,
+    )
+    data = response.data.decode()
+    assert response.status_code == 200
+    for name in Employee.columns_name.values():
+        assert str(name) in data
+    for employee in Employee.get_all(sort="id", desc=False):
+        for attr in Employee.__table__.columns:
+            assert str(getattr(employee, attr.name) or "-") in data
+
+
+@pytest.mark.role("admin")
+def test_export_excel(client, user, employee):
+    response = client.get(
+        url_for("employee.export", export_format="excel"),
+        follow_redirects=True,
+    )
+    data = pd.read_excel(response.data)
+    assert response.status_code == 200
+    for name in Employee.columns_name.values():
+        assert str(name) in data
+
+    for employee in Employee.get_all(sort="id", desc=False):
+        for attr in ("first_name", "last_name", "id"):
+            value = getattr(employee, attr)
+            assert value in data.values

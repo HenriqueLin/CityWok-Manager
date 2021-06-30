@@ -2,6 +2,7 @@ import datetime
 import html
 import io
 import os
+import pandas as pd
 
 import pytest
 from citywok_ms import db
@@ -321,3 +322,35 @@ def test_upload_post_invalid_empty(client, user, supplier, id):
     assert response.status_code == 200
     assert request.url.endswith(url_for("supplier.detail", supplier_id=id))
     assert "No file has been uploaded." in html.unescape(data)
+
+
+@pytest.mark.role("admin")
+def test_export_csv(client, user, supplier):
+    response = client.get(
+        url_for("supplier.export", export_format="csv"),
+        follow_redirects=True,
+    )
+    data = response.data.decode()
+    assert response.status_code == 200
+    for name in Supplier.columns_name.values():
+        assert str(name) in data
+    for supplier in Supplier.get_all(sort="id", desc=False):
+        for attr in Supplier.__table__.columns:
+            assert str(getattr(supplier, attr.name) or "-") in data
+
+
+@pytest.mark.role("admin")
+def test_export_excel(client, user, supplier):
+    response = client.get(
+        url_for("supplier.export", export_format="excel"),
+        follow_redirects=True,
+    )
+    data = pd.read_excel(response.data)
+    assert response.status_code == 200
+    for name in Supplier.columns_name.values():
+        assert str(name) in data
+
+    for supplier in Supplier.get_all(sort="id", desc=False):
+        for attr in ("name", "id"):
+            value = getattr(supplier, attr)
+            assert value in data.values
