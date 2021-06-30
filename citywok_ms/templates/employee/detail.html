@@ -89,93 +89,16 @@
             </button>
             {% endif %}
         </div>
-        {% if employee.active_files %}
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered text-nowrap text-center">
-                <thead class="table-dark">
-                    <tr>
-                        <th scope="col">{{_('File Name')}}</th>
-                        <th scope="col">{{_('Upload Date')}}</th>
-                        <th scope="col">{{_('Size')}}</th>
-                        <th scope="col">{{_('Edit')}}</th>
-                        <th scope="col">{{_('Delete')}}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for file in employee.active_files %}
-                    <tr>
-                        <th>
-                            <a href="{{ url_for('file.download',file_id=file.id) }}"><strong>{{ file.full_name
-                                    }}</strong></a>
-                        </th>
-                        <td>{{ moment(file.upload_date).fromNow(refresh=True) }}</td>
-                        <td>{{ file.humanized_size }}</td>
-                        <td><a href="{{url_for('file.update',file_id=file.id)}}"><span class="material-icons">
-                                    edit
-                                </span></a></td>
-                        <td>
-                            <form action="{{ url_for('file.delete',file_id=file.id) }}" method="post" class="d-inline">
-                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                <input type="submit" hidden id="delete_file_{{file.id}}">
-                                <span class="material-icons icon-btn"
-                                    onclick="document.getElementById('delete_file_{{file.id}}').click();">
-                                    delete
-                                </span>
-                            </form>
 
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% endif %}
+        {% with files=employee.active_files %}
+        {% include 'file/active_file_table.html' %}
+        {% endwith %}
 
         <div class="collapse" id="deletedFiles">
             <h4>{{_('Deleted Files')}}</h4>
-
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered text-nowrap text-center">
-                    <thead class="table-dark">
-                        <tr>
-                            <th scope="col">{{_('File Name')}}</th>
-                            <th scope="col">{{_('Deleted Date')}}</th>
-                            <th scope="col">{{_('Size')}}</th>
-                            <th scope="col">{{_('Restore')}}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for file in employee.deleted_files %}
-                        <tr>
-                            <th>
-                                <a href="{{ url_for('file.download',file_id=file.id) }}"><strong>{{ file.full_name
-                                        }}</strong></a>
-                            </th>
-                            <td>{{ moment(file.delete_date).fromNow(refresh=True) }}</td>
-                            <td>{{ file.humanized_size }}</td>
-
-                            <td>
-                                <form action="{{ url_for('file.restore',file_id=file.id) }}" method="post"
-                                    class="d-inline">
-                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                    <input type="submit" hidden id="restore_file_{{file.id}}">
-                                    <span class="material-icons icon-btn"
-                                        onclick="document.getElementById('restore_file_{{file.id}}').click();">
-                                        restore_from_trash
-                                    </span>
-                                </form>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="d-flex">
-                <span class="material-icons mb-18 info">
-                    info
-                </span>
-                {{_('These files will be permanente removed 30 days after being deleted')}}
-            </div>
+            {% with files=employee.deleted_files %}
+            {% include 'file/suspend_file_table.html' %}
+            {% endwith %}
         </div>
     </div>
 </div>

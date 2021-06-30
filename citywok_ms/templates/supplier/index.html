@@ -12,8 +12,10 @@
                 {{ _("Export") }}
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{{url_for('supplier.export',export_format='csv')}}">CSV</a></li>
-                <li><a class="dropdown-item" href="{{url_for('supplier.export',export_format='excel')}}">Excel</a></li>
+                <li><a class="dropdown-item" href="{{url_for('supplier.export',export_format='csv')}}"
+                        target="_blank">CSV</a></li>
+                <li><a class="dropdown-item" href="{{url_for('supplier.export',export_format='excel')}}"
+                        target="_blank">Excel</a></li>
             </ul>
         </div>
     </div>

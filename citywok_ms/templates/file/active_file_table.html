@@ -1,0 +1,48 @@
+{% if files %}
+<div class="table-responsive">
+    <table class="table table-striped table-bordered text-nowrap text-center">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">{{_('File Name')}}</th>
+                <th scope="col">{{_('Upload Date')}}</th>
+                <th scope="col">{{_('Size')}}</th>
+                <th scope="col">{{_('Edit')}}</th>
+                <th scope="col">{{_('Delete')}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in files %}
+            <tr>
+                <th>
+                    <a href="{{ url_for('file.download',file_id=file.id) }}" target="_blank">
+                        <strong>
+                            {{ file.full_name }}
+                        </strong>
+                    </a>
+                </th>
+                <td>{{ moment(file.upload_date).fromNow(refresh=True) }}</td>
+                <td>{{ file.humanized_size }}</td>
+                <td>
+                    <a href="{{url_for('file.update',file_id=file.id)}}">
+                        <span class="material-icons">
+                            edit
+                        </span>
+                    </a>
+                </td>
+                <td>
+                    <form action="{{ url_for('file.delete',file_id=file.id) }}" method="post" class="d-inline">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="submit" hidden id="delete_file_{{file.id}}">
+                        <span class="material-icons icon-btn"
+                            onclick="document.getElementById('delete_file_{{file.id}}').click();">
+                            delete
+                        </span>
+                    </form>
+
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
