@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-06-29 23:24+0100\n"
+"POT-Creation-Date: 2021-06-30 18:16+0100\n"
 "PO-Revision-Date: 2021-06-19 22:05+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -187,7 +187,7 @@ msgid "Birthday"
 msgstr "生日"
 
 #: citywok_ms/employee/forms.py:57 citywok_ms/employee/models.py:48
-#: citywok_ms/supplier/forms.py:24 citywok_ms/supplier/models.py:38
+#: citywok_ms/supplier/forms.py:24 citywok_ms/supplier/models.py:34
 #: citywok_ms/supplier/routes.py:33
 #: citywok_ms/templates/employee/detail.html:41
 #: citywok_ms/templates/supplier/detail.html:22
@@ -195,7 +195,7 @@ msgid "Contact"
 msgstr "联系方式"
 
 #: citywok_ms/employee/forms.py:60 citywok_ms/employee/models.py:49
-#: citywok_ms/supplier/forms.py:29 citywok_ms/supplier/models.py:39
+#: citywok_ms/supplier/forms.py:29 citywok_ms/supplier/models.py:35
 #: citywok_ms/supplier/routes.py:34
 #: citywok_ms/templates/supplier/detail.html:24
 msgid "E-mail"
@@ -223,7 +223,7 @@ msgstr "国籍"
 
 #: citywok_ms/employee/forms.py:85 citywok_ms/employee/models.py:54
 #: citywok_ms/employee/routes.py:33 citywok_ms/supplier/forms.py:33
-#: citywok_ms/supplier/models.py:40 citywok_ms/supplier/routes.py:31
+#: citywok_ms/supplier/models.py:36 citywok_ms/supplier/routes.py:31
 #: citywok_ms/templates/employee/detail.html:55
 #: citywok_ms/templates/supplier/detail.html:28
 msgid "NIF"
@@ -236,7 +236,7 @@ msgid "NISS"
 msgstr "NISS"
 
 #: citywok_ms/employee/forms.py:93 citywok_ms/employee/models.py:56
-#: citywok_ms/supplier/forms.py:37 citywok_ms/supplier/models.py:41
+#: citywok_ms/supplier/forms.py:37 citywok_ms/supplier/models.py:37
 #: citywok_ms/supplier/routes.py:32
 #: citywok_ms/templates/employee/detail.html:59
 #: citywok_ms/templates/supplier/detail.html:30
@@ -259,7 +259,7 @@ msgstr "纳税工资"
 
 #: citywok_ms/employee/forms.py:112 citywok_ms/employee/models.py:60
 #: citywok_ms/file/forms.py:22 citywok_ms/supplier/forms.py:55
-#: citywok_ms/supplier/models.py:45
+#: citywok_ms/supplier/models.py:41
 #: citywok_ms/templates/employee/detail.html:71
 #: citywok_ms/templates/supplier/detail.html:38
 msgid "Remark"
@@ -296,7 +296,7 @@ msgid "This Accountant ID already existe"
 msgstr "账房ID已存在"
 
 #: citywok_ms/employee/models.py:41 citywok_ms/employee/routes.py:27
-#: citywok_ms/supplier/models.py:34 citywok_ms/supplier/routes.py:27
+#: citywok_ms/supplier/models.py:30 citywok_ms/supplier/routes.py:27
 #: citywok_ms/templates/employee/detail.html:29
 #: citywok_ms/templates/supplier/detail.html:14
 msgid "ID"
@@ -368,10 +368,9 @@ msgstr "请登录以访问该页面."
 msgid "File"
 msgstr "文件"
 
-#: citywok_ms/file/forms.py:21 citywok_ms/templates/employee/detail.html:97
-#: citywok_ms/templates/employee/detail.html:141
-#: citywok_ms/templates/supplier/detail.html:64
-#: citywok_ms/templates/supplier/detail.html:108
+#: citywok_ms/file/forms.py:21
+#: citywok_ms/templates/file/active_file_table.html:6
+#: citywok_ms/templates/file/suspend_file_table.html:5
 msgid "File Name"
 msgstr "文件名"
 
@@ -404,35 +403,35 @@ msgstr "文件 \"%(name)s\" 已更新."
 msgid "Update File"
 msgstr "更新文件"
 
-#: citywok_ms/supplier/forms.py:12 citywok_ms/supplier/models.py:35
+#: citywok_ms/supplier/forms.py:12 citywok_ms/supplier/models.py:31
 #: citywok_ms/supplier/routes.py:28
 #: citywok_ms/templates/supplier/detail.html:16
 msgid "Company Name"
 msgstr "公司名称"
 
-#: citywok_ms/supplier/forms.py:16 citywok_ms/supplier/models.py:36
+#: citywok_ms/supplier/forms.py:16 citywok_ms/supplier/models.py:32
 #: citywok_ms/supplier/routes.py:30
 #: citywok_ms/templates/supplier/detail.html:18
 msgid "Abbreviation"
 msgstr "简称"
 
-#: citywok_ms/supplier/forms.py:20 citywok_ms/supplier/models.py:37
+#: citywok_ms/supplier/forms.py:20 citywok_ms/supplier/models.py:33
 #: citywok_ms/supplier/routes.py:29
 #: citywok_ms/templates/supplier/detail.html:20
 msgid "Principal"
 msgstr "负责人"
 
-#: citywok_ms/supplier/forms.py:42 citywok_ms/supplier/models.py:42
+#: citywok_ms/supplier/forms.py:42 citywok_ms/supplier/models.py:38
 #: citywok_ms/templates/supplier/detail.html:32
 msgid "Address"
 msgstr "地址"
 
-#: citywok_ms/supplier/forms.py:46 citywok_ms/supplier/models.py:43
+#: citywok_ms/supplier/forms.py:46 citywok_ms/supplier/models.py:39
 #: citywok_ms/templates/supplier/detail.html:34
 msgid "Postcode"
 msgstr "邮编"
 
-#: citywok_ms/supplier/forms.py:50 citywok_ms/supplier/models.py:44
+#: citywok_ms/supplier/forms.py:50 citywok_ms/supplier/models.py:40
 #: citywok_ms/templates/supplier/detail.html:36
 msgid "City"
 msgstr "城市"
@@ -526,56 +525,19 @@ msgid "New File"
 msgstr "添加文件"
 
 #: citywok_ms/templates/employee/detail.html:88
-#: citywok_ms/templates/employee/detail.html:189
+#: citywok_ms/templates/employee/detail.html:112
 #: citywok_ms/templates/supplier/detail.html:55
-#: citywok_ms/templates/supplier/detail.html:156
+#: citywok_ms/templates/supplier/detail.html:78
 msgid "Show deleted files"
 msgstr "显示已删除文件"
 
 #: citywok_ms/templates/employee/detail.html:98
-#: citywok_ms/templates/supplier/detail.html:65
-msgid "Upload Date"
-msgstr "上传日期"
-
-#: citywok_ms/templates/employee/detail.html:99
-#: citywok_ms/templates/employee/detail.html:143
-#: citywok_ms/templates/supplier/detail.html:66
-#: citywok_ms/templates/supplier/detail.html:110
-msgid "Size"
-msgstr "大小"
-
-#: citywok_ms/templates/employee/detail.html:100
-#: citywok_ms/templates/supplier/detail.html:67
-msgid "Edit"
-msgstr "编辑"
-
-#: citywok_ms/templates/employee/detail.html:101
-#: citywok_ms/templates/supplier/detail.html:68
-msgid "Delete"
-msgstr "删除"
-
-#: citywok_ms/templates/employee/detail.html:135
-#: citywok_ms/templates/supplier/detail.html:102
+#: citywok_ms/templates/supplier/detail.html:64
 msgid "Deleted Files"
 msgstr "已删除文件"
 
-#: citywok_ms/templates/employee/detail.html:142
-#: citywok_ms/templates/supplier/detail.html:109
-msgid "Deleted Date"
-msgstr "删除日期"
-
-#: citywok_ms/templates/employee/detail.html:144
-#: citywok_ms/templates/supplier/detail.html:111
-msgid "Restore"
-msgstr "复原"
-
-#: citywok_ms/templates/employee/detail.html:177
-#: citywok_ms/templates/supplier/detail.html:144
-msgid "These files will be permanente removed 30 days after being deleted"
-msgstr "这些文件将在被删除后30天后被彻底移除."
-
-#: citywok_ms/templates/employee/detail.html:189
-#: citywok_ms/templates/supplier/detail.html:156
+#: citywok_ms/templates/employee/detail.html:112
+#: citywok_ms/templates/supplier/detail.html:78
 msgid "Hide deleted files"
 msgstr "隐藏已删除文件"
 
@@ -593,12 +555,12 @@ msgstr "添加"
 msgid "Export"
 msgstr "导出"
 
-#: citywok_ms/templates/employee/index.html:28
+#: citywok_ms/templates/employee/index.html:30
 msgid "Suspended Employees"
 msgstr "冻结员工"
 
 #: citywok_ms/templates/employee/index_table.html:34
-#: citywok_ms/templates/supplier/index.html:54
+#: citywok_ms/templates/supplier/index.html:56
 msgid "Detail"
 msgstr "详情"
 
@@ -631,6 +593,35 @@ msgstr "发生未知错误"
 #: citywok_ms/templates/error/500.html:8
 msgid "The administrator has been notified."
 msgstr "已通知管理员."
+
+#: citywok_ms/templates/file/active_file_table.html:7
+msgid "Upload Date"
+msgstr "上传日期"
+
+#: citywok_ms/templates/file/active_file_table.html:8
+#: citywok_ms/templates/file/suspend_file_table.html:7
+msgid "Size"
+msgstr "大小"
+
+#: citywok_ms/templates/file/active_file_table.html:9
+msgid "Edit"
+msgstr "编辑"
+
+#: citywok_ms/templates/file/active_file_table.html:10
+msgid "Delete"
+msgstr "删除"
+
+#: citywok_ms/templates/file/suspend_file_table.html:6
+msgid "Deleted Date"
+msgstr "删除日期"
+
+#: citywok_ms/templates/file/suspend_file_table.html:8
+msgid "Restore"
+msgstr "复原"
+
+#: citywok_ms/templates/file/suspend_file_table.html:43
+msgid "These files will be permanente removed 30 days after being deleted"
+msgstr "这些文件将在被删除后30天后被彻底移除."
 
 #: citywok_ms/utils/__init__.py:3
 msgid "Male"
