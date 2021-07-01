@@ -84,6 +84,7 @@ def create_app(config_class=Config):
         from citywok_ms.file.routes import file_bp
         from citywok_ms.main.routes import main_bp
         from citywok_ms.supplier.routes import supplier_bp
+        from citywok_ms.movement.order.routes import order_bp
 
         # blueprints
         app.register_blueprint(auth_bp)
@@ -94,6 +95,7 @@ def create_app(config_class=Config):
         app.register_blueprint(main_bp)
         app.register_blueprint(error_bp)
         app.register_blueprint(admin_bp)
+        app.register_blueprint(order_bp)
 
         app.logger.removeHandler(default_handler)
         if not app.testing:  # test: no cover
