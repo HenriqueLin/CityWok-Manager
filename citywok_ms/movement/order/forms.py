@@ -1,11 +1,14 @@
-from citywok_ms.utils import FILEALLOWED
 import datetime
+
+from citywok_ms.supplier.models import Supplier
+from citywok_ms.utils import FILEALLOWED
+from citywok_ms.utils.fields import FilesAllowed, FilesRequired, MultipleFileField
+from flask_babel import lazy_gettext as _l
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
-from flask_babel import lazy_gettext as _l
-from citywok_ms.utils.fields import MultipleFileField, FilesAllowed, FilesRequired
-from wtforms.validators import InputRequired, NumberRange
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.fields.html5 import DateField, DecimalField
+from wtforms.validators import DataRequired, InputRequired, NumberRange
 
 
 class OrderForm(FlaskForm):
@@ -21,6 +24,16 @@ class OrderForm(FlaskForm):
     value = DecimalField(
         label=_l("Value"),
         validators=[InputRequired(), NumberRange(min=0)],
+    )
+
+    supplier = QuerySelectField(
+        label=_l("Supplier"),
+        query_factory=lambda: Supplier.query,
+        get_pk=lambda x: x.id,
+        get_label=lambda x: f"{x.id}: {x.name}",
+        allow_blank=True,
+        blank_text="---",
+        validators=[DataRequired()],
     )
 
     files = MultipleFileField(

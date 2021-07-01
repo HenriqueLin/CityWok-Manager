@@ -1,10 +1,12 @@
-from citywok_ms.utils.models import CRUDMixin
-from citywok_ms.file.models import SupplierFile
 from typing import List
+
 from citywok_ms import db
+from citywok_ms.file.models import SupplierFile
+from citywok_ms.movement.order.models import Order
+from citywok_ms.utils.models import CRUDMixin
+from flask_babel import lazy_gettext as _l
 from sqlalchemy import Column, Integer, String, Text
 from sqlalchemy.orm import relationship
-from flask_babel import lazy_gettext as _l
 
 
 class Supplier(db.Model, CRUDMixin):
@@ -20,6 +22,8 @@ class Supplier(db.Model, CRUDMixin):
     postcode = Column(String)
     city = Column(String)
     remark = Column(Text)
+
+    orders = relationship("Order", backref="supplier")
 
     files = relationship("File")
 

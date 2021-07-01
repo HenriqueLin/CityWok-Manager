@@ -19,6 +19,7 @@ def new():
             order_number=form.order_number.data,
             delivery_date=form.delivery_date.data,
             value=form.value.data,
+            supplier=form.supplier.data,
         )
         for f in form.files.data:
             db_file = OrderFile.create(f)

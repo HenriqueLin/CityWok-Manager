@@ -26,6 +26,12 @@
             </div>
             <div class="w-100 my-0"></div>
             <div class="col-sm-6">
+                {% with field=form.supplier %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <div class="w-100 my-0"></div>
+            <div class="col-sm-6">
                 {% with field=form.files %}
                 {% include 'field.html' %}
                 {% endwith %}
