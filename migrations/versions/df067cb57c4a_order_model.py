@@ -24,7 +24,7 @@ def upgrade():
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("order_number", sa.String(), nullable=False),
         sa.Column("delivery_date", sa.Date(), nullable=False),
-        sa.Column("value", citywok_ms.utils.models.SqliteDecimal(), nullable=False),
+        sa.Column("value", citywok_ms.utils.models.SqliteDecimal(2), nullable=False),
         sa.PrimaryKeyConstraint("id", name=op.f("pk_order")),
     )
     with op.batch_alter_table("file", schema=None) as batch_op:
