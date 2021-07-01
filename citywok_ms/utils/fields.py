@@ -7,7 +7,7 @@ from sqlalchemy_utils import i18n
 from sqlalchemy_utils.primitives.country import Country
 from sqlalchemy_utils.utils import str_coercible
 from werkzeug.datastructures import FileStorage
-from wtforms import FileField as _MultipleFileField
+from wtforms import MultipleFileField as _MultipleFileField
 from wtforms.validators import DataRequired, StopValidation
 from wtforms_components import SelectField
 
