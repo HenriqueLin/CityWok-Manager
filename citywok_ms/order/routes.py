@@ -1,6 +1,6 @@
 from citywok_ms.task import compress_file
-from citywok_ms.movement.order.models import Order
-from citywok_ms.movement.order.forms import OrderForm
+from citywok_ms.order.models import Order
+from citywok_ms.order.forms import OrderForm
 from flask import Blueprint, flash, redirect, url_for, render_template, current_app
 from citywok_ms.auth.permissions import manager
 from citywok_ms import db
@@ -33,4 +33,4 @@ def new():
         db.session.commit()
         current_app.logger.info(f"Create order {order}")
         return redirect(url_for("order.new"))  # FIXME:
-    return render_template("movement/order/new.html", title=_("New Order"), form=form)
+    return render_template("order/new.html", title=_("New Order"), form=form)

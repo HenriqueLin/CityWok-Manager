@@ -2,7 +2,7 @@ from typing import List
 
 from citywok_ms import db
 from citywok_ms.file.models import SupplierFile
-from citywok_ms.movement.order.models import Order
+from citywok_ms.order.models import Order
 from citywok_ms.utils.models import CRUDMixin
 from flask_babel import lazy_gettext as _l
 from sqlalchemy import Column, Integer, String, Text
