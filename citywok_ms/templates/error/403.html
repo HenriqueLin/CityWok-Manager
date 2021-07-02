@@ -6,7 +6,7 @@
     <div class="col-sm-6 mx-auto">
         <h3 class="mb-4">{{_("Ops, seems like you don't have the permission to visit this page.")}}</h3>
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-            <a href="{{ request.referrer }}" class="btn btn-secondary px-4">{{_('Back')}}</a>
+            <a href="{{ request.referrer }}" class="btn btn-outline-secondary px-4">{{_('Back')}}</a>
             <a href="{{ url_for('main.index') }}" class="btn btn-outline-primary px-4">{{_('Home')}}</a>
         </div>
     </div>

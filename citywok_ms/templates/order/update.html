@@ -4,29 +4,35 @@
     <!-- title -->
     <h1>{{title}}</h1>
     <hr>
-    <form action="" method="post" novalidate>
+    <form action="" method="post" enctype='multipart/form-data' novalidate>
         {{ form.hidden_tag() }}
         <div class="row gy-3 overflow-hidden justify-content-center">
             <div class="col-sm-6">
-                {% with field=form.username %}
+                {% with field=form.order_number %}
                 {% include 'field.html' %}
                 {% endwith %}
             </div>
             <div class="w-100 my-0"></div>
             <div class="col-sm-6">
-                {% with field=form.password %}
+                {% with field=form.delivery_date %}
                 {% include 'field.html' %}
                 {% endwith %}
             </div>
             <div class="w-100 my-0"></div>
             <div class="col-sm-6">
-                {% with field=form.password2 %}
+                {% with field=form.value %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <div class="w-100 my-0"></div>
+            <div class="col-sm-6">
+                {% with field=form.supplier %}
                 {% include 'field.html' %}
                 {% endwith %}
             </div>
             <div class="w-100 my-0"></div>
             <div class="gx-3 col-sm-6">
-                {{ form.submit(class="btn btn-outline-success ms-1 float-end") }}
+                {{ form.submit(class="btn btn-outline-primary ms-1 float-end") }}
                 <a href="{{url_for('auth.login')}}" class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
             </div>
         </div>
