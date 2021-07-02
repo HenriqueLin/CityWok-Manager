@@ -73,6 +73,42 @@
         <div class="mb-2">
             <a href="{{url_for('order.new')}}" class="btn btn-outline-success">{{_('New')}}</a>
         </div>
+        {% if supplier.orders %}
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered text-nowrap text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">{{_('Order Number')}}</th>
+                        <th scope="col">{{_('Delivery Date')}}</th>
+                        <th scope="col">{{_('Value')}}</th>
+                        <th scope="col">{{_('Edit')}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in supplier.orders %}
+                    <tr>
+                        <th>
+                            <a href="#" target="_blank">
+                                <strong>
+                                    {{ order.order_number }}
+                                </strong>
+                            </a>
+                        </th>
+                        <td>{{ moment(order.delivery_date).format('ll') }}</td>
+                        <td>{{ order.value }}</td>
+                        <td>
+                            <a href="{{url_for('order.update',order_id=order.id)}}">
+                                <span class="material-icons">
+                                    edit
+                                </span>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock content %}
