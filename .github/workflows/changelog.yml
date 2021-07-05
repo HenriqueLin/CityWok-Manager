@@ -14,4 +14,4 @@ jobs:
     - uses: dangoslen/changelog-enforcer@v2
       with:
         changeLogPath: 'CHANGELOG.md'
-        skipLabels: 'Skip-Changelog'
+        skipLabels: 'Skip-Changelog, dependencies'
