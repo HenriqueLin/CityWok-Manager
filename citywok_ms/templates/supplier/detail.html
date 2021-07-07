@@ -81,14 +81,13 @@
                         <th scope="col">{{_('Order Number')}}</th>
                         <th scope="col">{{_('Delivery Date')}}</th>
                         <th scope="col">{{_('Value')}}</th>
-                        <th scope="col">{{_('Edit')}}</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for order in supplier.orders %}
                     <tr>
                         <th>
-                            <a href="#" target="_blank">
+                            <a href="{{url_for('order.detail',order_id=order.id)}}">
                                 <strong>
                                     {{ order.order_number }}
                                 </strong>
@@ -96,13 +95,6 @@
                         </th>
                         <td>{{ moment(order.delivery_date).format('ll') }}</td>
                         <td>{{ order.value }}</td>
-                        <td>
-                            <a href="{{url_for('order.update',order_id=order.id)}}">
-                                <span class="material-icons">
-                                    edit
-                                </span>
-                            </a>
-                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
