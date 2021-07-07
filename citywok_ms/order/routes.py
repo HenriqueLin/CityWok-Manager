@@ -1,11 +1,12 @@
-from citywok_ms.task import compress_file
-from citywok_ms.order.models import Order
-from citywok_ms.order.forms import OrderForm, OrderUpdateForm
-from flask import Blueprint, flash, redirect, url_for, render_template, current_app
-from citywok_ms.auth.permissions import manager, shareholder
 from citywok_ms import db
-from flask_babel import _
+from citywok_ms.auth.permissions import manager, shareholder
+from citywok_ms.file.forms import FileForm
 from citywok_ms.file.models import OrderFile
+from citywok_ms.order.forms import OrderForm, OrderUpdateForm
+from citywok_ms.order.models import Order
+from citywok_ms.task import compress_file
+from flask import Blueprint, current_app, flash, redirect, render_template, url_for
+from flask_babel import _
 
 order_bp = Blueprint("order", __name__, url_prefix="/order")
 
@@ -42,7 +43,7 @@ def new():
         )
         db.session.commit()
         current_app.logger.info(f"Create order {order}")
-        return redirect(url_for("order.new"))  # FIXME:
+        return redirect(url_for("order.index"))
     return render_template("order/new.html", title=_("New Order"), form=form)
 
 
@@ -61,7 +62,7 @@ def update(order_id):
         )
         db.session.commit()
         current_app.logger.info(f"Update order {order}")
-        return redirect(url_for("order.new"))  # FIXME:
+        return redirect(url_for("order.detail", order_id=order_id))
 
     form.process(obj=order)
 
@@ -70,4 +71,16 @@ def update(order_id):
         order=order,
         form=form,
         title=_("Update Order"),
+    )
+
+
+@order_bp.route("/<int:order_id>")
+@shareholder.require(403)
+def detail(order_id):
+    order = Order.get_or_404(order_id)
+    return render_template(
+        "order/detail.html",
+        title=_("Order Detail"),
+        order=order,
+        file_form=FileForm(),
     )

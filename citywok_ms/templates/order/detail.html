@@ -1,0 +1,73 @@
+{% extends 'layout.html' %}
+{% set active_page = "order" %}
+{% block content %}
+<div>
+    <!-- title -->
+    <h1>{{title}}</h1>
+    <div class="d-print-none">
+        <a href="{{url_for('order.update',order_id=order.id)}}" class="btn btn-outline-primary"
+            id="update_button">{{_('Update')}}</a>
+    </div>
+
+    <hr>
+    <!-- informations -->
+    <dl class="row">
+        <dt class="col-4">{{_('Order Number')}}:</dt>
+        <dd class="col-8">{{ order.order_number }}</dd>
+        <dt class="col-4">{{_('Delivery Date')}}:</dt>
+        <dd class="col-8">{{ order.delivery_date }}</dd>
+        <dt class="col-4">{{_('Value')}}:</dt>
+        <dd class="col-8">{{ order.value}}</dd>
+        <dt class="col-4">{{_('Supplier')}}:</dt>
+        <dd class="col-8">
+            <a href="{{url_for('supplier.detail',supplier_id=order.supplier.id)}}">
+                {{ order.supplier.name }}
+            </a>
+        </dd>
+        <dt class="col-4">{{_('Remark')}}:</dt>
+        <dd class="col-8">{{ order.remark or '-'}}</dd>
+    </dl>
+    {#<div class="d-print-none">
+        <hr>
+        <h3 id="Files">{{_('Files')}}</h3>
+        <div class="mb-2">
+            <form action="{{url_for('employee.upload',employee_id=employee.id)}}" method="post"
+                enctype='multipart/form-data' class="d-inline" novalidate>
+                {{ file_form.hidden_tag() }}
+                {{ file_form.file(id="selectedFile", style="display:none", onchange="form.submit()") }}
+                <input type="button" value="{{_('New File')}}" class="btn btn-outline-success"
+                    onclick="document.getElementById('selectedFile').click();" />
+            </form>
+            {% if employee.deleted_files %}
+            <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse"
+                data-bs-target="#deletedFiles" aria-expanded="false" aria-controls="deletedFiles" id="fileButton">
+                {{_('Show deleted files')}}
+            </button>
+            {% endif %}
+        </div>
+
+        {% with files=employee.active_files %}
+        {% include 'file/active_file_table.html' %}
+        {% endwith %}
+
+        <div class="collapse" id="deletedFiles">
+            <h4>{{_('Deleted Files')}}</h4>
+            {% with files=employee.deleted_files %}
+            {% include 'file/suspend_file_table.html' %}
+            {% endwith %}
+        </div>
+    </div>#}
+</div>
+{% endblock content %}
+
+{% block js %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fileButton').click(function () {
+            $(this).text(function (i, old) {
+                return old == '{{_("Hide deleted files")}}' ? '{{_("Show deleted files")}}' : '{{_("Hide deleted files")}}';
+            });
+        });
+    });
+</script>
+{% endblock js %}
