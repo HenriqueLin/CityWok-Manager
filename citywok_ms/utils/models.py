@@ -52,7 +52,7 @@ class CRUDMixin(object):
         form.populate_obj(self)
 
     @classmethod
-    def get_all(cls, sort, desc):
+    def get_all(cls, sort="id", desc=False):
         result = db.session.query(cls)
         if desc:
             result = result.order_by(nullslast(getattr(cls, sort).desc())).all()
