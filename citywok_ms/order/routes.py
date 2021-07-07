@@ -2,12 +2,22 @@ from citywok_ms.task import compress_file
 from citywok_ms.order.models import Order
 from citywok_ms.order.forms import OrderForm, OrderUpdateForm
 from flask import Blueprint, flash, redirect, url_for, render_template, current_app
-from citywok_ms.auth.permissions import manager
+from citywok_ms.auth.permissions import manager, shareholder
 from citywok_ms import db
 from flask_babel import _
 from citywok_ms.file.models import OrderFile
 
 order_bp = Blueprint("order", __name__, url_prefix="/order")
+
+
+@order_bp.route("/")
+@shareholder.require(403)
+def index():
+    return render_template(
+        "order/index.html",
+        title=_("Order"),
+        orders=Order.get_all(),
+    )
 
 
 @order_bp.route("/new", methods=["GET", "POST"])
