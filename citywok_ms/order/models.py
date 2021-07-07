@@ -1,6 +1,6 @@
 from citywok_ms import db
 from citywok_ms.utils.models import CRUDMixin, SqliteDecimal
-from sqlalchemy import Column, Date, Integer, String, ForeignKey
+from sqlalchemy import Column, Date, Integer, String, ForeignKey, Text
 from sqlalchemy.orm import relationship
 
 
@@ -9,7 +9,7 @@ class Order(db.Model, CRUDMixin):
     order_number = Column(String, nullable=False)
     delivery_date = Column(Date, nullable=False)
     value = Column(SqliteDecimal(2), nullable=False)
+    remark = Column(Text)
 
     supplier_id = Column(Integer, ForeignKey("supplier.id"), nullable=False)
-
     files = relationship("OrderFile")
