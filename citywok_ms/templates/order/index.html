@@ -16,23 +16,27 @@
                     <th scope="col">{{_('Delivery Date')}}</th>
                     <th scope="col">{{_('Value')}}</th>
                     <th scope="col">{{_('Supplier')}}</th>
+                    <th scope="col">{{_('Detail')}}</th>
                 </tr>
             </thead>
             <tbody>
                 {% for order in orders %}
                 <tr>
                     <th>
-                        <a href="{{ url_for('order.detail',order_id=order.id) }}">
-                            <strong>
-                                {{ order.order_number }}
-                            </strong>
-                        </a>
+                        <strong>
+                            {{ order.order_number }}
+                        </strong>
                     </th>
                     <td>{{ moment(order.delivery_date).format('ll') }}</td>
                     <td>{{ order.value }}</td>
                     <td>
                         <a href="{{url_for('supplier.detail',supplier_id=order.supplier.id)}}">
                             {{ order.supplier.name }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{url_for('order.detail',order_id=order.id)}}">
+                            <span class="material-icons">more_vert</span>
                         </a>
                     </td>
                 </tr>
