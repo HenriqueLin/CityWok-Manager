@@ -1,7 +1,7 @@
 from citywok_ms import db
 from citywok_ms.auth.permissions import manager, shareholder
 from citywok_ms.file.forms import FileForm
-from citywok_ms.file.models import OrderFile
+from citywok_ms.file.models import File, OrderFile
 from citywok_ms.order.forms import OrderForm, OrderUpdateForm
 from citywok_ms.order.models import Order
 from citywok_ms.task import compress_file
@@ -84,3 +84,28 @@ def detail(order_id):
         order=order,
         file_form=FileForm(),
     )
+
+
+@order_bp.route("/<int:order_id>/upload", methods=["POST"])
+@manager.require(403)
+def upload(order_id):
+    form = FileForm()
+    file = form.file.data
+    if form.validate_on_submit():
+        db_file = OrderFile.create(form.file.data)
+        db_file.order_id = order_id
+        flash(
+            _('File "%(name)s" has been uploaded.', name=db_file.full_name), "success"
+        )
+        db.session.commit()
+        current_app.logger.info(f"Upload employee file {db_file}")
+        compress_file.queue(db_file.id)
+
+    elif file is not None:
+        flash(
+            _('Invalid file format "%(format)s".', format=File.split_file_format(file)),
+            "danger",
+        )
+    else:
+        flash(_("No file has been uploaded."), "danger")
+    return redirect(url_for("order.detail", order_id=order_id))

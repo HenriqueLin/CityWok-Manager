@@ -1,3 +1,5 @@
+from typing import List
+from citywok_ms.file.models import OrderFile
 from citywok_ms import db
 from citywok_ms.utils.models import CRUDMixin, SqliteDecimal
 from sqlalchemy import Column, Date, Integer, String, ForeignKey, Text
@@ -13,3 +15,25 @@ class Order(db.Model, CRUDMixin):
 
     supplier_id = Column(Integer, ForeignKey("supplier.id"), nullable=False)
     files = relationship("OrderFile")
+
+    @property
+    def active_files(self) -> List[OrderFile]:
+        return (
+            db.session.query(OrderFile)
+            .filter(
+                OrderFile.order_id == self.id,
+                OrderFile.delete_date.is_(None),
+            )
+            .all()
+        )
+
+    @property
+    def deleted_files(self) -> List[OrderFile]:
+        return (
+            db.session.query(OrderFile)
+            .filter(
+                OrderFile.order_id == self.id,
+                OrderFile.delete_date.isnot(None),
+            )
+            .all()
+        )
