@@ -77,7 +77,7 @@ class MultipleFileField(_MultipleFileField):
 
         if data is not None:
             self.data = data
-        else:
+        else:  # test: no cover
             self.raw_data = ()
 
 
@@ -117,7 +117,7 @@ class FilesAllowed(object):
         if not (
             field.data and all(isinstance(x, FileStorage) and x for x in field.data)
         ):
-            return
+            return  # test: no cover
 
         for data in field.data:
             filename = data.filename.lower()
@@ -131,9 +131,9 @@ class FilesAllowed(object):
                     or field.gettext(
                         "File does not have an approved extension: {extensions}"
                     ).format(extensions=", ".join(self.upload_set))
-                )
+                )  # test: no cover
 
-            if not self.upload_set.file_allowed(data, filename):
+            if not self.upload_set.file_allowed(data, filename):  # test: no cover
                 raise StopValidation(
                     self.message
                     or field.gettext("File does not have an approved extension.")

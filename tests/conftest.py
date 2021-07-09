@@ -8,8 +8,9 @@ import pytest
 from citywok_ms import create_app, current_app, db, principal, login
 from citywok_ms.auth.models import User
 from citywok_ms.employee.models import Employee
-from citywok_ms.file.models import EmployeeFile, SupplierFile
+from citywok_ms.file.models import EmployeeFile, OrderFile, SupplierFile
 from citywok_ms.supplier.models import Supplier
+from citywok_ms.order.models import Order
 from config import TestConfig
 from flask_login import login_user
 from flask_principal import Identity
@@ -195,3 +196,28 @@ def image():
     image.save(byte_io, "JPEG")
     byte_io.seek(0)
     return byte_io
+
+
+@pytest.fixture
+def order(supplier):
+    order = Order(
+        order_number="ORDER-1",
+        delivery_date=datetime.date.today(),
+        value=123,
+        supplier_id=1,
+    )
+    db.session.add(order)
+    db.session.commit()
+
+
+@pytest.fixture
+def order_with_file():
+    f = OrderFile(full_name="test_file.txt", order_id=1)
+    db.session.add(f)
+    db.session.flush()
+    with open(
+        os.path.join(current_app.config["UPLOAD_FOLDER"], str(f.id) + ".txt"), "x"
+    ) as file:
+        file.write("test_file")
+    f.size = os.path.getsize(f.path)
+    db.session.commit()
