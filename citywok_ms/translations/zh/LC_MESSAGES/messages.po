@@ -546,7 +546,7 @@ msgstr "登出"
 #: citywok_ms/templates/order/update.html:38
 #: citywok_ms/templates/supplier/form.html:69
 #: citywok_ms/templates/supplier/form.html:73
-msgid "Cancle"
+msgid "Cancel"
 msgstr "取消"
 
 #: citywok_ms/templates/auth/login.html:42

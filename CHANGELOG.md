@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Added
 - New `order` module, including relatives database model, forms, views and tests
 
+## [Unreleased]
+### Fixed
+- Typo of `Cancel` button and change it's CSS for consistency
+
 ## [0.2.1] - 2021-06-30
 ### Fixed
 - Fix missing log when visit `employee.export` and `supplier.export`

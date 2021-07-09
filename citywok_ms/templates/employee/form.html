@@ -105,11 +105,11 @@
             <div class="gx-3 d-print-none">
                 {% if request.endpoint == 'employee.new' %}
                 {{ form.submit(class="btn btn-outline-success ms-1 float-end") }}
-                <a href="{{url_for('employee.index')}}" class="btn btn-secondary float-end">{{_('Cancle')}}</a>
+                <a href="{{url_for('employee.index')}}" class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
                 {% elif request.endpoint == 'employee.update' %}
                 {{ form.update(class="btn btn-outline-primary ms-1 float-end") }}
                 <a href="{{url_for('employee.detail',employee_id=employee.id)}}"
-                    class="btn btn-secondary float-end">{{_('Cancle')}}</a>
+                    class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
                 {% endif %}
             </div>
         </div>
