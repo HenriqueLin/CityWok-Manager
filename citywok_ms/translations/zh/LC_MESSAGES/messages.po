@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-07-07 16:48+0100\n"
+"POT-Creation-Date: 2021-07-09 20:06+0100\n"
 "PO-Revision-Date: 2021-06-19 22:05+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -412,21 +412,21 @@ msgstr "更新文件"
 
 #: citywok_ms/order/forms.py:17 citywok_ms/order/forms.py:52
 #: citywok_ms/templates/order/detail.html:15
-#: citywok_ms/templates/order/index.html:14
+#: citywok_ms/templates/order/index.html:15
 #: citywok_ms/templates/supplier/detail.html:81
 msgid "Order Number"
 msgstr "订单号"
 
 #: citywok_ms/order/forms.py:21 citywok_ms/order/forms.py:56
 #: citywok_ms/templates/order/detail.html:17
-#: citywok_ms/templates/order/index.html:15
+#: citywok_ms/templates/order/index.html:16
 #: citywok_ms/templates/supplier/detail.html:82
 msgid "Delivery Date"
 msgstr "交付日期"
 
 #: citywok_ms/order/forms.py:26 citywok_ms/order/forms.py:61
 #: citywok_ms/templates/order/detail.html:19
-#: citywok_ms/templates/order/index.html:16
+#: citywok_ms/templates/order/index.html:17
 #: citywok_ms/templates/supplier/detail.html:83
 msgid "Value"
 msgstr "金额"
@@ -434,7 +434,7 @@ msgstr "金额"
 #: citywok_ms/order/forms.py:31 citywok_ms/order/forms.py:66
 #: citywok_ms/templates/layout.html:34
 #: citywok_ms/templates/order/detail.html:21
-#: citywok_ms/templates/order/index.html:17
+#: citywok_ms/templates/order/index.html:18
 msgid "Supplier"
 msgstr "供应商"
 
@@ -543,7 +543,7 @@ msgstr "登出"
 #: citywok_ms/templates/employee/form.html:112
 #: citywok_ms/templates/file/update.html:37
 #: citywok_ms/templates/order/new.html:43
-#: citywok_ms/templates/order/update.html:37
+#: citywok_ms/templates/order/update.html:38
 #: citywok_ms/templates/supplier/form.html:69
 #: citywok_ms/templates/supplier/form.html:73
 msgid "Cancle"
@@ -609,7 +609,7 @@ msgid "Active Employees"
 msgstr "激活员工"
 
 #: citywok_ms/templates/employee/index.html:9
-#: citywok_ms/templates/order/index.html:7
+#: citywok_ms/templates/order/index.html:8
 #: citywok_ms/templates/supplier/detail.html:74
 #: citywok_ms/templates/supplier/index.html:8
 msgid "New"
@@ -625,6 +625,7 @@ msgid "Suspended Employees"
 msgstr "冻结员工"
 
 #: citywok_ms/templates/employee/index_table.html:34
+#: citywok_ms/templates/order/index.html:19
 #: citywok_ms/templates/supplier/index.html:56
 msgid "Detail"
 msgstr "详情"
