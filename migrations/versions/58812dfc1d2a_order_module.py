@@ -1,17 +1,16 @@
-"""order model
+"""`order` module
 
-Revision ID: df067cb57c4a
+Revision ID: 58812dfc1d2a
 Revises: 31abbbb774c0
-Create Date: 2021-07-01 17:03:35.652147
+Create Date: 2021-07-09 20:17:50.750413
 
 """
 import citywok_ms
-from alembic import op
 import sqlalchemy as sa
-
+from alembic import op
 
 # revision identifiers, used by Alembic.
-revision = "df067cb57c4a"
+revision = "58812dfc1d2a"
 down_revision = "31abbbb774c0"
 branch_labels = None
 depends_on = None
@@ -25,6 +24,11 @@ def upgrade():
         sa.Column("order_number", sa.String(), nullable=False),
         sa.Column("delivery_date", sa.Date(), nullable=False),
         sa.Column("value", citywok_ms.utils.models.SqliteDecimal(2), nullable=False),
+        sa.Column("remark", sa.Text(), nullable=True),
+        sa.Column("supplier_id", sa.Integer(), nullable=False),
+        sa.ForeignKeyConstraint(
+            ["supplier_id"], ["supplier.id"], name=op.f("fk_order_supplier_id_supplier")
+        ),
         sa.PrimaryKeyConstraint("id", name=op.f("pk_order")),
     )
     with op.batch_alter_table("file", schema=None) as batch_op:
