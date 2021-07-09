@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
+## [Unreleased]
+### Added
+- New `order` module, including relatives database model, forms, views and tests
 
 ## [0.2.1] - 2021-06-30
 ### Fixed
