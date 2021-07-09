@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{% set active_page = "order" %}
 {% block content %}
 <div>
     <!-- title -->
@@ -39,7 +40,7 @@
             <div class="w-100 my-0"></div>
             <div class="gx-3 col-sm-6">
                 {{ form.submit(class="btn btn-outline-success ms-1 float-end") }}
-                <a href="{{url_for('auth.login')}}" class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
+                <a href="{{url_for('order.index')}}" class="btn btn-secondary float-end">{{_('Cancle')}}</a>
             </div>
         </div>
 </div>

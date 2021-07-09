@@ -1,15 +1,14 @@
-from werkzeug.datastructures import FileStorage
-from citywok_ms.file.forms import FileForm
 import os
 from datetime import datetime
 
-from sqlalchemy.ext.hybrid import hybrid_property
-
 from citywok_ms import db
+from citywok_ms.file.forms import FileForm
+from citywok_ms.utils.models import CRUDMixin
 from flask import current_app, url_for
 from humanize import naturalsize
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
-from citywok_ms.utils.models import CRUDMixin
+from sqlalchemy.ext.hybrid import hybrid_property
+from werkzeug.datastructures import FileStorage
 
 
 class File(db.Model, CRUDMixin):
@@ -106,5 +105,24 @@ class SupplierFile(File):
         file.save(
             os.path.join(current_app.config["UPLOAD_FOLDER"], db_file.internal_name)
         )
+        db_file.size = os.path.getsize(db_file.path)
+        return db_file
+
+
+class OrderFile(File):
+    order_id = Column(Integer, ForeignKey("order.id"))
+
+    __mapper_args__ = {"polymorphic_identity": "order_file"}
+
+    @property
+    def owner_url(self) -> str:
+        return url_for("order.detail", order_id=self.order_id, _anchor="Files")
+
+    @staticmethod
+    def create(f: FileStorage) -> "File":
+        db_file = OrderFile(full_name=f.filename)
+        db.session.add(db_file)
+        db.session.flush()
+        f.save(os.path.join(current_app.config["UPLOAD_FOLDER"], db_file.internal_name))
         db_file.size = os.path.getsize(db_file.path)
         return db_file

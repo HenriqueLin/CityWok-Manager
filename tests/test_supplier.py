@@ -334,7 +334,7 @@ def test_export_csv(client, user, supplier):
     assert response.status_code == 200
     for name in Supplier.columns_name.values():
         assert str(name) in data
-    for supplier in Supplier.get_all(sort="id", desc=False):
+    for supplier in Supplier.get_all():
         for attr in Supplier.__table__.columns:
             assert str(getattr(supplier, attr.name) or "-") in data
 
@@ -350,7 +350,7 @@ def test_export_excel(client, user, supplier):
     for name in Supplier.columns_name.values():
         assert str(name) in data
 
-    for supplier in Supplier.get_all(sort="id", desc=False):
+    for supplier in Supplier.get_all():
         for attr in ("name", "id"):
             value = getattr(supplier, attr)
             assert value in data.values
