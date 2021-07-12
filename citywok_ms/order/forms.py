@@ -1,12 +1,11 @@
 import datetime
 
-
 from citywok_ms.supplier.models import Supplier
 from citywok_ms.utils import FILEALLOWED
 from citywok_ms.utils.fields import FilesAllowed, FilesRequired, MultipleFileField
 from flask_babel import lazy_gettext as _l
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, HiddenField
+from wtforms import HiddenField, StringField, SubmitField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.fields.html5 import DateField, DecimalField
 from wtforms.validators import DataRequired, InputRequired, NumberRange
