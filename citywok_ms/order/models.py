@@ -14,6 +14,7 @@ class Order(db.Model, CRUDMixin):
     remark = Column(Text)
 
     supplier_id = Column(Integer, ForeignKey("supplier.id"), nullable=False)
+    expense_id = Column(Integer, ForeignKey("expense.id"))
     files = relationship("OrderFile")
 
     @property
