@@ -1,0 +1,13 @@
+{% for field in money_form if field.widget.input_type != 'hidden' %}
+<div class="col-sm-2">
+    {{ field.label (class="fw-bold form-label") }}
+    {% if money_form.errors %}
+    {{ field(class="form-control is-invalid") }}
+    {% else %}
+    {{ field(class="form-control") }}
+    {% endif %}
+</div>
+{% endfor %}
+{% if money_form.errors %}
+<span class="text-danger col-sm-8">{{ money_form.errors["cash"][0] }}</span>
+{% endif %}
