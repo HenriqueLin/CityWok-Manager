@@ -8,23 +8,17 @@
     <form action="" method="post" enctype='multipart/form-data' novalidate autocomplete="off">
         {{ form.hidden_tag() }}
         <div class="row gy-3 overflow-hidden justify-content-center">
-            <div class="col-sm-4">
-                {% with field=form.description %}
-                {% include 'field.html' %}
-                {% endwith %}
-            </div>
-            <div class="col-sm-4">
+            <div class="col-sm-8">
                 {% with field=form.date %}
                 {% include 'field.html' %}
                 {% endwith %}
             </div>
-            <div class="w-100 my-0"></div>
-            <div class="col-sm-4">
+            <div class="col-sm-8">
                 {% with field=form.category %}
                 {% include 'field.html' %}
                 {% endwith %}
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-8">
                 {% with field=form.supplier %}
                 {% include 'field.html' %}
                 {% endwith %}

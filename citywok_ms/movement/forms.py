@@ -1,7 +1,14 @@
-from wtforms.fields.core import FormField
-from citywok_ms.movement.models import Expense, CATEGORY
 import datetime
 
+from citywok_ms.employee.models import Employee
+from citywok_ms.movement.models import (
+    LABOR,
+    LaborExpense,
+    MATERIAL,
+    OPERATION,
+    TAX,
+    NonLaborExpense,
+)
 from citywok_ms.supplier.models import Supplier
 from citywok_ms.utils import FILEALLOWED
 from citywok_ms.utils.fields import (
@@ -10,10 +17,12 @@ from citywok_ms.utils.fields import (
     FilesRequired,
     MultipleFileField,
 )
-from flask_babel import lazy_gettext as _l, _
+from flask_babel import _
+from flask_babel import lazy_gettext as _l
 from flask_wtf import FlaskForm
-from wtforms import HiddenField, StringField, SubmitField, TextAreaField
+from wtforms import SubmitField, TextAreaField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
+from wtforms.fields.core import FormField
 from wtforms.fields.html5 import DateField, DecimalField
 from wtforms.validators import (
     DataRequired,
@@ -23,7 +32,6 @@ from wtforms.validators import (
     ValidationError,
 )
 from wtforms_alchemy.utils import choice_type_coerce_factory
-from citywok_ms.movement.models import NonLaborExpense
 
 
 class MoneyForm(FlaskForm):
@@ -54,10 +62,6 @@ class MoneyForm(FlaskForm):
 
 
 class NonLaborExpenseForm(FlaskForm):
-    description = StringField(
-        label=_l("Description"),
-        validators=[InputRequired()],
-    )
     date = DateField(
         label=_l("Date"),
         validators=[InputRequired()],
@@ -65,7 +69,11 @@ class NonLaborExpenseForm(FlaskForm):
     )
     category = BlankSelectField(
         label=_l("Category"),
-        choices=CATEGORY[1:],
+        choices=(
+            (_l("Operation"), tuple((x, y) for x, y, _ in OPERATION)),
+            (_l("Material"), tuple((x, y) for x, y, _ in MATERIAL)),
+            (_l("Tax"), tuple((x, y) for x, y, _ in TAX)),
+        ),
         coerce=choice_type_coerce_factory(NonLaborExpense.category.type),
         message="---",
         validators=[InputRequired()],
