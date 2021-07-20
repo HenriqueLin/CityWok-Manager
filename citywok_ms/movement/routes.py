@@ -38,4 +38,29 @@ def new_non_labor():
         form=form,
     )
 
+
+@expense_bp.route("/new/labor", methods=["GET", "POST"])
+def new_labor():
+    form = LaborExpenseForm()
+    if form.validate_on_submit():
+        expense = LaborExpense(
+            date=form.date.data,
+            category=form.category.data,
+            remark=form.remark.data,
+            employee=form.employee.data,
+            cash=form.value.cash.data,
+            transfer=form.value.transfer.data,
+            card=form.value.card.data,
+            check=form.value.check.data,
+        )
+        for f in form.files.data:
+            db_file = ExpenseFile.create(f)
+            expense.files.append(db_file)
+            compress_file.queue(db_file.id)
+        db.session.add(expense)
+        db.session.commit()
+        flash(_("New labor expense has been registed."), "success")
+        return redirect(url_for("expense.new_labor"))
+    return render_template(
+        "movement/expense/new_labor.html", title=_("New Labor Expense"), form=form
     )

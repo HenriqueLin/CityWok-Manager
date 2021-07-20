@@ -101,3 +101,41 @@ class NonLaborExpenseForm(FlaskForm):
     )
 
     submit = SubmitField(label=_l("Add"))
+
+
+class LaborExpenseForm(FlaskForm):
+    category = BlankSelectField(
+        label=_l("Category"),
+        choices=tuple((x, y) for x, y, _ in LABOR),
+        coerce=choice_type_coerce_factory(LaborExpense.category.type),
+        message="---",
+        validators=[InputRequired()],
+    )
+    date = DateField(
+        label=_l("Date"),
+        validators=[InputRequired()],
+        default=datetime.date.today(),
+    )
+    value = FormField(MoneyForm)
+
+    employee = QuerySelectField(
+        label=_l("Employee"),
+        query_factory=lambda: Employee.query,
+        get_pk=lambda x: x.id,
+        get_label=lambda x: f"{x.id}: {x.full_name}",
+        allow_blank=True,
+        blank_text="---",
+        validators=[DataRequired()],
+    )
+    remark = TextAreaField(
+        label=_l("Remark"),
+        validators=[Optional()],
+        filters=[lambda x: x or None],
+    )
+
+    files = MultipleFileField(
+        label=_l("Files"),
+        validators=[FilesRequired(), FilesAllowed(FILEALLOWED)],
+    )
+
+    submit = SubmitField(label=_l("Add"))
