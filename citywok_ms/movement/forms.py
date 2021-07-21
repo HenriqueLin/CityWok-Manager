@@ -21,7 +21,7 @@ from flask_babel import _
 from flask_babel import lazy_gettext as _l
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, TextAreaField
-from wtforms.ext.sqlalchemy.fields import QuerySelectField
+from wtforms.ext.sqlalchemy.fields import QuerySelectField, QuerySelectMultipleField
 from wtforms.fields.core import FormField
 from wtforms.fields.html5 import DateField, DecimalField
 from wtforms.validators import (
@@ -100,6 +100,55 @@ class NonLaborExpenseForm(FlaskForm):
         validators=[FilesRequired(), FilesAllowed(FILEALLOWED)],
     )
 
+    submit = SubmitField(label=_l("Add"))
+
+
+class OrderPaymentForm(FlaskForm):
+    date = DateField(
+        label=_l("Date"),
+        validators=[InputRequired()],
+        default=datetime.date.today(),
+    )
+    category = BlankSelectField(
+        label=_l("Category"),
+        choices=(
+            (_l("Operation"), tuple((x, y) for x, y, _ in OPERATION)),
+            (_l("Material"), tuple((x, y) for x, y, _ in MATERIAL)),
+            (_l("Tax"), tuple((x, y) for x, y, _ in TAX)),
+        ),
+        coerce=choice_type_coerce_factory(NonLaborExpense.category.type),
+        message="---",
+        validators=[InputRequired()],
+    )
+    value = FormField(MoneyForm)
+
+    supplier = QuerySelectField(
+        label=_l("Supplier"),
+        query_factory=lambda: Supplier.query,
+        get_pk=lambda x: x.id,
+        get_label=lambda x: f"{x.id}: {x.name}",
+        allow_blank=True,
+        blank_text="---",
+        validators=[DataRequired()],
+    )
+    orders = QuerySelectMultipleField(
+        label=_l("Orders"),
+        get_pk=lambda x: x.id,
+        get_label=lambda x: f"{x.order_number}: {x.value}",
+        validators=[DataRequired()],
+    )
+    remark = TextAreaField(
+        label=_l("Remark"),
+        validators=[Optional()],
+        filters=[lambda x: x or None],
+    )
+
+    files = MultipleFileField(
+        label=_l("Files"),
+        validators=[FilesRequired(), FilesAllowed(FILEALLOWED)],
+    )
+
+    load = SubmitField()
     submit = SubmitField(label=_l("Add"))
 
 
