@@ -145,3 +145,22 @@ class ExpenseFile(File):
         f.save(os.path.join(current_app.config["UPLOAD_FOLDER"], db_file.internal_name))
         db_file.size = os.path.getsize(db_file.path)
         return db_file
+
+
+class SalaryPaymentFile(File):
+    salary_payment_id = Column(Integer, ForeignKey("salary_payment.month"))
+
+    __mapper_args__ = {"polymorphic_identity": "salary_payment_file"}
+
+    # @property
+    # def owner_url(self) -> str:
+    #     return url_for("order.detail", order_id=self.order_id, _anchor="Files")
+
+    @staticmethod
+    def create(f: FileStorage) -> "File":
+        db_file = SalaryPaymentFile(full_name=f.filename)
+        db.session.add(db_file)
+        db.session.flush()
+        f.save(os.path.join(current_app.config["UPLOAD_FOLDER"], db_file.internal_name))
+        db_file.size = os.path.getsize(db_file.path)
+        return db_file

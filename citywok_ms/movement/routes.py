@@ -1,22 +1,17 @@
-from citywok_ms.order.models import Order
-from citywok_ms.file.models import ExpenseFile
-from citywok_ms.movement.models import LaborExpense, NonLaborExpense
-from citywok_ms.movement.forms import (
-    LaborExpenseForm,
-    NonLaborExpenseForm,
-    OrderPaymentForm,
-)
-from flask import (
-    Blueprint,
-    redirect,
-    render_template,
-    flash,
-    url_for,
-    request,
-)
+import datetime
+
 from citywok_ms import db
-from flask_babel import _
+from citywok_ms.employee.models import Employee
+from citywok_ms.file.models import ExpenseFile
+from citywok_ms.movement.forms import (LaborExpenseForm, MonthForm,
+                                       NonLaborExpenseForm, OrderPaymentForm,
+                                       SalaryForm)
+from citywok_ms.movement.models import (LaborExpense, NonLaborExpense,
+                                        SalaryPayment)
+from citywok_ms.order.models import Order
 from citywok_ms.task import compress_file
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_babel import _
 from sqlalchemy import false
 
 expense_bp = Blueprint("expense", __name__, url_prefix="/expense")
@@ -124,3 +119,47 @@ def new_order_payment():
         title=_("New Orders Payment"),
         form=form,
     )
+
+
+@expense_bp.route("/new/salary/<int:employee_id>/<month_str>", methods=["GET", "POST"])
+def new_salary(employee_id, month_str):
+    month = datetime.datetime.strptime(month_str, "%Y-%m").date()
+    form = SalaryForm()
+    employee = Employee.get_or_404(employee_id)
+    if employee.payed(month):
+        flash(_("Employee already payed at the given month."), "warning")
+        return redirect(url_for("main.index"))  # FIXME:
+    if form.validate_on_submit():
+        salary_payment = SalaryPayment.get_or_create(month)
+        expense = LaborExpense(
+            date=form.date.data,
+            category="labor:salary",
+            remark=form.remark.data,
+            employee=employee,
+            cash=form.value.cash.data,
+            transfer=form.value.transfer.data,
+            card=form.value.card.data,
+            check=form.value.check.data,
+        )
+        for f in form.files.data:
+            db_file = ExpenseFile.create(f)
+            expense.files.append(db_file)
+            compress_file.queue(db_file.id)
+        db.session.add(expense)
+        salary_payment.expenses.append(expense)
+        db.session.commit()
+        flash(_("New salary has been registed."), "success")
+        return redirect(url_for("expense.new_labor"))
+    return render_template(
+        "movement/expense/new_salary.html",
+        title=_("New Salary"),
+        form=form,
+        employee=employee,
+        month=month,
+        last_payments=db.session.query(LaborExpense)
+        .filter(LaborExpense.employee_id == employee_id)
+        .order_by(LaborExpense.date)
+        .limit(10)
+        .all(),
+    )
+

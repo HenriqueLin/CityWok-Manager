@@ -1,3 +1,4 @@
+import datetime
 from flask_babel import lazy_gettext as _l
 from sqlalchemy.orm import relationship
 from citywok_ms import db
@@ -73,6 +74,8 @@ class LaborExpense(Expense):
     employee_id = Column(Integer, ForeignKey("employee.id"), nullable=False)
     employee = relationship("Employee", backref="expenses")
 
+    month_id = Column(Date, ForeignKey("salary_payment.month"))
+
     __mapper_args__ = {
         "polymorphic_identity": "labor_expense",
     }
@@ -89,3 +92,18 @@ class NonLaborExpense(Expense):
     __mapper_args__ = {
         "polymorphic_identity": "non_labor_expense",
     }
+
+
+class SalaryPayment(db.Model):
+    month = Column(Date, primary_key=True)
+
+    expenses = relationship("LaborExpense", backref="month")
+    files = relationship("SalaryPaymentFile")
+
+    @classmethod
+    def get_or_create(cls, month):
+        salary_payment = db.session.query(cls).filter(month == month).first()
+        if not salary_payment:
+            salary_payment = cls(month=month)
+            db.session.add(salary_payment)
+        return salary_payment

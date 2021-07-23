@@ -155,7 +155,7 @@ class OrderPaymentForm(FlaskForm):
 class LaborExpenseForm(FlaskForm):
     category = BlankSelectField(
         label=_l("Category"),
-        choices=tuple((x, y) for x, y, _ in LABOR),
+        choices=tuple((x, y) for x, y, _ in LABOR if x != "labor:salary"),
         coerce=choice_type_coerce_factory(LaborExpense.category.type),
         message="---",
         validators=[InputRequired()],
@@ -176,6 +176,27 @@ class LaborExpenseForm(FlaskForm):
         blank_text="---",
         validators=[DataRequired()],
     )
+    remark = TextAreaField(
+        label=_l("Remark"),
+        validators=[Optional()],
+        filters=[lambda x: x or None],
+    )
+
+    files = MultipleFileField(
+        label=_l("Files"),
+        validators=[FilesRequired(), FilesAllowed(FILEALLOWED)],
+    )
+
+    submit = SubmitField(label=_l("Add"))
+
+
+class SalaryForm(FlaskForm):
+    date = DateField(
+        label=_l("Payment Date"),
+        validators=[InputRequired()],
+        default=datetime.date.today(),
+    )
+    value = FormField(MoneyForm)
     remark = TextAreaField(
         label=_l("Remark"),
         validators=[Optional()],
