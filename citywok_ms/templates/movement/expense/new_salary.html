@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% set active_page = "order" %}
+{% set active_page = "expense" %}
 {% block content %}
 <div>
     <!-- title -->
@@ -10,8 +10,11 @@
             <dt class="col-4">{{_('ID')}}:</dt>
             <dd class="col-8">{{ employee.id }}</dd>
             <dt class="col-4">{{_('Name')}}:</dt>
-            <dd class="col-8"> <a href="{{url_for('employee.detail',employee_id=employee.id)}}" target="_blank">{{
-                    employee.full_name }}</a></dd>
+            <dd class="col-8">
+                <a href="{{url_for('employee.detail',employee_id=employee.id)}}" target="_blank">{{
+                    employee.full_name }}
+                </a>
+            </dd>
             <dt class="col-4">{{_('Chinese Name')}}:</dt>
             <dd class="col-8">{{ employee.zh_name or '-'}}</dd>
             <dt class="col-4">{{_('Accountant ID')}}:</dt>
