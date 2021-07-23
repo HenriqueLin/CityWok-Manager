@@ -1,5 +1,5 @@
 {% for field in money_form if field.widget.input_type != 'hidden' %}
-<div class="col-sm-2">
+<div class="col-sm-3">
     {{ field.label (class="fw-bold form-label") }}
     {% if money_form.errors %}
     {{ field(class="form-control is-invalid") }}
