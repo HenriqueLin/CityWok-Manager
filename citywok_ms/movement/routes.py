@@ -3,21 +3,76 @@ import datetime
 from citywok_ms import db
 from citywok_ms.employee.models import Employee
 from citywok_ms.file.models import ExpenseFile
-from citywok_ms.movement.forms import (LaborExpenseForm, MonthForm,
-                                       NonLaborExpenseForm, OrderPaymentForm,
-                                       SalaryForm)
-from citywok_ms.movement.models import (LaborExpense, NonLaborExpense,
-                                        SalaryPayment)
+from citywok_ms.movement.forms import (
+    DateForm,
+    LaborExpenseForm,
+    MonthForm,
+    NonLaborExpenseForm,
+    OrderPaymentForm,
+    SalaryForm,
+)
+from citywok_ms.movement.models import (
+    ROOT,
+    Expense,
+    LaborExpense,
+    NonLaborExpense,
+    SalaryPayment,
+)
 from citywok_ms.order.models import Order
 from citywok_ms.task import compress_file
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_babel import _
-from sqlalchemy import false
+from sqlalchemy import false, func
+from sqlalchemy.orm import with_polymorphic
 
 expense_bp = Blueprint("expense", __name__, url_prefix="/expense")
 
 
 # Expenses
+@expense_bp.route("/", methods=["GET", "POST"])
+@expense_bp.route("/<date_str>", methods=["GET", "POST"])
+def index(date_str=None):
+    if date_str is None:
+        return redirect(url_for("expense.index", date_str=datetime.date.today()))
+
+    form = DateForm(date=datetime.datetime.strptime(date_str, "%Y-%m-%d"))
+    if form.validate_on_submit():
+        return redirect(url_for("expense.index", date_str=form.date.data))
+    else:
+        date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+
+    expense = with_polymorphic(Expense, "*")
+    query = db.session.query(expense).filter(Expense.date == date)
+    category_query = (
+        query.with_entities(
+            func.sum(Expense.total).label("amount"),
+            func.substr(
+                Expense.category, 1, func.instr(expense.category, ":") - 1
+            ).label("root_category"),
+        )
+        .group_by("root_category")
+        .order_by("root_category")
+    )
+    category_label = [str(dict(ROOT)[x.root_category]) for x in category_query.all()]
+    category_value = [str(x.amount) for x in category_query.all()]
+
+    method = query.with_entities(
+        func.coalesce(func.sum(Expense.cash), 0).label("cash"),
+        func.coalesce(func.sum(Expense.card), 0).label("card"),
+        func.coalesce(func.sum(Expense.check), 0).label("check"),
+        func.coalesce(func.sum(Expense.transfer), 0).label("transfer"),
+    ).first()
+    return render_template(
+        "movement/expense/index.html",
+        title=_("Expenses"),
+        form=form,
+        category_value=category_value,
+        category_label=category_label,
+        method=method,
+        expenses=query.all(),
+    )
+
+
 @expense_bp.route("/new/non_labor", methods=["GET", "POST"])
 def new_non_labor():
     form = NonLaborExpenseForm()
@@ -39,7 +94,7 @@ def new_non_labor():
         db.session.add(expense)
         db.session.commit()
         flash(_("New non-labor expense has been registed."), "success")
-        return redirect(url_for("expense.new_non_labor"))
+        return redirect(url_for("expense.index"))
     return render_template(
         "movement/expense/new_non_labor.html",
         title=_("New Non-Labor Expense"),
@@ -68,7 +123,7 @@ def new_labor():
         db.session.add(expense)
         db.session.commit()
         flash(_("New labor expense has been registed."), "success")
-        return redirect(url_for("expense.new_labor"))
+        return redirect(url_for("expense.index"))
     return render_template(
         "movement/expense/new_labor.html", title=_("New Labor Expense"), form=form
     )
@@ -110,7 +165,7 @@ def new_order_payment():
             db.session.add(expense)
             db.session.commit()
             flash(_("New labor expense has been registed."), "success")
-            return redirect(url_for("expense.new_labor"))
+            return redirect(url_for("expense.index"))
     else:
         form.orders.query_factory = lambda: db.session.query(false()).filter(false())
 
@@ -149,7 +204,7 @@ def new_salary(employee_id, month_str):
         salary_payment.expenses.append(expense)
         db.session.commit()
         flash(_("New salary has been registed."), "success")
-        return redirect(url_for("expense.new_labor"))
+        return redirect(url_for("expense.index"))
     return render_template(
         "movement/expense/new_salary.html",
         title=_("New Salary"),

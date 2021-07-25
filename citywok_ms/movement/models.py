@@ -5,6 +5,7 @@ from citywok_ms import db
 from citywok_ms.utils.models import CRUDMixin, SqliteDecimal
 from sqlalchemy import Column, Date, Integer, Text, ForeignKey, String
 from sqlalchemy_utils import ChoiceType
+from sqlalchemy.ext.hybrid import hybrid_property
 
 LABOR = (
     ("labor:salary", _l("Salary"), _l("Labor - Salary")),
@@ -42,6 +43,12 @@ TAX = (
     ("tax:iuc", _l("IUC"), _l("Tax - IUC")),
     ("tax:other", _l("Other"), _l("Tax - Other")),
 )
+ROOT = (
+    ("labor", _l("Labor")),
+    ("material", _l("Material")),
+    ("operation", _l("Operation")),
+    ("tax", _l("Tax")),
+)
 
 
 class Expense(db.Model, CRUDMixin):
@@ -63,7 +70,7 @@ class Expense(db.Model, CRUDMixin):
 
     __mapper_args__ = {"polymorphic_on": type, "polymorphic_identity": "expense"}
 
-    @property
+    @hybrid_property
     def total(self):
         return self.cash + self.card + self.transfer + self.check
 

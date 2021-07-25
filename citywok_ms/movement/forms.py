@@ -190,6 +190,13 @@ class LaborExpenseForm(FlaskForm):
     submit = SubmitField(label=_l("Add"))
 
 
+class DateForm(FlaskForm):
+    date = DateField(
+        label=_l("Date"),
+        default=datetime.datetime.today,
+        validators=[InputRequired()],
+    )
+
 class SalaryForm(FlaskForm):
     date = DateField(
         label=_l("Payment Date"),
