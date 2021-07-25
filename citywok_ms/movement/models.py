@@ -74,6 +74,10 @@ class Expense(db.Model, CRUDMixin):
     def total(self):
         return self.cash + self.card + self.transfer + self.check
 
+    @hybrid_property
+    def non_cash(self):
+        return self.card + self.transfer + self.check
+
 
 class LaborExpense(Expense):
     id = Column(Integer, ForeignKey("expense.id"), primary_key=True)
@@ -109,7 +113,7 @@ class SalaryPayment(db.Model):
 
     @classmethod
     def get_or_create(cls, month):
-        salary_payment = db.session.query(cls).filter(month == month).first()
+        salary_payment = db.session.query(cls).filter(cls.month == month).first()
         if not salary_payment:
             salary_payment = cls(month=month)
             db.session.add(salary_payment)

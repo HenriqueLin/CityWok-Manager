@@ -1,0 +1,82 @@
+{% extends 'layout.html' %}
+{% set active_page = "expense" %}
+{% block content %}
+<div>
+    <div class="d-flex justify-content-between flex-wrap flex-sm-nowrap align-items-center">
+        <h1>{{title}}</h1>
+        <form action="" method="post" novalidate autocomplete="off">
+            {{ form.hidden_tag() }}
+            <div class="row gy-3 overflow-hidden">
+                <div>
+                    {{ form.month(class="form-control", onchange="form.submit()") }}
+                </div>
+            </div>
+        </form>
+    </div>
+    <hr>
+    <h3>{{_('Unpayed')}}</h3>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered text-nowrap text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">{{_('ID')}}</th>
+                    <th scope="col">{{_('Name')}}</th>
+                    <th scope="col">{{_('Chinese Name')}}</th>
+                    <th scope="col">{{_('Pay')}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in active %}
+                <tr>
+                    <th>{{ employee.id }}</th>
+                    <td>{{ employee.full_name }}</td>
+                    <td>{{ employee.zh_name or "-" }}</td>
+                    <td>
+                        <a href="{{ url_for('expense.new_salary',employee_id=employee.id,month_str=month_str) }}">
+                            <span class="material-icons">
+                                payments
+                            </span>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <hr>
+    <h3>{{_('Payed')}}</h3>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered text-nowrap text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">{{_('ID')}}</th>
+                    <th scope="col">{{_('Name')}}</th>
+                    <th scope="col">{{_('Chinese Name')}}</th>
+                    <th scope="col">{{_('Cash')}}</th>
+                    <th scope="col">{{_('Non-Cash')}}</th>
+                    <th scope="col">{{_('Edit')}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee, cash, non_cash in payed %}
+                <tr>
+                    <th>{{ employee.id }}</th>
+                    <td>{{ employee.full_name }}</td>
+                    <td>{{ employee.zh_name or "-" }}</td>
+                    <td>{{ cash }}</td>
+                    <td>{{ non_cash }}</td>
+                    <td>
+                        <a href="#">
+                            <span class="material-icons">
+                                edit
+                            </span>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}

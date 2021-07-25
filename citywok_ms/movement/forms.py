@@ -197,6 +197,17 @@ class DateForm(FlaskForm):
         validators=[InputRequired()],
     )
 
+
+class MonthForm(FlaskForm):
+    month = DateField(
+        label=_l("Month"),
+        default=datetime.datetime.today,
+        validators=[InputRequired()],
+        format="%Y-%m",
+        render_kw={"type": "month"},
+    )
+
+
 class SalaryForm(FlaskForm):
     date = DateField(
         label=_l("Payment Date"),

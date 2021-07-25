@@ -1,5 +1,7 @@
 import datetime
 
+from sqlalchemy.sql.elements import not_
+
 from citywok_ms import db
 from citywok_ms.employee.models import Employee
 from citywok_ms.file.models import ExpenseFile
@@ -183,7 +185,7 @@ def new_salary(employee_id, month_str):
     employee = Employee.get_or_404(employee_id)
     if employee.payed(month):
         flash(_("Employee already payed at the given month."), "warning")
-        return redirect(url_for("main.index"))  # FIXME:
+        return redirect(url_for("expense.salary_index"))
     if form.validate_on_submit():
         salary_payment = SalaryPayment.get_or_create(month)
         expense = LaborExpense(
@@ -204,7 +206,7 @@ def new_salary(employee_id, month_str):
         salary_payment.expenses.append(expense)
         db.session.commit()
         flash(_("New salary has been registed."), "success")
-        return redirect(url_for("expense.index"))
+        return redirect(url_for("expense.salary_index"))
     return render_template(
         "movement/expense/new_salary.html",
         title=_("New Salary"),
@@ -218,3 +220,37 @@ def new_salary(employee_id, month_str):
         .all(),
     )
 
+
+@expense_bp.route("/salary", methods=["GET", "POST"])
+@expense_bp.route("/salary/<month_str>", methods=["GET", "POST"])
+def salary_index(month_str=None):
+    if month_str is None:
+        return redirect(
+            url_for(
+                "expense.salary_index",
+                month_str=datetime.datetime.today().strftime("%Y-%m"),
+            )
+        )
+    month = datetime.datetime.strptime(month_str, "%Y-%m").date()
+    form = MonthForm(month=month)
+    if form.validate_on_submit():
+        return redirect(
+            url_for("expense.salary_index", month_str=form.month.data.strftime("%Y-%m"))
+        )
+
+    payed = db.session.query(Employee, LaborExpense.cash, LaborExpense.non_cash).filter(
+        Employee.payed(month),
+        LaborExpense.employee_id == Employee.id,
+        LaborExpense.month_id == month,
+    )
+    active = db.session.query(Employee).filter(
+        not_(Employee.payed(month)), Employee.active
+    )
+    return render_template(
+        "movement/expense/salary_index.html",
+        title=_("Salary Payment"),
+        form=form,
+        payed=payed.all(),
+        active=active.all(),
+        month_str=month_str,
+    )

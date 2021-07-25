@@ -72,15 +72,11 @@ class Employee(db.Model, CRUDMixin):
 
     @hybrid_method
     def payed(self, month):
-        return (
-            db.session.query(Employee.id)
-            .join(LaborExpense, SalaryPayment)
-            .filter(
-                Employee.id == self.id,
-                Employee.expenses.any(SalaryPayment.month == month),
-            )
-            .scalar()
-        )
+        return any(expense.month_id == month for expense in self.expenses)
+
+    @payed.expression
+    def payed(self, month):
+        return Employee.expenses.any(LaborExpense.month_id == month)
 
     @validates("sex")
     def validate_sex(self, key, sex):
