@@ -75,7 +75,7 @@ def index(date_str=None):
     )
 
 
-@expense_bp.route("/new/non_labor", methods=["GET", "POST"])
+@expense_bp.route("/non_labor/new", methods=["GET", "POST"])
 def new_non_labor():
     form = NonLaborExpenseForm()
     if form.validate_on_submit():
@@ -104,7 +104,7 @@ def new_non_labor():
     )
 
 
-@expense_bp.route("/new/labor", methods=["GET", "POST"])
+@expense_bp.route("/labor/new", methods=["GET", "POST"])
 def new_labor():
     form = LaborExpenseForm()
     if form.validate_on_submit():
@@ -131,7 +131,7 @@ def new_labor():
     )
 
 
-@expense_bp.route("/new/order_payment", methods=["GET", "POST"])
+@expense_bp.route("/order_payment/new", methods=["GET", "POST"])
 def new_order_payment():
     form = OrderPaymentForm()
     if form.is_submitted():
@@ -178,7 +178,7 @@ def new_order_payment():
     )
 
 
-@expense_bp.route("/new/salary/<int:employee_id>/<month_str>", methods=["GET", "POST"])
+@expense_bp.route("/salary/new/<int:employee_id>/<month_str>", methods=["GET", "POST"])
 def new_salary(employee_id, month_str):
     month = datetime.datetime.strptime(month_str, "%Y-%m").date()
     form = SalaryForm()
