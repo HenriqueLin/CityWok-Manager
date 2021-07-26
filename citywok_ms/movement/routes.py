@@ -107,7 +107,7 @@ def new_non_labor():
         flash(_("New non-labor expense has been registed."), "success")
         return redirect(url_for("expense.index"))
     return render_template(
-        "movement/expense/new_non_labor.html",
+        "movement/expense/non_labor.html",
         title=_("New Non-Labor Expense"),
         form=form,
     )
@@ -287,17 +287,46 @@ def update(expense_id):
         abort(404)
 
     if isinstance(expense, LaborExpense):
-        if expense.month is not None:
+        if expense.month:
             return redirect(url_for("expense.update_salary", expense_id=expense_id))
         else:
             return redirect(url_for("expense.update_labor", expense_id=expense_id))
     elif isinstance(expense, NonLaborExpense):
-        if expense.orders is not None:
+        if expense.orders:
             return redirect(
                 url_for("expense.update_order_payment", expense_id=expense_id)
             )
         else:
             return redirect(url_for("expense.update_non_labor", expense_id=expense_id))
+
+
+@expense_bp.route("/update/non_labor/<int:expense_id>", methods=["GET", "POST"])
+def update_non_labor(expense_id):
+    expense = NonLaborExpense.get_or_404(expense_id)
+    form = NonLaborExpenseForm()
+    if form.validate_on_submit():
+        expense.date = form.date.data
+        expense.category = form.category.data
+        expense.remark = form.remark.data
+        expense.supplier = form.supplier.data
+        expense.cash = form.value.cash.data
+        expense.transfer = form.value.transfer.data
+        expense.card = form.value.card.data
+        expense.check = form.value.check.data
+        db.session.commit()
+        flash(_("Non-labor expense has been updated."), "success")
+        return redirect(url_for("expense.detail", expense_id=expense_id))
+    if not form.is_submitted():
+        form.process(obj=expense)
+        form.value.cash.data = expense.cash
+        form.value.transfer.data = expense.transfer
+        form.value.card.data = expense.card
+        form.value.check.data = expense.check
+    return render_template(
+        "movement/expense/non_labor.html",
+        title=_("Update Non-Labor Expense"),
+        form=form,
+    )
 
 
 @expense_bp.route("/update/labor/<int:expense_id>", methods=["GET", "POST"])
