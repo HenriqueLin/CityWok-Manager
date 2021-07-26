@@ -133,9 +133,9 @@ class ExpenseFile(File):
 
     __mapper_args__ = {"polymorphic_identity": "expense_file"}
 
-    # @property
-    # def owner_url(self) -> str:
-    #     return url_for("order.detail", order_id=self.order_id, _anchor="Files")
+    @property
+    def owner_url(self) -> str:
+        return url_for("expense.detail", expense_id=self.expense_id, _anchor="Files")
 
     @staticmethod
     def create(f: FileStorage) -> "File":
