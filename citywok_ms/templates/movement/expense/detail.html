@@ -5,7 +5,8 @@
     <!-- title -->
     <h1>{{title}}</h1>
     <div class="d-print-none">
-        <a href="#" class="btn btn-outline-primary " id="update_button">{{_('Update')}}</a>
+        <a href="{{url_for('expense.update',expense_id=expense.id)}}" class="btn btn-outline-primary "
+            id="update_button">{{_('Update')}}</a>
         <form action="#" method="post" class="d-inline">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <input type="submit" value="{{_('Delete')}}" class="btn btn-outline-danger">

@@ -217,7 +217,7 @@ def new_salary(employee_id, month_str):
         flash(_("New salary has been registed."), "success")
         return redirect(url_for("expense.salary_index"))
     return render_template(
-        "movement/expense/new_salary.html",
+        "movement/expense/salary.html",
         title=_("New Salary"),
         form=form,
         employee=employee,
@@ -278,6 +278,57 @@ def detail(expense_id):
         expense=expense,
     )
 
+
+@expense_bp.route("/update/<int:expense_id>")
+def update(expense_id):
+    polymorphic = with_polymorphic(Expense, "*")
+    expense = db.session.query(polymorphic).filter(Expense.id == expense_id).first()
+    if expense is None:
+        abort(404)
+
+    if expense.employee is not None:
+        if expense.month is not None:
+            return redirect(url_for("expense.update_salary", expense_id=expense_id))
+        else:
+            return redirect(url_for("expense.update_labor", expense_id=expense_id))
+    elif expense.supplier is not None:
+        if expense.orders is not None:
+            return redirect(
+                url_for("expense.update_order_payment", expense_id=expense_id)
+            )
+        else:
+            return redirect(url_for("expense.update_non_labor", expense_id=expense_id))
+
+
+@expense_bp.route("/update/salary/<int:expense_id>", methods=["GET", "POST"])
+def update_salary(expense_id):
+    expense = LaborExpense.get_or_404(expense_id)
+    form = SalaryForm()
+    del form.files
+
+    if form.validate_on_submit():
+        expense.date = form.date.data
+        expense.remark = form.remark.data
+        expense.cash = form.value.cash.data
+        expense.transfer = form.value.transfer.data
+        expense.card = form.value.card.data
+        expense.check = form.value.check.data
+        db.session.commit()
+        flash(_("Salary has been updated."), "success")
+        return redirect(url_for("expense.detail", expense_id=expense_id))
+    else:
+        form.process(obj=expense)
+        form.value.cash.data = expense.cash
+        form.value.transfer.data = expense.transfer
+        form.value.card.data = expense.card
+        form.value.check.data = expense.check
+    return render_template(
+        "movement/expense/salary.html",
+        title=_("Update Salary"),
+        form=form,
+        employee=expense.employee,
+        month=expense.month_id,
+    )
 @expense_bp.route("/<int:expense_id>/upload", methods=["POST"])
 def upload(expense_id):
     form = FileForm()
