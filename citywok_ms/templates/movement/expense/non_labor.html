@@ -41,10 +41,12 @@
             <div class="gx-3">
                 {% if request.endpoint == 'expense.new_non_labor' %}
                 {{ form.submit(class="btn btn-outline-success ms-1 float-end") }}
+                <a href="{{url_for('expense.index')}}" class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
                 {% elif request.endpoint == 'expense.update_non_labor' %}
                 {{ form.update(class="btn btn-outline-primary ms-1 float-end") }}
+                <a href="{{url_for('expense.detail',expense_id=expense_id)}}"
+                    class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
                 {% endif %}
-                <a href="{{url_for('order.index')}}" class="btn btn-secondary float-end">{{_('Cancle')}}</a>
             </div>
         </div>
     </form>

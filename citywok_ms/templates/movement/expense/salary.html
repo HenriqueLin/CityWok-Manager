@@ -93,10 +93,13 @@
             <div class="gx-3">
                 {% if request.endpoint == 'expense.new_salary' %}
                 {{ form.submit(class="btn btn-outline-success ms-1 float-end") }}
+                <a href="{{url_for('expense.salary_index')}}"
+                    class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
                 {% elif request.endpoint == 'expense.update_salary' %}
                 {{ form.update(class="btn btn-outline-primary ms-1 float-end") }}
+                <a href="{{url_for('expense.detail',expense_id=expense_id)}}"
+                    class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
                 {% endif %}
-                <a href="{{url_for('order.index')}}" class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
             </div>
         </div>
     </form>

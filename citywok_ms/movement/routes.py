@@ -328,6 +328,7 @@ def update_non_labor(expense_id):
         "movement/expense/non_labor.html",
         title=_("Update Non-Labor Expense"),
         form=form,
+        expense_id=expense_id,
     )
 
 
@@ -355,7 +356,10 @@ def update_labor(expense_id):
         form.value.card.data = expense.card
         form.value.check.data = expense.check
     return render_template(
-        "movement/expense/labor.html", title=_("Update Labor Expense"), form=form
+        "movement/expense/labor.html",
+        title=_("Update Labor Expense"),
+        form=form,
+        expense_id=expense_id,
     )
 
 
@@ -411,6 +415,7 @@ def update_order_payment(expense_id):
         "movement/expense/order_payment.html",
         title=_("Update Orders Payment"),
         form=form,
+        expense_id=expense_id,
     )
 
 
@@ -442,6 +447,7 @@ def update_salary(expense_id):
         form=form,
         employee=expense.employee,
         month=expense.month_id,
+        expense_id=expense_id,
     )
 
 
