@@ -1,3 +1,5 @@
+from typing import List
+from citywok_ms.file.models import ExpenseFile
 import datetime
 from flask_babel import lazy_gettext as _l
 from sqlalchemy.orm import relationship
@@ -77,6 +79,28 @@ class Expense(db.Model, CRUDMixin):
     @hybrid_property
     def non_cash(self):
         return self.card + self.transfer + self.check
+
+    @property
+    def active_files(self) -> List[ExpenseFile]:
+        return (
+            db.session.query(ExpenseFile)
+            .filter(
+                ExpenseFile.expense_id == self.id,
+                ExpenseFile.delete_date.is_(None),
+            )
+            .all()
+        )
+
+    @property
+    def deleted_files(self) -> List[ExpenseFile]:
+        return (
+            db.session.query(ExpenseFile)
+            .filter(
+                ExpenseFile.expense_id == self.id,
+                ExpenseFile.delete_date.isnot(None),
+            )
+            .all()
+        )
 
 
 class LaborExpense(Expense):

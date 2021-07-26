@@ -1,10 +1,8 @@
 import datetime
 
-from sqlalchemy.sql.elements import not_
-
 from citywok_ms import db
 from citywok_ms.employee.models import Employee
-from citywok_ms.file.models import ExpenseFile
+from citywok_ms.file.models import ExpenseFile, File
 from citywok_ms.movement.forms import (
     DateForm,
     LaborExpenseForm,
@@ -22,10 +20,21 @@ from citywok_ms.movement.models import (
 )
 from citywok_ms.order.models import Order
 from citywok_ms.task import compress_file
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import (
+    Blueprint,
+    abort,
+    flash,
+    redirect,
+    render_template,
+    request,
+    url_for,
+    current_app,
+)
 from flask_babel import _
 from sqlalchemy import false, func
 from sqlalchemy.orm import with_polymorphic
+from sqlalchemy.sql.elements import not_
+from citywok_ms.file.forms import FileForm
 
 expense_bp = Blueprint("expense", __name__, url_prefix="/expense")
 
@@ -75,7 +84,7 @@ def index(date_str=None):
     )
 
 
-@expense_bp.route("/non_labor/new", methods=["GET", "POST"])
+@expense_bp.route("/new/non_labor", methods=["GET", "POST"])
 def new_non_labor():
     form = NonLaborExpenseForm()
     if form.validate_on_submit():
@@ -104,7 +113,7 @@ def new_non_labor():
     )
 
 
-@expense_bp.route("/labor/new", methods=["GET", "POST"])
+@expense_bp.route("/new/labor", methods=["GET", "POST"])
 def new_labor():
     form = LaborExpenseForm()
     if form.validate_on_submit():
@@ -131,7 +140,7 @@ def new_labor():
     )
 
 
-@expense_bp.route("/order_payment/new", methods=["GET", "POST"])
+@expense_bp.route("/new/order_payment", methods=["GET", "POST"])
 def new_order_payment():
     form = OrderPaymentForm()
     if form.is_submitted():
@@ -178,7 +187,7 @@ def new_order_payment():
     )
 
 
-@expense_bp.route("/salary/new/<int:employee_id>/<month_str>", methods=["GET", "POST"])
+@expense_bp.route("/new/salary/<int:employee_id>/<month_str>", methods=["GET", "POST"])
 def new_salary(employee_id, month_str):
     month = datetime.datetime.strptime(month_str, "%Y-%m").date()
     form = SalaryForm()
@@ -254,3 +263,40 @@ def salary_index(month_str=None):
         active=active.all(),
         month_str=month_str,
     )
+
+
+@expense_bp.route("/<int:expense_id>")
+def detail(expense_id):
+    polymorphic = with_polymorphic(Expense, "*")
+    expense = db.session.query(polymorphic).filter(Expense.id == expense_id).first()
+    if expense is None:
+        abort(404)
+    return render_template(
+        "movement/expense/detail.html",
+        title=_("Expense Detail"),
+        file_form=FileForm(),
+        expense=expense,
+    )
+
+@expense_bp.route("/<int:expense_id>/upload", methods=["POST"])
+def upload(expense_id):
+    form = FileForm()
+    file = form.file.data
+    if form.validate_on_submit():
+        db_file = ExpenseFile.create(form.file.data)
+        db_file.expense_id = expense_id
+        flash(
+            _('File "%(name)s" has been uploaded.', name=db_file.full_name), "success"
+        )
+        db.session.commit()
+        current_app.logger.info(f"Upload employee file {db_file}")
+        compress_file.queue(db_file.id)
+
+    elif file is not None:
+        flash(
+            _('Invalid file format "%(format)s".', format=File.split_file_format(file)),
+            "danger",
+        )
+    else:
+        flash(_("No file has been uploaded."), "danger")
+    return redirect(url_for("order.detail", expense_id=expense_id))

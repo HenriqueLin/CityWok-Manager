@@ -109,7 +109,7 @@
                         <td>{{ expense.supplier.name }}</td>
                     {% endif %}
                     <td>
-                        <a href="#">
+                        <a href="{{url_for('expense.detail',expense_id=expense.id)}}">
                             <span class="material-icons">
                                 more_vert
                             </span>
