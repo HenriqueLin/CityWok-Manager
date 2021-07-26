@@ -34,6 +34,10 @@ from wtforms_alchemy.utils import choice_type_coerce_factory
 
 
 class MoneyForm(FlaskForm):
+    def __init__(self, formdata, **kwargs):
+        super().__init__(formdata=formdata, **kwargs)
+        self.form_errors = []
+
     cash = DecimalField(
         label=_l("Cash"),
         validators=[NumberRange(min=0)],
@@ -55,9 +59,27 @@ class MoneyForm(FlaskForm):
         default=0,
     )
 
-    def validate_cash(self, cash):
-        if self.cash.data + self.card.data + self.transfer.data + self.check.data <= 0:
-            raise ValidationError(_l("Total value must be greater than 0."))
+    @property
+    def total(self):
+        return sum(
+            filter(
+                None,
+                [self.cash.data, self.card.data, self.transfer.data, self.check.data],
+            )
+        )
+
+    @property
+    def errors(self):
+        errors = {name: f.errors for name, f in self._fields.items() if f.errors}
+        if self.form_errors:
+            errors[None] = self.form_errors
+        return errors
+
+    def validate(self, extra_validators=None):
+        if self.total <= 0:
+            self.form_errors.append(_l("Total value must be greater than 0."))
+            return False
+        return super().validate(extra_validators=extra_validators)
 
 
 class NonLaborExpenseForm(FlaskForm):
