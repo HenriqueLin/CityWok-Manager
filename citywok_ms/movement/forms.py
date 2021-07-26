@@ -17,7 +17,6 @@ from citywok_ms.utils.fields import (
     FilesRequired,
     MultipleFileField,
 )
-from flask_babel import _
 from flask_babel import lazy_gettext as _l
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, TextAreaField
@@ -58,7 +57,7 @@ class MoneyForm(FlaskForm):
 
     def validate_cash(self, cash):
         if self.cash.data + self.card.data + self.transfer.data + self.check.data <= 0:
-            raise ValidationError(_("Total value must be greater than 0."))
+            raise ValidationError(_l("Total value must be greater than 0."))
 
 
 class NonLaborExpenseForm(FlaskForm):
@@ -150,6 +149,7 @@ class OrderPaymentForm(FlaskForm):
 
     load = SubmitField()
     submit = SubmitField(label=_l("Add"))
+    update = SubmitField(label=_l("Update"))
 
 
 class LaborExpenseForm(FlaskForm):

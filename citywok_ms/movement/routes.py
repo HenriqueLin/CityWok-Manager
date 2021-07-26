@@ -33,7 +33,7 @@ from flask import (
 from flask_babel import _
 from sqlalchemy import false, func
 from sqlalchemy.orm import with_polymorphic
-from sqlalchemy.sql.elements import not_
+from sqlalchemy.sql.elements import not_, or_
 from citywok_ms.file.forms import FileForm
 
 expense_bp = Blueprint("expense", __name__, url_prefix="/expense")
@@ -175,13 +175,13 @@ def new_order_payment():
                 compress_file.queue(db_file.id)
             db.session.add(expense)
             db.session.commit()
-            flash(_("New labor expense has been registed."), "success")
+            flash(_("New order payment has been registed."), "success")
             return redirect(url_for("expense.index"))
     else:
         form.orders.query_factory = lambda: db.session.query(false()).filter(false())
 
     return render_template(
-        "movement/expense/new_order_payment.html",
+        "movement/expense/order_payment.html",
         title=_("New Orders Payment"),
         form=form,
     )
@@ -286,18 +286,73 @@ def update(expense_id):
     if expense is None:
         abort(404)
 
-    if expense.employee is not None:
+    if isinstance(expense, LaborExpense):
         if expense.month is not None:
             return redirect(url_for("expense.update_salary", expense_id=expense_id))
         else:
             return redirect(url_for("expense.update_labor", expense_id=expense_id))
-    elif expense.supplier is not None:
+    elif isinstance(expense, NonLaborExpense):
         if expense.orders is not None:
             return redirect(
                 url_for("expense.update_order_payment", expense_id=expense_id)
             )
         else:
             return redirect(url_for("expense.update_non_labor", expense_id=expense_id))
+
+
+@expense_bp.route("/update/order_payment/<int:expense_id>", methods=["GET", "POST"])
+def update_order_payment(expense_id):
+    expense = NonLaborExpense.get_or_404(expense_id)
+    form = OrderPaymentForm()
+    del form.files
+
+    if form.is_submitted():
+        if form.supplier.validate(form):
+            form.orders.query_factory = (
+                lambda: db.session.query(Order)
+                .filter(
+                    Order.supplier_id == form.supplier.data.id,
+                    or_(Order.expense_id.is_(None), Order.expense_id == expense_id),
+                )
+                .order_by(Order.delivery_date)
+            )
+        else:
+            form.orders.query_factory = lambda: db.session.query(false()).filter(
+                false()
+            )
+        if "update" in request.form and form.validate():
+            expense.date = form.date.data
+            expense.category = form.category.data
+            expense.remark = form.remark.data
+            expense.supplier = form.supplier.data
+            expense.orders = form.orders.data
+            expense.cash = form.value.cash.data
+            expense.transfer = form.value.transfer.data
+            expense.card = form.value.card.data
+            expense.check = form.value.check.data
+            db.session.commit()
+            flash(_("Order Payment has been updated."), "success")
+            return redirect(url_for("expense.detail", expense_id=expense_id))
+    else:
+        form.orders.query_factory = (
+            lambda: db.session.query(Order)
+            .filter(
+                Order.supplier_id == expense.supplier.id,
+                or_(Order.expense_id.is_(None), Order.expense_id == expense_id),
+            )
+            .order_by(Order.delivery_date)
+        )
+        form.process(obj=expense)
+        form.value.cash.data = expense.cash
+        form.value.transfer.data = expense.transfer
+        form.value.card.data = expense.card
+        form.value.check.data = expense.check
+
+    return render_template(
+        "movement/expense/order_payment.html",
+        title=_("Update Orders Payment"),
+        form=form,
+    )
 
 
 @expense_bp.route("/update/salary/<int:expense_id>", methods=["GET", "POST"])
