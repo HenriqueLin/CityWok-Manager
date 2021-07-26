@@ -188,6 +188,7 @@ class LaborExpenseForm(FlaskForm):
     )
 
     submit = SubmitField(label=_l("Add"))
+    update = SubmitField(label=_l("Update"))
 
 
 class DateForm(FlaskForm):

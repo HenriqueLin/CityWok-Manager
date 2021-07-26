@@ -136,7 +136,7 @@ def new_labor():
         flash(_("New labor expense has been registed."), "success")
         return redirect(url_for("expense.index"))
     return render_template(
-        "movement/expense/new_labor.html", title=_("New Labor Expense"), form=form
+        "movement/expense/labor.html", title=_("New Labor Expense"), form=form
     )
 
 
@@ -300,6 +300,34 @@ def update(expense_id):
             return redirect(url_for("expense.update_non_labor", expense_id=expense_id))
 
 
+@expense_bp.route("/update/labor/<int:expense_id>", methods=["GET", "POST"])
+def update_labor(expense_id):
+    expense = LaborExpense.get_or_404(expense_id)
+    form = LaborExpenseForm()
+    del form.files
+    if form.validate_on_submit():
+        expense.date = form.date.data
+        expense.category = form.category.data
+        expense.remark = form.remark.data
+        expense.employee = form.employee.data
+        expense.cash = form.value.cash.data
+        expense.transfer = form.value.transfer.data
+        expense.card = form.value.card.data
+        expense.check = form.value.check.data
+        db.session.commit()
+        flash(_("Labor expense has been updated."), "success")
+        return redirect(url_for("expense.detail", expense_id=expense_id))
+    if not form.is_submitted():
+        form.process(obj=expense)
+        form.value.cash.data = expense.cash
+        form.value.transfer.data = expense.transfer
+        form.value.card.data = expense.card
+        form.value.check.data = expense.check
+    return render_template(
+        "movement/expense/labor.html", title=_("Update Labor Expense"), form=form
+    )
+
+
 @expense_bp.route("/update/order_payment/<int:expense_id>", methods=["GET", "POST"])
 def update_order_payment(expense_id):
     expense = NonLaborExpense.get_or_404(expense_id)
@@ -384,6 +412,8 @@ def update_salary(expense_id):
         employee=expense.employee,
         month=expense.month_id,
     )
+
+
 @expense_bp.route("/<int:expense_id>/upload", methods=["POST"])
 def upload(expense_id):
     form = FileForm()

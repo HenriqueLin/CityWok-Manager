@@ -26,19 +26,25 @@
             {% with money_form=form.value %}
             {% include 'movement/expense/money.html' %}
             {% endwith %}
+            {% if request.endpoint == 'expense.new_labor' %}
             <div>
                 {% with field=form.files %}
                 {% include 'field.html' %}
                 {% endwith %}
             </div>
+            {% endif %}
             <div>
                 {% with field=form.remark %}
                 {% include 'field.html' %}
                 {% endwith %}
             </div>
             <div class="gx-3">
+                {% if request.endpoint == 'expense.new_labor' %}
                 {{ form.submit(class="btn btn-outline-success ms-1 float-end") }}
-                <a href="{{url_for('order.index')}}" class="btn btn-secondary float-end">{{_('Cancle')}}</a>
+                {% elif request.endpoint == 'expense.update_labor' %}
+                {{ form.update(class="btn btn-outline-primary ms-1 float-end") }}
+                {% endif %}
+                <a href="{{url_for('order.index')}}" class="btn btn-secondary float-end">{{_('Cancel')}}</a>
             </div>
         </div>
 </div>
