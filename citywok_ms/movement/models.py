@@ -67,7 +67,7 @@ class Expense(db.Model, CRUDMixin):
     card = Column(SqliteDecimal(2))
     transfer = Column(SqliteDecimal(2))
 
-    files = relationship("ExpenseFile")
+    files = relationship("ExpenseFile", cascade="all, delete-orphan")
     type = Column(String)
 
     __mapper_args__ = {"polymorphic_on": type, "polymorphic_identity": "expense"}

@@ -493,3 +493,15 @@ def salary_upload(month_str):
     else:
         flash(_("No file has been uploaded."), "danger")
     return redirect(url_for("expense.salary_index", month_str=month_str))
+
+
+@expense_bp.route("delete/<int:expense_id>", methods=["POST"])
+def delete(expense_id):
+    polymorphic = with_polymorphic(Expense, "*")
+    expense = db.session.query(polymorphic).filter(Expense.id == expense_id).first()
+    if expense is None:
+        abort(404)
+    db.session.delete(expense)
+    db.session.commit()
+    flash(_("Expense has been deleted."), "success")
+    return redirect(url_for("expense.index"))

@@ -7,10 +7,8 @@
     <div class="d-print-none">
         <a href="{{url_for('expense.update',expense_id=expense.id)}}" class="btn btn-outline-primary "
             id="update_button">{{_('Update')}}</a>
-        <form action="#" method="post" class="d-inline">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <input type="submit" value="{{_('Delete')}}" class="btn btn-outline-danger">
-        </form>
+        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+            data-bs-target="#deleteModal">{{_("Delete")}}</button>
     </div>
 
     <hr>
@@ -114,6 +112,30 @@
         </div>
     </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="deleteModalLabel">Warning</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {{_("All files associated with this expense will also be deleted, please download the files if
+                needed.")}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{_("Close")}}</button>
+                <form action="{{url_for('expense.delete',expense_id=expense.id)}}" method="post" class="d-inline">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="submit" value="{{_('Delete')}}" class="btn btn-outline-danger">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock content %}
 
 {% block js %}
