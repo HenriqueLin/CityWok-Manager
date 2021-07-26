@@ -224,7 +224,7 @@ def new_salary(employee_id, month_str):
         month=month,
         last_payments=db.session.query(LaborExpense)
         .filter(LaborExpense.employee_id == employee_id)
-        .order_by(LaborExpense.date)
+        .order_by(LaborExpense.date.desc())
         .limit(10)
         .all(),
     )
@@ -247,7 +247,7 @@ def salary_index(month_str=None):
             url_for("expense.salary_index", month_str=form.month.data.strftime("%Y-%m"))
         )
 
-    payed = db.session.query(Employee, LaborExpense.cash, LaborExpense.non_cash).filter(
+    payed = db.session.query(Employee, LaborExpense).filter(
         Employee.payed(month),
         LaborExpense.employee_id == Employee.id,
         LaborExpense.month_id == month,

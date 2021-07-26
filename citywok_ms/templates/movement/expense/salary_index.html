@@ -54,21 +54,21 @@
                     <th scope="col">{{_('Chinese Name')}}</th>
                     <th scope="col">{{_('Cash')}}</th>
                     <th scope="col">{{_('Non-Cash')}}</th>
-                    <th scope="col">{{_('Edit')}}</th>
+                    <th scope="col">{{_('Detail')}}</th>
                 </tr>
             </thead>
             <tbody>
-                {% for employee, cash, non_cash in payed %}
+                {% for employee, expense in payed %}
                 <tr>
                     <th>{{ employee.id }}</th>
                     <td>{{ employee.full_name }}</td>
                     <td>{{ employee.zh_name or "-" }}</td>
-                    <td>{{ cash }}</td>
-                    <td>{{ non_cash }}</td>
+                    <td>{{ expense.cash }}</td>
+                    <td>{{ expense.non_cash }}</td>
                     <td>
-                        <a href="#">
+                        <a href="{{url_for('expense.detail',expense_id=expense.id)}}">
                             <span class="material-icons">
-                                edit
+                                more_vert
                             </span>
                         </a>
                     </td>

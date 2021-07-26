@@ -49,10 +49,13 @@
                     <th>{{ payment.category }}</th>
                     <td>{{ moment(payment.date).format('ll') }}</td>
                     <td>{{ payment.total }}</td>
-
-                    <td><a href="#"><span class="material-icons">
+                    <td>
+                        <a href="{{url_for('expense.detail',expense_id=payment.id)}}">
+                            <span class="material-icons">
                                 more_vert
-                            </span></a></td>
+                            </span>
+                        </a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
