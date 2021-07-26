@@ -6,7 +6,7 @@ from citywok_ms.file.forms import FileForm
 from citywok_ms.utils.models import CRUDMixin
 from flask import current_app, url_for
 from humanize import naturalsize
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text, Date
 from sqlalchemy.ext.hybrid import hybrid_property
 from werkzeug.datastructures import FileStorage
 
@@ -148,13 +148,17 @@ class ExpenseFile(File):
 
 
 class SalaryPaymentFile(File):
-    salary_payment_id = Column(Integer, ForeignKey("salary_payment.month"))
+    salary_payment_id = Column(Date, ForeignKey("salary_payment.month"))
 
     __mapper_args__ = {"polymorphic_identity": "salary_payment_file"}
 
-    # @property
-    # def owner_url(self) -> str:
-    #     return url_for("order.detail", order_id=self.order_id, _anchor="Files")
+    @property
+    def owner_url(self) -> str:
+        return url_for(
+            "expense.salary_index",
+            month_str=self.salary_payment_id.strftime("%Y-%m"),
+            _anchor="Files",
+        )
 
     @staticmethod
     def create(f: FileStorage) -> "File":

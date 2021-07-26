@@ -2,7 +2,7 @@ import datetime
 
 from citywok_ms import db
 from citywok_ms.employee.models import Employee
-from citywok_ms.file.models import ExpenseFile, File
+from citywok_ms.file.models import ExpenseFile, File, SalaryPaymentFile
 from citywok_ms.movement.forms import (
     DateForm,
     LaborExpenseForm,
@@ -262,6 +262,8 @@ def salary_index(month_str=None):
         payed=payed.all(),
         active=active.all(),
         month_str=month_str,
+        salary_payment=db.session.query(SalaryPayment).get(month),
+        file_form=FileForm(),
     )
 
 
@@ -454,7 +456,7 @@ def upload(expense_id):
             _('File "%(name)s" has been uploaded.', name=db_file.full_name), "success"
         )
         db.session.commit()
-        current_app.logger.info(f"Upload employee file {db_file}")
+        current_app.logger.info(f"Upload expense file {db_file}")
         compress_file.queue(db_file.id)
 
     elif file is not None:
@@ -464,4 +466,30 @@ def upload(expense_id):
         )
     else:
         flash(_("No file has been uploaded."), "danger")
-    return redirect(url_for("order.detail", expense_id=expense_id))
+    return redirect(url_for("expense.detail", expense_id=expense_id))
+
+
+@expense_bp.route("salary/<month_str>/upload", methods=["POST"])
+def salary_upload(month_str):
+    month = datetime.datetime.strptime(month_str, "%Y-%m").date()
+    salary_payment = SalaryPayment.get_or_create(month)
+    form = FileForm()
+    file = form.file.data
+    if form.validate_on_submit():
+        db_file = SalaryPaymentFile.create(form.file.data)
+        db_file.salary_payment_id = salary_payment.month
+        flash(
+            _('File "%(name)s" has been uploaded.', name=db_file.full_name), "success"
+        )
+        db.session.commit()
+        current_app.logger.info(f"Upload salary_payment file {db_file}")
+        compress_file.queue(db_file.id)
+
+    elif file is not None:
+        flash(
+            _('Invalid file format "%(format)s".', format=File.split_file_format(file)),
+            "danger",
+        )
+    else:
+        flash(_("No file has been uploaded."), "danger")
+    return redirect(url_for("expense.salary_index", month_str=month_str))

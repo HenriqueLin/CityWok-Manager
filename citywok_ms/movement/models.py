@@ -1,5 +1,5 @@
 from typing import List
-from citywok_ms.file.models import ExpenseFile
+from citywok_ms.file.models import ExpenseFile, SalaryPaymentFile
 import datetime
 from flask_babel import lazy_gettext as _l
 from sqlalchemy.orm import relationship
@@ -142,3 +142,25 @@ class SalaryPayment(db.Model):
             salary_payment = cls(month=month)
             db.session.add(salary_payment)
         return salary_payment
+
+    @property
+    def active_files(self) -> List[SalaryPaymentFile]:
+        return (
+            db.session.query(SalaryPaymentFile)
+            .filter(
+                SalaryPaymentFile.salary_payment_id == self.month,
+                SalaryPaymentFile.delete_date.is_(None),
+            )
+            .all()
+        )
+
+    @property
+    def deleted_files(self) -> List[SalaryPaymentFile]:
+        return (
+            db.session.query(SalaryPaymentFile)
+            .filter(
+                SalaryPaymentFile.salary_payment_id == self.month,
+                SalaryPaymentFile.delete_date.isnot(None),
+            )
+            .all()
+        )

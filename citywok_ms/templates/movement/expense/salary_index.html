@@ -77,6 +77,48 @@
             </tbody>
         </table>
     </div>
+    <div class="d-print-none">
+        <hr>
+        <h3 id="Files">{{_('Files')}}</h3>
+        <div class="mb-2">
+            <form action="{{url_for('expense.salary_upload',month_str=form.month.data.strftime('%Y-%d'))}}"
+                method="post" enctype='multipart/form-data' class="d-inline" novalidate>
+                {{ file_form.hidden_tag() }}
+                {{ file_form.file(id="selectedFile", style="display:none", onchange="form.submit()") }}
+                <input type="button" value="{{_('New File')}}" class="btn btn-outline-success"
+                    onclick="document.getElementById('selectedFile').click();" />
+            </form>
+            {% if salary_payment.deleted_files %}
+            <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse"
+                data-bs-target="#deletedFiles" aria-expanded="false" aria-controls="deletedFiles" id="fileButton">
+                {{_('Show deleted files')}}
+            </button>
+            {% endif %}
+        </div>
+
+        {% with files=salary_payment.active_files %}
+        {% include 'file/active_file_table.html' %}
+        {% endwith %}
+
+        <div class="collapse" id="deletedFiles">
+            <h4>{{_('Deleted Files')}}</h4>
+            {% with files=salary_payment.deleted_files %}
+            {% include 'file/suspend_file_table.html' %}
+            {% endwith %}
+        </div>
+    </div>
 </div>
 
 {% endblock content %}
+
+{% block js %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fileButton').click(function () {
+            $(this).text(function (i, old) {
+                return old == '{{_("Hide deleted files")}}' ? '{{_("Show deleted files")}}' : '{{_("Hide deleted files")}}';
+            });
+        });
+    });
+</script>
+{% endblock js %}
