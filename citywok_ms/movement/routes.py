@@ -316,7 +316,7 @@ def update_salary(expense_id):
         db.session.commit()
         flash(_("Salary has been updated."), "success")
         return redirect(url_for("expense.detail", expense_id=expense_id))
-    else:
+    elif not form.is_submitted():
         form.process(obj=expense)
         form.value.cash.data = expense.cash
         form.value.transfer.data = expense.transfer
