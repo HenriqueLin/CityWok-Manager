@@ -73,9 +73,11 @@
         <a href="{{ url_for('order.index', unpayed_page=unpayed.next_num, payed_page=payed.page) }}"
             class="btn btn-sm btn-outline-dark {% if unpayed.page == unpayed.pages %}disabled{% endif %}">&raquo;</a>
     </div>
+    {% else %}
+    {{ _("No unpayed orders") }}
     {% endif %}
-    <h3 id="Payed">{{_('Payed')}}</h3>
     {% if payed.items %}
+    <h3 id="Payed">{{_('Payed')}}</h3>
     <div class="table-responsive">
         <table class="table table-striped table-bordered text-nowrap text-center">
             <thead class="table-dark">
