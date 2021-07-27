@@ -49,6 +49,7 @@ def create_app(config_class=Config):
     # create the app instance
     app = Flask(__name__)
     app.config.from_object(config_class)
+    app.jinja_env.add_extension("jinja2.ext.do")
 
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 

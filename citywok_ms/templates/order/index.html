@@ -45,34 +45,7 @@
             </tbody>
         </table>
     </div>
-    <!-- Pagination Links-->
-    <div class="text-end">
-        <a href="{{ url_for('order.index', unpayed_page=unpayed.prev_num, payed_page=payed.page) }}"
-            class="btn btn-outline-dark btn-sm {% if unpayed.page == 1 %}disabled{% endif %}">
-            &laquo;
-        </a>
-        <!-- Loop through the number of pages to display a link for each-->
-        {% for page_num in unpayed.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-        {% if page_num %}
-        <!-- Check for the active page and set the link to " Active"-->
-        {% if unpayed.page == page_num %}
-        <a href="{{ url_for('order.index', unpayed_page=page_num, payed_page=payed.page) }}"
-            class="btn btn-sm btn-dark">
-            {{ page_num }}
-        </a>
-        {% else %}
-        <a href="{{ url_for('order.index', unpayed_page=page_num, payed_page=payed.page) }}"
-            class="btn btn-sm btn-outline-dark">
-            {{ page_num }}
-        </a>
-        {% endif %}
-        {% else %}
-        <span class="material-icons">more_horiz</span>
-        {% endif %}
-        {% endfor %}
-        <a href="{{ url_for('order.index', unpayed_page=unpayed.next_num, payed_page=payed.page) }}"
-            class="btn btn-sm btn-outline-dark {% if unpayed.page == unpayed.pages %}disabled{% endif %}">&raquo;</a>
-    </div>
+    {{ macros.pagination('order.index',obj=unpayed,page_str='unpayed_page',payed_page=payed.page) }}
     {% else %}
     {{ _("No unpayed orders") }}
     {% endif %}
@@ -114,34 +87,7 @@
             </tbody>
         </table>
     </div>
-    <!-- Pagination Links-->
-    <div class="text-end">
-        <a href="{{ url_for('order.index', payed_page=payed.prev_num, unpayed_page=unpayed.page) }}"
-            class="btn btn-outline-dark btn-sm {% if payed.page == 1 %}disabled{% endif %}">
-            &laquo;
-        </a>
-        <!-- Loop through the number of pages to display a link for each-->
-        {% for page_num in payed.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-        {% if page_num %}
-        <!-- Check for the active page and set the link to " Active"-->
-        {% if payed.page == page_num %}
-        <a href="{{ url_for('order.index', payed_page=page_num, unpayed_page=unpayed.page) }}"
-            class="btn btn-sm btn-dark">
-            {{ page_num }}
-        </a>
-        {% else %}
-        <a href="{{ url_for('order.index', payed_page=page_num, unpayed_page=unpayed.page) }}"
-            class="btn btn-sm btn-outline-dark">
-            {{ page_num }}
-        </a>
-        {% endif %}
-        {% else %}
-        <span class="material-icons">more_horiz</span>
-        {% endif %}
-        {% endfor %}
-        <a href="{{ url_for('order.index', payed_page=payed.next_num, unpayed_page=unpayed.page) }}"
-            class="btn btn-sm btn-outline-dark {% if payed.page == payed.pages %}disabled{% endif %}">&raquo;</a>
-    </div>
+    {{ macros.pagination('order.index',obj=payed,page_str='payed_page',unpayed_page=unpayed.page) }}
     {% endif %}
 </div>
 
