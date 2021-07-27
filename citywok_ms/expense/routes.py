@@ -1,9 +1,8 @@
 import datetime
 
 from citywok_ms import db
+from citywok_ms.auth.permissions import manager
 from citywok_ms.employee.models import Employee
-from citywok_ms.file.forms import FileForm
-from citywok_ms.file.models import ExpenseFile, File, SalaryPaymentFile
 from citywok_ms.expense.forms import (
     DateForm,
     LaborExpenseForm,
@@ -19,6 +18,8 @@ from citywok_ms.expense.models import (
     NonLaborExpense,
     SalaryPayment,
 )
+from citywok_ms.file.forms import FileForm
+from citywok_ms.file.models import ExpenseFile, File, SalaryPaymentFile
 from citywok_ms.order.models import Order
 from citywok_ms.supplier.models import Supplier
 from citywok_ms.task import compress_file
@@ -43,6 +44,7 @@ expense_bp = Blueprint("expense", __name__, url_prefix="/expense")
 # Expenses
 @expense_bp.route("/", methods=["GET", "POST"])
 @expense_bp.route("/<date_str>", methods=["GET", "POST"])
+@manager.require(403)
 def index(date_str=None):
     if date_str is None:
         return redirect(url_for("expense.index", date_str=datetime.date.today()))
@@ -86,6 +88,7 @@ def index(date_str=None):
 
 
 @expense_bp.route("/new/non_labor", methods=["GET", "POST"])
+@manager.require(403)
 def new_non_labor():
     form = NonLaborExpenseForm()
     if form.validate_on_submit():
@@ -119,6 +122,7 @@ def new_non_labor():
 
 
 @expense_bp.route("/new/labor", methods=["GET", "POST"])
+@manager.require(403)
 def new_labor():
     form = LaborExpenseForm()
     if form.validate_on_submit():
@@ -150,6 +154,7 @@ def new_labor():
 
 
 @expense_bp.route("/new/order_payment", methods=["GET", "POST"])
+@manager.require(403)
 def new_order_payment():
     form = OrderPaymentForm()
     if form.is_submitted():
@@ -211,6 +216,7 @@ def new_order_payment():
 
 
 @expense_bp.route("/new/salary/<int:employee_id>/<month_str>", methods=["GET", "POST"])
+@manager.require(403)
 def new_salary(employee_id, month_str):
     month = datetime.datetime.strptime(month_str, "%Y-%m").date()
     form = SalaryForm()
@@ -255,6 +261,7 @@ def new_salary(employee_id, month_str):
 
 @expense_bp.route("/salary", methods=["GET", "POST"])
 @expense_bp.route("/salary/<month_str>", methods=["GET", "POST"])
+@manager.require(403)
 def salary_index(month_str=None):
     if month_str is None:
         return redirect(
@@ -302,6 +309,7 @@ def salary_index(month_str=None):
 
 
 @expense_bp.route("/<int:expense_id>")
+@manager.require(403)
 def detail(expense_id):
     polymorphic = with_polymorphic(Expense, "*")
     expense = db.session.query(polymorphic).filter(Expense.id == expense_id).first()
@@ -337,6 +345,7 @@ def update(expense_id):
 
 
 @expense_bp.route("/update/non_labor/<int:expense_id>", methods=["GET", "POST"])
+@manager.require(403)
 def update_non_labor(expense_id):
     expense = NonLaborExpense.get_or_404(expense_id)
     form = NonLaborExpenseForm()
@@ -367,6 +376,7 @@ def update_non_labor(expense_id):
 
 
 @expense_bp.route("/update/labor/<int:expense_id>", methods=["GET", "POST"])
+@manager.require(403)
 def update_labor(expense_id):
     expense = LaborExpense.get_or_404(expense_id)
     form = LaborExpenseForm()
@@ -398,6 +408,7 @@ def update_labor(expense_id):
 
 
 @expense_bp.route("/update/order_payment/<int:expense_id>", methods=["GET", "POST"])
+@manager.require(403)
 def update_order_payment(expense_id):
     expense = NonLaborExpense.get_or_404(expense_id)
     form = OrderPaymentForm()
@@ -454,6 +465,7 @@ def update_order_payment(expense_id):
 
 
 @expense_bp.route("/update/salary/<int:expense_id>", methods=["GET", "POST"])
+@manager.require(403)
 def update_salary(expense_id):
     expense = LaborExpense.get_or_404(expense_id)
     form = SalaryForm()
@@ -486,6 +498,7 @@ def update_salary(expense_id):
 
 
 @expense_bp.route("/<int:expense_id>/upload", methods=["POST"])
+@manager.require(403)
 def upload(expense_id):
     form = FileForm()
     file = form.file.data
@@ -510,6 +523,7 @@ def upload(expense_id):
 
 
 @expense_bp.route("salary/<month_str>/upload", methods=["POST"])
+@manager.require(403)
 def salary_upload(month_str):
     month = datetime.datetime.strptime(month_str, "%Y-%m").date()
     salary_payment = SalaryPayment.get_or_create(month)
@@ -536,6 +550,7 @@ def salary_upload(month_str):
 
 
 @expense_bp.route("delete/<int:expense_id>", methods=["POST"])
+@manager.require(403)
 def delete(expense_id):
     polymorphic = with_polymorphic(Expense, "*")
     expense = db.session.query(polymorphic).filter(Expense.id == expense_id).first()
