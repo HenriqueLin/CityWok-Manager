@@ -255,6 +255,16 @@ def salary_index(month_str=None):
     active = db.session.query(Employee).filter(
         not_(Employee.payed(month)), Employee.active
     )
+    amount = (
+        db.session.query(
+            func.coalesce(func.sum(LaborExpense.cash), 0).label("cash"),
+            func.coalesce(func.sum(LaborExpense.card), 0).label("card"),
+            func.coalesce(func.sum(LaborExpense.check), 0).label("check"),
+            func.coalesce(func.sum(LaborExpense.transfer), 0).label("transfer"),
+        )
+        .filter(LaborExpense.month_id == month)
+        .first()
+    )
     return render_template(
         "movement/expense/salary_index.html",
         title=_("Salary Payment"),
@@ -264,6 +274,7 @@ def salary_index(month_str=None):
         month_str=month_str,
         salary_payment=db.session.query(SalaryPayment).get(month),
         file_form=FileForm(),
+        amount=amount,
     )
 
 

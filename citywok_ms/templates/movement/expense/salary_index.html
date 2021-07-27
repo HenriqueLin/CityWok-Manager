@@ -14,6 +14,39 @@
         </form>
     </div>
     <hr>
+    <div class="row">
+        <div class="col-sm-4 pb-2">
+            <div class="card text-center">
+                <h5 class="card-header text-white bg-dark">
+                    {{_("Total")}}
+                </h5>
+                <div class="card-body text-center">
+                    <h3>{{ amount.cash + amount.card + amount.check + amount.transfer}}€</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 pb-2">
+            <div class="card text-center">
+                <h5 class="card-header text-white bg-dark">
+                    {{_("Cash")}}
+                </h5>
+                <div class="card-body text-center">
+                    <h3>{{ amount.cash }}€</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 pb-2">
+            <div class="card text-center">
+                <h5 class="card-header text-white bg-dark">
+                    {{_("Non-Cash")}}
+                </h5>
+                <div class="card-body text-center">
+                    <h3>{{ amount.card + amount.check + amount.transfer}}€</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
     <h3>{{_('Unpayed')}}</h3>
     <div class="table-responsive">
         <table class="table table-striped table-bordered text-nowrap text-center">
