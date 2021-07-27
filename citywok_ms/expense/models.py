@@ -62,10 +62,10 @@ class Expense(db.Model, CRUDMixin):
     )
     remark = Column(Text)
 
-    cash = Column(SqliteDecimal(2))
-    check = Column(SqliteDecimal(2))
-    card = Column(SqliteDecimal(2))
-    transfer = Column(SqliteDecimal(2))
+    cash = Column(SqliteDecimal(2), default=0)
+    check = Column(SqliteDecimal(2), default=0)
+    card = Column(SqliteDecimal(2), default=0)
+    transfer = Column(SqliteDecimal(2), default=0)
 
     files = relationship("ExpenseFile", cascade="all, delete-orphan")
     type = Column(String)
@@ -74,11 +74,11 @@ class Expense(db.Model, CRUDMixin):
 
     @hybrid_property
     def total(self):
-        return self.cash + self.card + self.transfer + self.check
+        return sum((self.cash, self.card, self.transfer, self.check))
 
     @hybrid_property
     def non_cash(self):
-        return self.card + self.transfer + self.check
+        return sum((self.card, self.transfer, self.check))
 
     @property
     def active_files(self) -> List[ExpenseFile]:
