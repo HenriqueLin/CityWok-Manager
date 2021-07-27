@@ -92,6 +92,7 @@
                 <thead class="table-dark">
                     <tr>
                         <th scope="col">{{_('ID')}}</th>
+                        <th scope="col">{{_('Payment Date')}}</th>
                         <th scope="col">{{_('Category')}}</th>
                         <th scope="col">{{_('Amount')}}</th>
                         <th scope="col">{{_('Detail')}}</th>
@@ -101,6 +102,7 @@
                     {% for expense in expenses.items %}
                     <tr>
                         <th>{{ expense.id }}</th>
+                        <td>{{ moment(expense.date).format('ll') }}</td>
                         <td>{{ expense.category }}</td>
                         <td>{{ expense.total }}</td>
                         <td>
