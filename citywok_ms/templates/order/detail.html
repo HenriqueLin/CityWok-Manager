@@ -4,6 +4,10 @@
 <div>
     <!-- title -->
     <h1>{{title}}</h1>
+    {% if order.expense %}
+    <p class="text-muted small mb-2">{{_('Payed')}}</p>
+    {% endif %}
+
     <div class="d-print-none">
         <a href="{{url_for('order.update',order_id=order.id)}}" class="btn btn-outline-primary"
             id="update_button">{{_('Update')}}</a>
@@ -24,6 +28,16 @@
                 {{ order.supplier.name }}
             </a>
         </dd>
+        {% if order.expense %}
+        <dt class="col-4">{{_('Expense')}}:</dt>
+        <dd class="col-8">
+            <a href="{{url_for('expense.detail',expense_id=order.expense.id)}}">
+                {{ order.expense.id }}
+            </a>
+        </dd>
+        {% endif %}
+
+
         <dt class="col-4">{{_('Remark')}}:</dt>
         <dd class="col-8">{{ order.remark or '-'}}</dd>
     </dl>
