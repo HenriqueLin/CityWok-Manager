@@ -76,7 +76,7 @@
                 {% endwith %}
             </div>
             {% with money_form=form.value %}
-            {% include 'movement/expense/money.html' %}
+            {% include 'expense/money.html' %}
             {% endwith %}
             {% if request.endpoint == 'expense.new_salary' %}
             <div>

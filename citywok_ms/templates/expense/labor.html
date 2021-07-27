@@ -19,14 +19,14 @@
                 {% endwith %}
             </div>
             <div>
-                {% with field=form.supplier %}
+                {% with field=form.employee %}
                 {% include 'field.html' %}
                 {% endwith %}
             </div>
             {% with money_form=form.value %}
-            {% include 'movement/expense/money.html' %}
+            {% include 'expense/money.html' %}
             {% endwith %}
-            {% if request.endpoint == 'expense.new_non_labor' %}
+            {% if request.endpoint == 'expense.new_labor' %}
             <div>
                 {% with field=form.files %}
                 {% include 'field.html' %}
@@ -39,24 +39,23 @@
                 {% endwith %}
             </div>
             <div class="gx-3">
-                {% if request.endpoint == 'expense.new_non_labor' %}
+                {% if request.endpoint == 'expense.new_labor' %}
                 {{ form.submit(class="btn btn-outline-success ms-1 float-end") }}
                 <a href="{{url_for('expense.index')}}" class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
-                {% elif request.endpoint == 'expense.update_non_labor' %}
+                {% elif request.endpoint == 'expense.update_labor' %}
                 {{ form.update(class="btn btn-outline-primary ms-1 float-end") }}
                 <a href="{{url_for('expense.detail',expense_id=expense_id)}}"
                     class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
                 {% endif %}
             </div>
         </div>
-    </form>
 </div>
 {% endblock content %}
 
 {% block js %}
 <script type="text/javascript">
     $(document).ready(function () {
-        $('select#category,select#supplier').select2({
+        $('select#category,select#employee').select2({
             theme: 'bootstrap4',
         });
     });

@@ -86,7 +86,7 @@ def create_app(config_class=Config):
         from citywok_ms.main.routes import main_bp
         from citywok_ms.supplier.routes import supplier_bp
         from citywok_ms.order.routes import order_bp
-        from citywok_ms.movement.routes import expense_bp
+        from citywok_ms.expense.routes import expense_bp
 
         # blueprints
         app.register_blueprint(auth_bp)

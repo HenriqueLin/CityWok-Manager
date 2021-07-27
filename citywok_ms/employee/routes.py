@@ -1,4 +1,4 @@
-from citywok_ms.movement.models import LaborExpense
+from citywok_ms.expense.models import LaborExpense
 from citywok_ms import db
 from citywok_ms.auth.permissions import manager, shareholder, visitor
 from citywok_ms.employee.forms import EmployeeForm

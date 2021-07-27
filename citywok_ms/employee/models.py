@@ -3,7 +3,7 @@ from typing import List
 
 from citywok_ms import db
 from citywok_ms.file.models import EmployeeFile
-from citywok_ms.movement.models import LaborExpense, SalaryPayment
+from citywok_ms.expense.models import LaborExpense, SalaryPayment
 from citywok_ms.utils import ID, SEX
 from citywok_ms.utils.models import CRUDMixin, SqliteDecimal
 from flask_babel import lazy_gettext as _l

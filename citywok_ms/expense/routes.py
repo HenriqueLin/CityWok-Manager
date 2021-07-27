@@ -4,7 +4,7 @@ from citywok_ms import db
 from citywok_ms.employee.models import Employee
 from citywok_ms.file.forms import FileForm
 from citywok_ms.file.models import ExpenseFile, File, SalaryPaymentFile
-from citywok_ms.movement.forms import (
+from citywok_ms.expense.forms import (
     DateForm,
     LaborExpenseForm,
     MonthForm,
@@ -12,7 +12,7 @@ from citywok_ms.movement.forms import (
     OrderPaymentForm,
     SalaryForm,
 )
-from citywok_ms.movement.models import (
+from citywok_ms.expense.models import (
     ROOT,
     Expense,
     LaborExpense,
@@ -75,7 +75,7 @@ def index(date_str=None):
         func.coalesce(func.sum(Expense.transfer), 0).label("transfer"),
     ).first()
     return render_template(
-        "movement/expense/index.html",
+        "expense/index.html",
         title=_("Expenses"),
         form=form,
         category_value=category_value,
@@ -112,7 +112,7 @@ def new_non_labor():
         if supplier_id:
             form.supplier.data = Supplier.get_or_404(supplier_id)
     return render_template(
-        "movement/expense/non_labor.html",
+        "expense/non_labor.html",
         title=_("New Non-Labor Expense"),
         form=form,
     )
@@ -145,7 +145,7 @@ def new_labor():
         if employee_id:
             form.employee.data = Employee.get_or_404(employee_id)
     return render_template(
-        "movement/expense/labor.html", title=_("New Labor Expense"), form=form
+        "expense/labor.html", title=_("New Labor Expense"), form=form
     )
 
 
@@ -204,7 +204,7 @@ def new_order_payment():
             )
 
     return render_template(
-        "movement/expense/order_payment.html",
+        "expense/order_payment.html",
         title=_("New Orders Payment"),
         form=form,
     )
@@ -240,7 +240,7 @@ def new_salary(employee_id, month_str):
         flash(_("New salary has been registed."), "success")
         return redirect(url_for("expense.salary_index"))
     return render_template(
-        "movement/expense/salary.html",
+        "expense/salary.html",
         title=_("New Salary"),
         form=form,
         employee=employee,
@@ -289,7 +289,7 @@ def salary_index(month_str=None):
         .first()
     )
     return render_template(
-        "movement/expense/salary_index.html",
+        "expense/salary_index.html",
         title=_("Salary Payment"),
         form=form,
         payed=payed.all(),
@@ -308,7 +308,7 @@ def detail(expense_id):
     if expense is None:
         abort(404)
     return render_template(
-        "movement/expense/detail.html",
+        "expense/detail.html",
         title=_("Expense Detail"),
         file_form=FileForm(),
         expense=expense,
@@ -359,7 +359,7 @@ def update_non_labor(expense_id):
         form.value.card.data = expense.card
         form.value.check.data = expense.check
     return render_template(
-        "movement/expense/non_labor.html",
+        "expense/non_labor.html",
         title=_("Update Non-Labor Expense"),
         form=form,
         expense_id=expense_id,
@@ -390,7 +390,7 @@ def update_labor(expense_id):
         form.value.card.data = expense.card
         form.value.check.data = expense.check
     return render_template(
-        "movement/expense/labor.html",
+        "expense/labor.html",
         title=_("Update Labor Expense"),
         form=form,
         expense_id=expense_id,
@@ -446,7 +446,7 @@ def update_order_payment(expense_id):
         form.value.check.data = expense.check
 
     return render_template(
-        "movement/expense/order_payment.html",
+        "expense/order_payment.html",
         title=_("Update Orders Payment"),
         form=form,
         expense_id=expense_id,
@@ -476,7 +476,7 @@ def update_salary(expense_id):
         form.value.card.data = expense.card
         form.value.check.data = expense.check
     return render_template(
-        "movement/expense/salary.html",
+        "expense/salary.html",
         title=_("Update Salary"),
         form=form,
         employee=expense.employee,

@@ -1,7 +1,7 @@
 import datetime
 
 from citywok_ms.employee.models import Employee
-from citywok_ms.movement.models import (
+from citywok_ms.expense.models import (
     LABOR,
     LaborExpense,
     MATERIAL,

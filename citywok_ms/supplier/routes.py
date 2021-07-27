@@ -1,4 +1,4 @@
-from citywok_ms.movement.models import NonLaborExpense
+from citywok_ms.expense.models import NonLaborExpense
 from citywok_ms.task import compress_file
 from flask.globals import current_app
 from citywok_ms import db
