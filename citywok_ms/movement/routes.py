@@ -2,6 +2,7 @@ import datetime
 
 from citywok_ms import db
 from citywok_ms.employee.models import Employee
+from citywok_ms.file.forms import FileForm
 from citywok_ms.file.models import ExpenseFile, File, SalaryPaymentFile
 from citywok_ms.movement.forms import (
     DateForm,
@@ -19,22 +20,22 @@ from citywok_ms.movement.models import (
     SalaryPayment,
 )
 from citywok_ms.order.models import Order
+from citywok_ms.supplier.models import Supplier
 from citywok_ms.task import compress_file
 from flask import (
     Blueprint,
     abort,
+    current_app,
     flash,
     redirect,
     render_template,
     request,
     url_for,
-    current_app,
 )
 from flask_babel import _
 from sqlalchemy import false, func
 from sqlalchemy.orm import with_polymorphic
 from sqlalchemy.sql.elements import not_, or_
-from citywok_ms.file.forms import FileForm
 
 expense_bp = Blueprint("expense", __name__, url_prefix="/expense")
 
@@ -106,6 +107,10 @@ def new_non_labor():
         db.session.commit()
         flash(_("New non-labor expense has been registed."), "success")
         return redirect(url_for("expense.index"))
+    if not form.is_submitted():
+        supplier_id = request.args.get("supplier_id", None, type=int)
+        if supplier_id:
+            form.supplier.data = Supplier.get_or_404(supplier_id)
     return render_template(
         "movement/expense/non_labor.html",
         title=_("New Non-Labor Expense"),
@@ -135,6 +140,10 @@ def new_labor():
         db.session.commit()
         flash(_("New labor expense has been registed."), "success")
         return redirect(url_for("expense.index"))
+    if not form.is_submitted():
+        employee_id = request.args.get("employee_id", None, type=int)
+        if employee_id:
+            form.employee.data = Employee.get_or_404(employee_id)
     return render_template(
         "movement/expense/labor.html", title=_("New Labor Expense"), form=form
     )
@@ -178,7 +187,21 @@ def new_order_payment():
             flash(_("New order payment has been registed."), "success")
             return redirect(url_for("expense.index"))
     else:
-        form.orders.query_factory = lambda: db.session.query(false()).filter(false())
+        supplier_id = request.args.get("supplier_id", None, type=int)
+        if supplier_id:
+            form.orders.query_factory = (
+                lambda: db.session.query(Order)
+                .filter(
+                    Order.supplier_id == supplier_id,
+                    Order.expense_id.is_(None),
+                )
+                .order_by(Order.delivery_date)
+            )
+            form.supplier.data = Supplier.get_or_404(supplier_id)
+        else:
+            form.orders.query_factory = lambda: db.session.query(false()).filter(
+                false()
+            )
 
     return render_template(
         "movement/expense/order_payment.html",

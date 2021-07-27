@@ -77,9 +77,13 @@
                     {{ _("New") }}
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{url_for('expense.new_non_labor')}}">{{_("Non-Labor")}}</a></li>
+                    <li><a class="dropdown-item" href="{{url_for('expense.new_non_labor',supplier_id=supplier.id)}}">
+                            {{_("Non-Labor")}}
+                        </a>
+                    </li>
                     <li>
-                        <a class="dropdown-item" href="{{url_for('expense.new_order_payment')}}">
+                        <a class="dropdown-item"
+                            href="{{url_for('expense.new_order_payment',supplier_id=supplier.id)}}">
                             {{_("Order Payment")}}
                         </a>
                     </li>
