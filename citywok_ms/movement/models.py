@@ -32,7 +32,7 @@ MATERIAL = (
     ("material:seafood", _l("SeaFood"), _l("Material - SeaFood")),
     ("material:fruit/veg", _l("Fruit/Vegetable"), _l("Material - Fruit/Vegetable")),
     ("material:frozen", _l("Frozen"), _l("Material - Frozen")),
-    ("material:drinks", _l("Drinks"), _l("Material - Others")),
+    ("material:drinks", _l("Drinks"), _l("Material - Drinks")),
     ("material:chinese_goods", _l("Chinese Goods"), _l("Material - Chinese Goods")),
     ("material:sanitary", _l("Sanitary"), _l("Material - Sanitary")),
     ("material:stationery", _l("Stationery"), _l("Material - Stationery")),
