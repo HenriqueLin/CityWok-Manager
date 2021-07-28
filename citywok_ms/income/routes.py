@@ -7,7 +7,15 @@ from citywok_ms.income.forms import IncomeForm, RevenueForm
 from citywok_ms.income.models import Income, Revenue
 from citywok_ms.supplier.models import Supplier
 from citywok_ms.task import compress_file
-from flask import Blueprint, current_app, flash, redirect, render_template, url_for
+from flask import (
+    Blueprint,
+    current_app,
+    flash,
+    redirect,
+    render_template,
+    url_for,
+    request,
+)
 from flask_babel import _
 from flask_babel import lazy_gettext as _l
 from sqlalchemy import func
@@ -49,6 +57,7 @@ def index(date_str=None):
         income=income,
         revenue=revenue,
         actual_revenue=cash + card,
+        date_str=date_str,
     )
 
 
@@ -82,6 +91,11 @@ def new_revenue():
         db.session.commit()
         current_app.logger.info(f"Create revenue {revenue}")
         return redirect(url_for("expense.index"))
+    if not form.is_submitted():
+        date_str = request.args.get("date_str", None, type=str)
+        date = datetime.datetime.strptime(date_str, "%Y-%m-%d")
+        if date:
+            form.date.data = date
     return render_template(
         "income/revenue.html",
         title=_("New Revenue"),
@@ -111,6 +125,11 @@ def new_other_income():
         db.session.commit()
         current_app.logger.info(f"Create income {income}")
         return redirect(url_for("expense.index"))
+    if not form.is_submitted():
+        date_str = request.args.get("date_str", None, type=str)
+        date = datetime.datetime.strptime(date_str, "%Y-%m-%d")
+        if date:
+            form.date.data = date
     return render_template(
         "income/other_income.html",
         title=_("New Income"),

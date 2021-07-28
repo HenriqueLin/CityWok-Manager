@@ -53,7 +53,7 @@
                     {{_("Theoretical Revenue")}}
                 </h5>
                 <div class="card-body text-center">
-                    <h3>{{ revenue.t_revenue }}€</h3>
+                    <h3>{{ revenue.t_revenue or '0.00' }}€</h3>
                 </div>
             </div>
         </div>
@@ -76,8 +76,13 @@
                 {{ _("New") }}
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{{url_for('income.new_revenue')}}">{{_("Revenue")}}</a></li>
-                <li><a class="dropdown-item" href="{{url_for('income.new_other_income')}}">{{_("Other Income")}}</a>
+                {% if not revenue %}
+                <li><a class="dropdown-item"
+                        href="{{url_for('income.new_revenue',date_str=date_str)}}">{{_("Revenue")}}</a>
+                </li>
+                {% endif %}
+                <li><a class="dropdown-item" href="{{url_for('income.new_other_income',date_str=date_str)}}">{{_("Other
+                        Income")}}</a>
                 </li>
             </ul>
         </div>
