@@ -6,7 +6,7 @@ from citywok_ms.file.forms import FileForm
 from citywok_ms.utils.models import CRUDMixin
 from flask import current_app, url_for
 from humanize import naturalsize
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text, Date
 from sqlalchemy.ext.hybrid import hybrid_property
 from werkzeug.datastructures import FileStorage
 
@@ -121,6 +121,48 @@ class OrderFile(File):
     @staticmethod
     def create(f: FileStorage) -> "File":
         db_file = OrderFile(full_name=f.filename)
+        db.session.add(db_file)
+        db.session.flush()
+        f.save(os.path.join(current_app.config["UPLOAD_FOLDER"], db_file.internal_name))
+        db_file.size = os.path.getsize(db_file.path)
+        return db_file
+
+
+class ExpenseFile(File):
+    expense_id = Column(Integer, ForeignKey("expense.id"))
+
+    __mapper_args__ = {"polymorphic_identity": "expense_file"}
+
+    @property
+    def owner_url(self) -> str:
+        return url_for("expense.detail", expense_id=self.expense_id, _anchor="Files")
+
+    @staticmethod
+    def create(f: FileStorage) -> "File":
+        db_file = ExpenseFile(full_name=f.filename)
+        db.session.add(db_file)
+        db.session.flush()
+        f.save(os.path.join(current_app.config["UPLOAD_FOLDER"], db_file.internal_name))
+        db_file.size = os.path.getsize(db_file.path)
+        return db_file
+
+
+class SalaryPaymentFile(File):
+    salary_payment_id = Column(Date, ForeignKey("salary_payment.month"))
+
+    __mapper_args__ = {"polymorphic_identity": "salary_payment_file"}
+
+    @property
+    def owner_url(self) -> str:
+        return url_for(
+            "expense.salary_index",
+            month_str=self.salary_payment_id.strftime("%Y-%m"),
+            _anchor="Files",
+        )
+
+    @staticmethod
+    def create(f: FileStorage) -> "File":
+        db_file = SalaryPaymentFile(full_name=f.filename)
         db.session.add(db_file)
         db.session.flush()
         f.save(os.path.join(current_app.config["UPLOAD_FOLDER"], db_file.internal_name))

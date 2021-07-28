@@ -1,3 +1,4 @@
+from citywok_ms.expense.models import NonLaborExpense
 from citywok_ms.task import compress_file
 from flask.globals import current_app
 from citywok_ms import db
@@ -63,10 +64,15 @@ def new():
 @supplier_bp.route("/<int:supplier_id>")
 @shareholder.require(403)
 def detail(supplier_id):
+    expense_page = request.args.get("expense_page", 1, type=int)
     return render_template(
         "supplier/detail.html",
         title=_("Supplier Detail"),
         supplier=Supplier.get_or_404(supplier_id),
+        expenses=db.session.query(NonLaborExpense)
+        .filter(NonLaborExpense.supplier_id == supplier_id)
+        .order_by(NonLaborExpense.date.desc())
+        .paginate(page=expense_page, per_page=10),
         file_form=FileForm(),
     )
 

@@ -1,0 +1,151 @@
+{% extends 'layout.html' %}
+{% set active_page = "expense" %}
+{% block content %}
+<div>
+    <!-- title -->
+    <h1>{{title}}</h1>
+    <div class="d-print-none">
+        <a href="{{url_for('expense.update',expense_id=expense.id)}}" class="btn btn-outline-primary "
+            id="update_button">{{_('Update')}}</a>
+        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+            data-bs-target="#deleteModal">{{_("Delete")}}</button>
+    </div>
+
+    <hr>
+    <!-- informations -->
+    <dl class="row">
+        <dt class="col-4">{{_('ID')}}:</dt>
+        <dd class="col-8">{{ expense.id }}</dd>
+        <dt class="col-4">{{_('Payment Date')}}:</dt>
+        <dd class="col-8"><a href="{{url_for('expense.index',date_str=expense.date.strftime('%Y-%m-%d'))}}"
+                target="_blank">{{ expense.date }}</a></dd>
+        <dt class="col-4">{{_('Category')}}:</dt>
+        <dd class="col-8">{{ expense.category }}</dd>
+        <dt class="col-4">{{_('Payee')}}:</dt>
+        <dd class="col-8">
+            {% if expense.employee %}
+            <a href="{{url_for('employee.detail',employee_id=expense.employee.id)}}" target="_blank">
+                {{ expense.employee.full_name }}
+            </a>
+            {% elif expense.supplier %}
+            <a href="{{url_for('supplier.detail',supplier_id=expense.supplier.id)}}" target="_blank">
+                {{ expense.supplier.name }}
+            </a>
+            {% endif %}
+        </dd>
+        <dt class="col-4">{{_('Total')}}:</dt>
+        <dd class="col-8">{{ expense.total }}</dd>
+        <dt class="col-4">{{_('Cash')}}:</dt>
+        <dd class="col-8">{{ expense.cash }}</dd>
+        <dt class="col-4">{{_('Non-Cash')}}:</dt>
+        <dd class="col-8">{{ expense.non_cash }}</dd>
+        {% if expense.month_id %}
+        <dt class="col-4">{{_('Month')}}:</dt>
+        <dd class="col-8"><a href="{{url_for('expense.salary_index',month_str=expense.month_id.strftime('%Y-%m'))}}"
+                target="_blank">
+                {{ moment(expense.month_id).format('YYYY MMM') }}
+            </a></dd>
+        {% endif %}
+        <dt class="col-4">{{_('Remark')}}:</dt>
+        <dd class="col-8">{{ expense.remark or '-'}}</dd>
+    </dl>
+    {% if expense.orders %}
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered text-nowrap text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">{{_('Order Number')}}</th>
+                    <th scope="col">{{_('Delivery Date')}}</th>
+                    <th scope="col">{{_('Amount')}}</th>
+                    <th scope="col">{{_('Detail')}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in expense.orders %}
+                <tr>
+                    <th>
+                        <strong>
+                            {{ order.order_number }}
+                        </strong>
+                    </th>
+                    <td>{{ moment(order.delivery_date).format('ll') }}</td>
+                    <td>{{ order.value }}</td>
+                    <td>
+                        <a href="{{url_for('order.detail',order_id=order.id)}}">
+                            <span class="material-icons">more_vert</span>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    <div class="d-print-none">
+        <hr>
+        <h3 id="Files">{{_('Files')}}</h3>
+        <div class="mb-2">
+            <form action="{{url_for('expense.upload',expense_id=expense.id)}}" method="post"
+                enctype='multipart/form-data' class="d-inline" novalidate>
+                {{ file_form.hidden_tag() }}
+                {{ file_form.file(id="selectedFile", style="display:none", onchange="form.submit()") }}
+                <input type="button" value="{{_('New File')}}" class="btn btn-outline-success"
+                    onclick="document.getElementById('selectedFile').click();" />
+            </form>
+            {% if expense.deleted_files %}
+            <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse"
+                data-bs-target="#deletedFiles" aria-expanded="false" aria-controls="deletedFiles" id="fileButton">
+                {{_('Show deleted files')}}
+            </button>
+            {% endif %}
+        </div>
+
+        {% with files=expense.active_files %}
+        {% include 'file/active_file_table.html' %}
+        {% endwith %}
+
+        <div class="collapse" id="deletedFiles">
+            <h4>{{_('Deleted Files')}}</h4>
+            {% with files=expense.deleted_files %}
+            {% include 'file/suspend_file_table.html' %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="deleteModalLabel">{{_("Warning")}}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {{_("All files associated with this expense will also be deleted, please download the files if
+                needed.")}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{_("Close")}}</button>
+                <form action="{{url_for('expense.delete',expense_id=expense.id)}}" method="post" class="d-inline">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="submit" value="{{_('Delete')}}" class="btn btn-outline-danger">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block js %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fileButton').click(function () {
+            $(this).text(function (i, old) {
+                return old == '{{_("Hide deleted files")}}' ? '{{_("Show deleted files")}}' : '{{_("Hide deleted files")}}';
+            });
+        });
+    });
+</script>
+{% endblock js %}

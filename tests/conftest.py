@@ -1,3 +1,4 @@
+from citywok_ms.expense.models import LaborExpense, NonLaborExpense, SalaryPayment
 import datetime
 from io import BytesIO
 import os
@@ -8,7 +9,13 @@ import pytest
 from citywok_ms import create_app, current_app, db, principal, login
 from citywok_ms.auth.models import User
 from citywok_ms.employee.models import Employee
-from citywok_ms.file.models import EmployeeFile, OrderFile, SupplierFile
+from citywok_ms.file.models import (
+    EmployeeFile,
+    ExpenseFile,
+    OrderFile,
+    SalaryPaymentFile,
+    SupplierFile,
+)
 from citywok_ms.supplier.models import Supplier
 from citywok_ms.order.models import Order
 from config import TestConfig
@@ -213,6 +220,71 @@ def order(supplier):
 @pytest.fixture
 def order_with_file():
     f = OrderFile(full_name="test_file.txt", order_id=1)
+    db.session.add(f)
+    db.session.flush()
+    with open(
+        os.path.join(current_app.config["UPLOAD_FOLDER"], str(f.id) + ".txt"), "x"
+    ) as file:
+        file.write("test_file")
+    f.size = os.path.getsize(f.path)
+    db.session.commit()
+
+
+@pytest.fixture
+def expenses(supplier, employee, order):
+    labor = LaborExpense(
+        date=datetime.datetime.today().date(),
+        category="labor:advance",
+        cash=150.00,
+        employee=Employee.query.get(1),
+    )
+    db.session.add(labor)
+    month = SalaryPayment.get_or_create(datetime.datetime.today().replace(day=1).date())
+    salary = LaborExpense(
+        date=datetime.datetime.today().date(),
+        category="labor:salary",
+        cash=150.00,
+        employee=Employee.query.get(1),
+        month=month,
+    )
+    db.session.add(salary)
+    non_labor = NonLaborExpense(
+        date=datetime.datetime.today().date(),
+        category="operation:rent",
+        cash=150.00,
+        supplier=Supplier.query.get(1),
+    )
+    db.session.add(non_labor)
+    order_payment = NonLaborExpense(
+        date=datetime.datetime.today().date(),
+        category="operation:rent",
+        cash=150.00,
+        supplier=Supplier.query.get(1),
+        orders=[Order.query.get(1)],
+    )
+    db.session.add(order_payment)
+    db.session.commit()
+
+
+@pytest.fixture
+def expense_with_file(expenses):
+    f = ExpenseFile(full_name="test_file.txt", expense_id=1)
+    db.session.add(f)
+    db.session.flush()
+    with open(
+        os.path.join(current_app.config["UPLOAD_FOLDER"], str(f.id) + ".txt"), "x"
+    ) as file:
+        file.write("test_file")
+    f.size = os.path.getsize(f.path)
+    db.session.commit()
+
+
+@pytest.fixture
+def salary_payment_with_file():
+    f = SalaryPaymentFile(
+        full_name="test_file.txt",
+        salary_payment_id=datetime.datetime.today().replace(day=1),
+    )
     db.session.add(f)
     db.session.flush()
     with open(

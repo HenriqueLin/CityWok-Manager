@@ -5,7 +5,15 @@ from citywok_ms.file.models import File, OrderFile
 from citywok_ms.order.forms import OrderForm, OrderUpdateForm
 from citywok_ms.order.models import Order
 from citywok_ms.task import compress_file
-from flask import Blueprint, current_app, flash, redirect, render_template, url_for
+from flask import (
+    Blueprint,
+    current_app,
+    flash,
+    redirect,
+    render_template,
+    url_for,
+    request,
+)
 from flask_babel import _
 
 order_bp = Blueprint("order", __name__, url_prefix="/order")
@@ -14,10 +22,19 @@ order_bp = Blueprint("order", __name__, url_prefix="/order")
 @order_bp.route("/")
 @shareholder.require(403)
 def index():
+    payed_page = request.args.get("payed_page", 1, type=int)
+    unpayed_page = request.args.get("unpayed_page", 1, type=int)
     return render_template(
         "order/index.html",
         title=_("Order"),
-        orders=Order.get_all(),
+        payed=db.session.query(Order)
+        .filter(Order.expense_id.isnot(None))
+        .order_by(Order.delivery_date.desc())
+        .paginate(page=payed_page, per_page=10),
+        unpayed=db.session.query(Order)
+        .filter(Order.expense_id.is_(None))
+        .order_by(Order.delivery_date.desc())
+        .paginate(page=unpayed_page, per_page=10),
     )
 
 

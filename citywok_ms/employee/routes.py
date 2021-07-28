@@ -1,3 +1,4 @@
+from citywok_ms.expense.models import LaborExpense
 from citywok_ms import db
 from citywok_ms.auth.permissions import manager, shareholder, visitor
 from citywok_ms.employee.forms import EmployeeForm
@@ -65,11 +66,16 @@ def new():
 @employee_bp.route("/<int:employee_id>")
 @shareholder.require(403)
 def detail(employee_id):
+    expense_page = request.args.get("expense_page", 1, type=int)
     return render_template(
         "employee/detail.html",
         title=_("Employee Detail"),
         employee=Employee.get_or_404(employee_id),
         file_form=FileForm(),
+        expenses=db.session.query(LaborExpense)
+        .filter(LaborExpense.employee_id == employee_id)
+        .order_by(LaborExpense.date.desc())
+        .paginate(page=expense_page, per_page=10),
     )
 
 

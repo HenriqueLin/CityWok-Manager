@@ -2,12 +2,19 @@
 # from citywok_ms.models import Employee, File
 # from flask import request
 
+import datetime
 import html
 
 import pytest
 from citywok_ms import db
 from citywok_ms.file.forms import FileForm
-from citywok_ms.file.models import EmployeeFile, OrderFile, SupplierFile
+from citywok_ms.file.models import (
+    EmployeeFile,
+    ExpenseFile,
+    OrderFile,
+    SalaryPaymentFile,
+    SupplierFile,
+)
 from flask import request
 from flask.helpers import url_for
 from wtforms.fields.simple import HiddenField, SubmitField
@@ -151,6 +158,60 @@ def test_update_get_order_file(client, user, order_with_file):
 
     # links
     assert url_for("order.detail", order_id=1) in data
+
+
+@pytest.mark.role("admin")
+def test_update_get_expense_file(client, user, expense_with_file):
+    response = client.get(url_for("file.update", file_id=1))
+    data = response.data.decode()
+
+    # state code
+    assert response.status_code == 200
+    # titles
+    assert "Update File" in data
+    # form
+    for field in FileForm()._fields.values():
+        if isinstance(field, (HiddenField, SubmitField)):
+            continue
+        assert field.id in data
+
+    f = ExpenseFile.get_or_404(1)
+    assert f.base_name in data
+    assert f.format in data
+    assert "Update" in data
+
+    # links
+    assert url_for("expense.detail", expense_id=1) in data
+
+
+@pytest.mark.role("admin")
+def test_update_get_salary_payment_file(client, user, salary_payment_with_file):
+    response = client.get(url_for("file.update", file_id=1))
+    data = response.data.decode()
+
+    # state code
+    assert response.status_code == 200
+    # titles
+    assert "Update File" in data
+    # form
+    for field in FileForm()._fields.values():
+        if isinstance(field, (HiddenField, SubmitField)):
+            continue
+        assert field.id in data
+
+    f = SalaryPaymentFile.get_or_404(1)
+    assert f.base_name in data
+    assert f.format in data
+    assert "Update" in data
+
+    # links
+    assert (
+        url_for(
+            "expense.salary_index",
+            month_str=datetime.datetime.today().strftime("%Y-%m"),
+        )
+        in data
+    )
 
 
 @pytest.mark.role("admin")

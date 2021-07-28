@@ -7,7 +7,8 @@
     <div class="mb-2 d-print-none">
         <a href="{{url_for('order.new')}}" class="btn btn-outline-success">{{_('New')}}</a>
     </div>
-    {% if orders %}
+    <h3 id="Payed">{{_('Unpayed')}}</h3>
+    {% if unpayed.items %}
     <div class="table-responsive">
         <table class="table table-striped table-bordered text-nowrap text-center">
             <thead class="table-dark">
@@ -20,7 +21,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for order in orders %}
+                {% for order in unpayed.items %}
                 <tr>
                     <th>
                         <strong>
@@ -44,6 +45,49 @@
             </tbody>
         </table>
     </div>
+    {{ macros.pagination('order.index',obj=unpayed,page_str='unpayed_page',payed_page=payed.page) }}
+    {% else %}
+    {{ _("No unpayed orders") }}
+    {% endif %}
+    {% if payed.items %}
+    <h3 id="Payed">{{_('Payed')}}</h3>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered text-nowrap text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">{{_('Order Number')}}</th>
+                    <th scope="col">{{_('Delivery Date')}}</th>
+                    <th scope="col">{{_('Value')}}</th>
+                    <th scope="col">{{_('Supplier')}}</th>
+                    <th scope="col">{{_('Detail')}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in payed.items %}
+                <tr>
+                    <th>
+                        <strong>
+                            {{ order.order_number }}
+                        </strong>
+                    </th>
+                    <td>{{ moment(order.delivery_date).format('ll') }}</td>
+                    <td>{{ order.value }}</td>
+                    <td>
+                        <a href="{{url_for('supplier.detail',supplier_id=order.supplier.id)}}">
+                            {{ order.supplier.name }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{url_for('order.detail',order_id=order.id)}}">
+                            <span class="material-icons">more_vert</span>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {{ macros.pagination('order.index',obj=payed,page_str='payed_page',unpayed_page=unpayed.page) }}
     {% endif %}
 </div>
 

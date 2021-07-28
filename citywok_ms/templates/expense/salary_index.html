@@ -1,0 +1,157 @@
+{% extends 'layout.html' %}
+{% set active_page = "expense" %}
+{% block content %}
+<div>
+    <div class="d-flex justify-content-between flex-wrap flex-sm-nowrap align-items-center">
+        <h1>{{title}}</h1>
+        <form action="" method="post" novalidate autocomplete="off">
+            {{ form.hidden_tag() }}
+            <div class="row gy-3 overflow-hidden">
+                <div>
+                    {{ form.month(class="form-control", onchange="form.submit()") }}
+                </div>
+            </div>
+        </form>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-4 pb-2">
+            <div class="card text-center">
+                <h5 class="card-header text-white bg-dark">
+                    {{_("Total")}}
+                </h5>
+                <div class="card-body text-center">
+                    <h3>{{ amount.cash + amount.card + amount.check + amount.transfer}}€</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 pb-2">
+            <div class="card text-center">
+                <h5 class="card-header text-white bg-dark">
+                    {{_("Cash")}}
+                </h5>
+                <div class="card-body text-center">
+                    <h3>{{ amount.cash }}€</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 pb-2">
+            <div class="card text-center">
+                <h5 class="card-header text-white bg-dark">
+                    {{_("Non-Cash")}}
+                </h5>
+                <div class="card-body text-center">
+                    <h3>{{ amount.card + amount.check + amount.transfer}}€</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <h3>{{_('Unpayed')}}</h3>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered text-nowrap text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">{{_('ID')}}</th>
+                    <th scope="col">{{_('Name')}}</th>
+                    <th scope="col">{{_('Chinese Name')}}</th>
+                    <th scope="col">{{_('Pay')}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in active %}
+                <tr>
+                    <th>{{ employee.id }}</th>
+                    <td>{{ employee.full_name }}</td>
+                    <td>{{ employee.zh_name or "-" }}</td>
+                    <td>
+                        <a href="{{ url_for('expense.new_salary',employee_id=employee.id,month_str=month_str) }}">
+                            <span class="material-icons">
+                                payments
+                            </span>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <hr>
+    <h3>{{_('Payed')}}</h3>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered text-nowrap text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">{{_('ID')}}</th>
+                    <th scope="col">{{_('Name')}}</th>
+                    <th scope="col">{{_('Chinese Name')}}</th>
+                    <th scope="col">{{_('Cash')}}</th>
+                    <th scope="col">{{_('Non-Cash')}}</th>
+                    <th scope="col">{{_('Detail')}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee, expense in payed %}
+                <tr>
+                    <th>{{ employee.id }}</th>
+                    <td>{{ employee.full_name }}</td>
+                    <td>{{ employee.zh_name or "-" }}</td>
+                    <td>{{ expense.cash }}</td>
+                    <td>{{ expense.non_cash }}</td>
+                    <td>
+                        <a href="{{url_for('expense.detail',expense_id=expense.id)}}">
+                            <span class="material-icons">
+                                more_vert
+                            </span>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="d-print-none">
+        <hr>
+        <h3 id="Files">{{_('Files')}}</h3>
+        <div class="mb-2">
+            <form action="{{url_for('expense.salary_upload',month_str=month_str)}}" method="post"
+                enctype='multipart/form-data' class="d-inline" novalidate>
+                {{ file_form.hidden_tag() }}
+                {{ file_form.file(id="selectedFile", style="display:none", onchange="form.submit()") }}
+                <input type="button" value="{{_('New File')}}" class="btn btn-outline-success"
+                    onclick="document.getElementById('selectedFile').click();" />
+            </form>
+            {% if salary_payment.deleted_files %}
+            <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse"
+                data-bs-target="#deletedFiles" aria-expanded="false" aria-controls="deletedFiles" id="fileButton">
+                {{_('Show deleted files')}}
+            </button>
+            {% endif %}
+        </div>
+
+        {% with files=salary_payment.active_files %}
+        {% include 'file/active_file_table.html' %}
+        {% endwith %}
+
+        <div class="collapse" id="deletedFiles">
+            <h4>{{_('Deleted Files')}}</h4>
+            {% with files=salary_payment.deleted_files %}
+            {% include 'file/suspend_file_table.html' %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block js %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fileButton').click(function () {
+            $(this).text(function (i, old) {
+                return old == '{{_("Hide deleted files")}}' ? '{{_("Show deleted files")}}' : '{{_("Hide deleted files")}}';
+            });
+        });
+    });
+</script>
+{% endblock js %}
