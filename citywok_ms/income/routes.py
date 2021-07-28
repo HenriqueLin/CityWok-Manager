@@ -1,7 +1,8 @@
+from sqlalchemy.orm.util import with_polymorphic
 from citywok_ms.expense.forms import DateForm
 import datetime
 from citywok_ms import db
-from citywok_ms.expense.models import NonLaborExpense
+from citywok_ms.expense.models import Expense, NonLaborExpense
 from citywok_ms.file.models import IncomeFile, RevenueFile
 from citywok_ms.income.forms import IncomeForm, RevenueForm
 from citywok_ms.income.models import Income, Revenue
@@ -48,6 +49,13 @@ def index(date_str=None):
         .filter(Income.category == "revenue")
         .first()
     )
+    polymorphic = with_polymorphic(Expense, "*")
+    expense = db.session.query(polymorphic).filter(
+        Expense.from_pos, Expense.date == date
+    )
+    small_expense = expense.with_entities(
+        func.coalesce(func.sum(Expense.total), 0)
+    ).first()[0]
 
     return render_template(
         "income/index.html",
@@ -56,8 +64,9 @@ def index(date_str=None):
         incomes=query.all(),
         income=income,
         revenue=revenue,
-        actual_revenue=cash + card,
+        actual_revenue=cash + card + small_expense,
         date_str=date_str,
+        expenses=expense.all(),
     )
 
 
