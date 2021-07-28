@@ -192,7 +192,7 @@ class LaborExpenseForm(FlaskForm):
 
     employee = QuerySelectField(
         label=_l("Employee"),
-        query_factory=lambda: Employee.query,
+        query_factory=lambda: Employee.query.filter(Employee.active),
         get_pk=lambda x: x.id,
         get_label=lambda x: f"{x.id}: {x.full_name}",
         allow_blank=True,
