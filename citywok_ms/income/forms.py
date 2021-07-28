@@ -9,6 +9,7 @@ from wtforms.fields.core import FieldList, FormField
 from wtforms.fields.html5 import DateField, DecimalField
 from wtforms.validators import InputRequired, NumberRange, Optional, ValidationError
 from citywok_ms import db
+from citywok_ms.expense.forms import MoneyForm
 
 
 class CardForm(FlaskForm):
@@ -60,7 +61,6 @@ class RevenueForm(FlaskForm):
         validators=[FilesRequired(), FilesAllowed(FILEALLOWED)],
     )
     submit = SubmitField(label=_l("Add"))
-    update = SubmitField(label=_l("Update"))
 
     @property
     def cards_total(self):
@@ -75,3 +75,24 @@ class RevenueForm(FlaskForm):
             raise ValidationError(
                 _l('Revenue of "%(date)s" already existe.', date=self.date.data)
             )
+
+
+class IncomeForm(FlaskForm):
+    date = DateField(
+        label=_l("Date"),
+        validators=[InputRequired()],
+        default=datetime.date.today(),
+    )
+    value = FormField(MoneyForm)
+    remark = TextAreaField(
+        label=_l("Remark"),
+        validators=[Optional()],
+        filters=[lambda x: x or None],
+    )
+    files = MultipleFileField(
+        label=_l("Files"),
+        validators=[FilesRequired(), FilesAllowed(FILEALLOWED)],
+    )
+
+    submit = SubmitField(label=_l("Add"))
+    update = SubmitField(label=_l("Update"))
