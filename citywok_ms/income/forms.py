@@ -7,7 +7,13 @@ from flask_wtf import FlaskForm
 from wtforms import SubmitField, TextAreaField
 from wtforms.fields.core import FieldList, FormField
 from wtforms.fields.html5 import DateField, DecimalField
-from wtforms.validators import InputRequired, NumberRange, Optional, ValidationError
+from wtforms.validators import (
+    DataRequired,
+    InputRequired,
+    NumberRange,
+    Optional,
+    ValidationError,
+)
 from citywok_ms import db
 from citywok_ms.expense.forms import MoneyForm
 
@@ -16,12 +22,12 @@ class CardForm(FlaskForm):
     total = DecimalField(
         label=_l("Total"),
         default=0,
-        validators=[NumberRange(min=0)],
+        validators=[NumberRange(min=0), InputRequired()],
     )
     fee = DecimalField(
         label=_l("Fee"),
         default=0,
-        validators=[NumberRange(min=0)],
+        validators=[NumberRange(min=0), InputRequired()],
     )
 
     def validate_total(self, total):
