@@ -175,9 +175,9 @@ class IncomeFile(File):
 
     __mapper_args__ = {"polymorphic_identity": "income_file"}
 
-    # @property
-    # def owner_url(self) -> str:
-    #     return url_for("income.detail", income_id=self.income_id, _anchor="Files")
+    @property
+    def owner_url(self) -> str:
+        return url_for("income.detail", income_id=self.income_id, _anchor="Files")
 
     @staticmethod
     def create(f: FileStorage) -> "File":

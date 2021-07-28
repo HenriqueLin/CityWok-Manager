@@ -160,6 +160,30 @@ def detail(income_id):
     )
 
 
+@income_bp.route("/<int:income_id>/upload", methods=["POST"])
+def upload(income_id):
+    form = FileForm()
+    file = form.file.data
+    if form.validate_on_submit():
+        db_file = IncomeFile.create(form.file.data)
+        db_file.income_id = income_id
+        flash(
+            _('File "%(name)s" has been uploaded.', name=db_file.full_name), "success"
+        )
+        db.session.commit()
+        current_app.logger.info(f"Upload income file {db_file}")
+        compress_file.queue(db_file.id)
+
+    elif file is not None:
+        flash(
+            _('Invalid file format "%(format)s".', format=File.split_file_format(file)),
+            "danger",
+        )
+    else:
+        flash(_("No file has been uploaded."), "danger")
+    return redirect(url_for("income.detail", income_id=income_id))
+
+
 @income_bp.route("/revenue/<date_str>/upload", methods=["POST"])
 def revenue_upload(date_str):
     form = FileForm()
