@@ -1,4 +1,5 @@
 from flask_babel import lazy_gettext as _l
+from sqlalchemy.ext.hybrid import hybrid_property
 from citywok_ms import db
 from citywok_ms.utils.models import CRUDMixin, SqliteDecimal
 from sqlalchemy import Column, Date, Integer, Text, ForeignKey, String
@@ -30,3 +31,11 @@ class Income(db.Model):
     transfer = Column(SqliteDecimal(2), default=0)
 
     files = relationship("IncomeFile", cascade="all, delete-orphan")
+
+    @hybrid_property
+    def total(self):
+        return sum((self.cash, self.card, self.transfer, self.check))
+
+    @hybrid_property
+    def non_cash(self):
+        return sum((self.card, self.transfer, self.check))

@@ -1,3 +1,4 @@
+from citywok_ms.expense.forms import DateForm
 import datetime
 from citywok_ms import db
 from citywok_ms.expense.models import NonLaborExpense
@@ -9,8 +10,46 @@ from citywok_ms.task import compress_file
 from flask import Blueprint, current_app, flash, redirect, render_template, url_for
 from flask_babel import _
 from flask_babel import lazy_gettext as _l
+from sqlalchemy import func
 
 income_bp = Blueprint("income", __name__, url_prefix="/income")
+
+
+@income_bp.route("/", methods=["GET", "POST"])
+@income_bp.route("/<date_str>", methods=["GET", "POST"])
+def index(date_str=None):
+    if date_str is None:
+        return redirect(url_for("income.index", date_str=datetime.date.today()))
+    form = DateForm(date=datetime.datetime.strptime(date_str, "%Y-%m-%d").date())
+    if form.validate_on_submit():
+        return redirect(url_for("income.index", date_str=form.date.data))
+    # if not form.is_submitted():
+    date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+    query = db.session.query(Income).filter(Income.date == date)
+    income = query.with_entities(
+        func.coalesce(func.sum(Income.total), 0).label("total"),
+        func.coalesce(func.sum(Income.cash), 0).label("cash"),
+        func.coalesce(func.sum(Income.non_cash), 0).label("non_cash"),
+    ).first()
+    revenue = db.session.query(Revenue).get(date)
+    cash, card = (
+        query.with_entities(
+            func.coalesce(func.sum(Income.cash), 0),
+            func.coalesce(func.sum(Income.card), 0),
+        )
+        .filter(Income.category == "revenue")
+        .first()
+    )
+
+    return render_template(
+        "income/index.html",
+        title=_("Income"),
+        form=form,
+        incomes=query.all(),
+        income=income,
+        revenue=revenue,
+        actual_revenue=cash + card,
+    )
 
 
 @income_bp.route("/new/revenue", methods=["GET", "POST"])
