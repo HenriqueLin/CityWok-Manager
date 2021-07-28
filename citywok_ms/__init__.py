@@ -87,6 +87,7 @@ def create_app(config_class=Config):
         from citywok_ms.supplier.routes import supplier_bp
         from citywok_ms.order.routes import order_bp
         from citywok_ms.expense.routes import expense_bp
+        from citywok_ms.income.routes import income_bp
 
         # blueprints
         app.register_blueprint(auth_bp)
@@ -99,6 +100,7 @@ def create_app(config_class=Config):
         app.register_blueprint(admin_bp)
         app.register_blueprint(order_bp)
         app.register_blueprint(expense_bp)
+        app.register_blueprint(income_bp)
 
         app.logger.removeHandler(default_handler)
         if not app.testing:  # test: no cover
