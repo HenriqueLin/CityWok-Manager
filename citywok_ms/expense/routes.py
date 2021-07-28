@@ -49,10 +49,10 @@ def index(date_str=None):
     if date_str is None:
         return redirect(url_for("expense.index", date_str=datetime.date.today()))
 
-    form = DateForm(date=datetime.datetime.strptime(date_str, "%Y-%m-%d"))
+    form = DateForm(date=datetime.datetime.strptime(date_str, "%Y-%m-%d").date())
     if form.validate_on_submit():
         return redirect(url_for("expense.index", date_str=form.date.data))
-    else:
+    if not form.is_submitted():
         date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
 
     expense = with_polymorphic(Expense, "*")
@@ -157,6 +157,7 @@ def new_labor():
 @manager.require(403)
 def new_order_payment():
     form = OrderPaymentForm()
+    form.orders.query_factory = lambda: db.session.query(false()).filter(false())
     if form.is_submitted():
         if form.supplier.validate(form):
             form.orders.query_factory = (
@@ -167,10 +168,7 @@ def new_order_payment():
                 )
                 .order_by(Order.delivery_date)
             )
-        else:
-            form.orders.query_factory = lambda: db.session.query(false()).filter(
-                false()
-            )
+
         if "submit" in request.form and form.validate():
             expense = NonLaborExpense(
                 date=form.date.data,
@@ -203,10 +201,6 @@ def new_order_payment():
                 .order_by(Order.delivery_date)
             )
             form.supplier.data = Supplier.get_or_404(supplier_id)
-        else:
-            form.orders.query_factory = lambda: db.session.query(false()).filter(
-                false()
-            )
 
     return render_template(
         "expense/order_payment.html",
@@ -218,6 +212,7 @@ def new_order_payment():
 @expense_bp.route("/new/salary/<int:employee_id>/<month_str>", methods=["GET", "POST"])
 @manager.require(403)
 def new_salary(employee_id, month_str):
+
     month = datetime.datetime.strptime(month_str, "%Y-%m").date()
     form = SalaryForm()
     employee = Employee.get_or_404(employee_id)
@@ -241,7 +236,7 @@ def new_salary(employee_id, month_str):
             expense.files.append(db_file)
             compress_file.queue(db_file.id)
         db.session.add(expense)
-        salary_payment.expenses.append(expense)
+        expense.month = salary_payment
         db.session.commit()
         flash(_("New salary has been registed."), "success")
         return redirect(url_for("expense.salary_index"))
@@ -349,6 +344,7 @@ def update(expense_id):
 def update_non_labor(expense_id):
     expense = NonLaborExpense.get_or_404(expense_id)
     form = NonLaborExpenseForm()
+    del form.files
     if form.validate_on_submit():
         expense.date = form.date.data
         expense.category = form.category.data
@@ -552,10 +548,7 @@ def salary_upload(month_str):
 @expense_bp.route("delete/<int:expense_id>", methods=["POST"])
 @manager.require(403)
 def delete(expense_id):
-    polymorphic = with_polymorphic(Expense, "*")
-    expense = db.session.query(polymorphic).filter(Expense.id == expense_id).first()
-    if expense is None:
-        abort(404)
+    expense = Expense.get_or_404(expense_id)
     db.session.delete(expense)
     db.session.commit()
     flash(_("Expense has been deleted."), "success")

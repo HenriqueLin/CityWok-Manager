@@ -114,8 +114,8 @@
         <hr>
         <h3 id="Files">{{_('Files')}}</h3>
         <div class="mb-2">
-            <form action="{{url_for('expense.salary_upload',month_str=form.month.data.strftime('%Y-%d'))}}"
-                method="post" enctype='multipart/form-data' class="d-inline" novalidate>
+            <form action="{{url_for('expense.salary_upload',month_str=month_str)}}" method="post"
+                enctype='multipart/form-data' class="d-inline" novalidate>
                 {{ file_form.hidden_tag() }}
                 {{ file_form.file(id="selectedFile", style="display:none", onchange="form.submit()") }}
                 <input type="button" value="{{_('New File')}}" class="btn btn-outline-success"

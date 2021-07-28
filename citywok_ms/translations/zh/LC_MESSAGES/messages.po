@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-07-27 20:54+0100\n"
+"POT-Creation-Date: 2021-07-28 02:11+0100\n"
 "PO-Revision-Date: 2021-06-19 22:05+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -369,22 +369,22 @@ msgstr "员工 \"%(name)s\" 冻结."
 msgid "Employee \"%(name)s\" has been activated."
 msgstr "员工 \"%(name)s\" 已激活."
 
-#: citywok_ms/employee/routes.py:142 citywok_ms/expense/routes.py:509
-#: citywok_ms/expense/routes.py:536 citywok_ms/order/routes.py:115
+#: citywok_ms/employee/routes.py:142 citywok_ms/expense/routes.py:505
+#: citywok_ms/expense/routes.py:532 citywok_ms/order/routes.py:115
 #: citywok_ms/supplier/routes.py:111
 #, python-format
 msgid "File \"%(name)s\" has been uploaded."
 msgstr "文件成功上传."
 
-#: citywok_ms/employee/routes.py:150 citywok_ms/expense/routes.py:517
-#: citywok_ms/expense/routes.py:544 citywok_ms/order/routes.py:123
+#: citywok_ms/employee/routes.py:150 citywok_ms/expense/routes.py:513
+#: citywok_ms/expense/routes.py:540 citywok_ms/order/routes.py:123
 #: citywok_ms/supplier/routes.py:119
 #, python-format
 msgid "Invalid file format \"%(format)s\"."
 msgstr "无效的文件格式 \"%(format)s\"."
 
-#: citywok_ms/employee/routes.py:154 citywok_ms/expense/routes.py:521
-#: citywok_ms/expense/routes.py:548 citywok_ms/order/routes.py:127
+#: citywok_ms/employee/routes.py:154 citywok_ms/expense/routes.py:517
+#: citywok_ms/expense/routes.py:544 citywok_ms/order/routes.py:127
 #: citywok_ms/supplier/routes.py:123
 msgid "No file has been uploaded."
 msgstr "未上传文件."
@@ -736,67 +736,67 @@ msgstr "人工支出已登记."
 msgid "New Labor Expense"
 msgstr "添加人工支出"
 
-#: citywok_ms/expense/routes.py:192
+#: citywok_ms/expense/routes.py:190
 msgid "New order payment has been registed."
 msgstr "订单支付已登记."
 
-#: citywok_ms/expense/routes.py:213
+#: citywok_ms/expense/routes.py:207
 msgid "New Orders Payment"
 msgstr "添加订单支付"
 
-#: citywok_ms/expense/routes.py:225
+#: citywok_ms/expense/routes.py:220
 msgid "Employee already payed at the given month."
 msgstr "该员工已领取了给定月份的工资."
 
-#: citywok_ms/expense/routes.py:246
+#: citywok_ms/expense/routes.py:241
 msgid "New salary has been registed."
 msgstr "工资已登记."
 
-#: citywok_ms/expense/routes.py:250
+#: citywok_ms/expense/routes.py:245
 msgid "New Salary"
 msgstr "添加工资"
 
-#: citywok_ms/expense/routes.py:300
+#: citywok_ms/expense/routes.py:295
 msgid "Salary Payment"
 msgstr "工资支付"
 
-#: citywok_ms/expense/routes.py:320
+#: citywok_ms/expense/routes.py:315
 msgid "Expense Detail"
 msgstr "付款详情"
 
-#: citywok_ms/expense/routes.py:362
+#: citywok_ms/expense/routes.py:358
 msgid "Non-labor expense has been updated."
 msgstr "非人工支出已更新."
 
-#: citywok_ms/expense/routes.py:372
+#: citywok_ms/expense/routes.py:368
 msgid "Update Non-Labor Expense"
 msgstr "更新非人工支出"
 
-#: citywok_ms/expense/routes.py:394
+#: citywok_ms/expense/routes.py:390
 msgid "Labor expense has been updated."
 msgstr "人工支出已更新."
 
-#: citywok_ms/expense/routes.py:404
+#: citywok_ms/expense/routes.py:400
 msgid "Update Labor Expense"
 msgstr "更新人工支出"
 
-#: citywok_ms/expense/routes.py:442
+#: citywok_ms/expense/routes.py:438
 msgid "Order Payment has been updated."
 msgstr "订单支付已更新."
 
-#: citywok_ms/expense/routes.py:461
+#: citywok_ms/expense/routes.py:457
 msgid "Update Orders Payment"
 msgstr "更新订单支付"
 
-#: citywok_ms/expense/routes.py:482
+#: citywok_ms/expense/routes.py:478
 msgid "Salary has been updated."
 msgstr "工资已更新"
 
-#: citywok_ms/expense/routes.py:492
+#: citywok_ms/expense/routes.py:488
 msgid "Update Salary"
 msgstr "更新工资"
 
-#: citywok_ms/expense/routes.py:561
+#: citywok_ms/expense/routes.py:554
 msgid "Expense has been deleted."
 msgstr "支出已删除."
 
