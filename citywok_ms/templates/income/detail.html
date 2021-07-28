@@ -8,9 +8,12 @@
         {#
         <a href="{{url_for('income.update',income_id=income.id)}}" class="btn btn-outline-primary "
             id="update_button">{{_('Update')}}</a>
+        #}
+        {% if income.category != "revenue" %}
         <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
             data-bs-target="#deleteModal">{{_("Delete")}}</button>
-        #}
+        {% endif %}
+
     </div>
 
     <hr>
@@ -63,9 +66,6 @@
         </div>
     </div>
 </div>
-{#
-
-
 <!-- Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -89,7 +89,6 @@
         </div>
     </div>
 </div>
-#}
 {% endblock content %}
 
 {% block js %}

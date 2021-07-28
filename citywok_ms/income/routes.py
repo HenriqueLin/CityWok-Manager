@@ -160,6 +160,19 @@ def detail(income_id):
     )
 
 
+@income_bp.route("delete/<int:income_id>", methods=["POST"])
+def delete(income_id):
+    income = Income.get_or_404(income_id)
+    if income.category == "revenue":
+        flash(_("This income can not be deleted."), "danger")
+        return redirect(url_for("income.detail", income_id=income_id))
+    db.session.delete(income)
+    flash(_("Income has been deleted."), "success")
+    db.session.commit()
+    current_app.logger.info(f"Delete income {income}")
+    return redirect(url_for("income.index"))
+
+
 @income_bp.route("/<int:income_id>/upload", methods=["POST"])
 def upload(income_id):
     form = FileForm()
