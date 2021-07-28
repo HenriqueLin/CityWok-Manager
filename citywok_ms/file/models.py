@@ -194,9 +194,9 @@ class RevenueFile(File):
 
     __mapper_args__ = {"polymorphic_identity": "revenue_file"}
 
-    # @property
-    # def owner_url(self) -> str:
-    #     return url_for("revenue.detail", date_str=self.revenue_id, _anchor="Files")
+    @property
+    def owner_url(self) -> str:
+        return url_for("income.index", date_str=self.revenue_id, _anchor="Files")
 
     @staticmethod
     def create(f: FileStorage) -> "File":

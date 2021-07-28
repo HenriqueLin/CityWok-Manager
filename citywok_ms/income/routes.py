@@ -1,9 +1,10 @@
-from sqlalchemy.orm.util import with_polymorphic
-from citywok_ms.expense.forms import DateForm
 import datetime
+
 from citywok_ms import db
+from citywok_ms.expense.forms import DateForm
 from citywok_ms.expense.models import Expense, NonLaborExpense
-from citywok_ms.file.models import IncomeFile, RevenueFile
+from citywok_ms.file.forms import FileForm
+from citywok_ms.file.models import File, IncomeFile, RevenueFile
 from citywok_ms.income.forms import IncomeForm, RevenueForm
 from citywok_ms.income.models import Income, Revenue
 from citywok_ms.supplier.models import Supplier
@@ -14,12 +15,13 @@ from flask import (
     flash,
     redirect,
     render_template,
-    url_for,
     request,
+    url_for,
 )
 from flask_babel import _
 from flask_babel import lazy_gettext as _l
 from sqlalchemy import func
+from sqlalchemy.orm.util import with_polymorphic
 
 income_bp = Blueprint("income", __name__, url_prefix="/income")
 
@@ -67,6 +69,7 @@ def index(date_str=None):
         actual_revenue=cash + card + small_expense,
         date_str=date_str,
         expenses=expense.all(),
+        file_form=FileForm(),
     )
 
 
@@ -144,3 +147,27 @@ def new_other_income():
         title=_("New Income"),
         form=form,
     )
+
+
+@income_bp.route("/revenue/<date_str>/upload", methods=["POST"])
+def revenue_upload(date_str):
+    form = FileForm()
+    file = form.file.data
+    if form.validate_on_submit():
+        db_file = RevenueFile.create(form.file.data)
+        db_file.revenue_id = date_str
+        flash(
+            _('File "%(name)s" has been uploaded.', name=db_file.full_name), "success"
+        )
+        db.session.commit()
+        current_app.logger.info(f"Upload revenue file {db_file}")
+        compress_file.queue(db_file.id)
+
+    elif file is not None:
+        flash(
+            _('Invalid file format "%(format)s".', format=File.split_file_format(file)),
+            "danger",
+        )
+    else:
+        flash(_("No file has been uploaded."), "danger")
+    return redirect(url_for("income.index", date_str=date_str))
