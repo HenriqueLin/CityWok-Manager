@@ -107,8 +107,9 @@ def new_non_labor():
             expense.files.append(db_file)
             compress_file.queue(db_file.id)
         db.session.add(expense)
-        db.session.commit()
         flash(_("New non-labor expense has been registed."), "success")
+        db.session.commit()
+        current_app.logger.info(f"Create non-labor expense {expense}")
         return redirect(url_for("expense.index"))
     if not form.is_submitted():
         supplier_id = request.args.get("supplier_id", None, type=int)
@@ -141,8 +142,9 @@ def new_labor():
             expense.files.append(db_file)
             compress_file.queue(db_file.id)
         db.session.add(expense)
-        db.session.commit()
         flash(_("New labor expense has been registed."), "success")
+        db.session.commit()
+        current_app.logger.info(f"Create labor expense {expense}")
         return redirect(url_for("expense.index"))
     if not form.is_submitted():
         employee_id = request.args.get("employee_id", None, type=int)
@@ -186,8 +188,9 @@ def new_order_payment():
                 expense.files.append(db_file)
                 compress_file.queue(db_file.id)
             db.session.add(expense)
-            db.session.commit()
             flash(_("New order payment has been registed."), "success")
+            db.session.commit()
+            current_app.logger.info(f"Create order payment {expense}")
             return redirect(url_for("expense.index"))
     else:
         supplier_id = request.args.get("supplier_id", None, type=int)
@@ -237,8 +240,9 @@ def new_salary(employee_id, month_str):
             compress_file.queue(db_file.id)
         db.session.add(expense)
         expense.month = salary_payment
-        db.session.commit()
         flash(_("New salary has been registed."), "success")
+        db.session.commit()
+        current_app.logger.info(f"Create salary {expense}")
         return redirect(url_for("expense.salary_index"))
     return render_template(
         "expense/salary.html",
@@ -354,8 +358,9 @@ def update_non_labor(expense_id):
         expense.transfer = form.value.transfer.data
         expense.card = form.value.card.data
         expense.check = form.value.check.data
-        db.session.commit()
         flash(_("Non-labor expense has been updated."), "success")
+        db.session.commit()
+        current_app.logger.info(f"Update non-labor expense {expense}")
         return redirect(url_for("expense.detail", expense_id=expense_id))
     if not form.is_submitted():
         form.process(obj=expense)
@@ -386,8 +391,9 @@ def update_labor(expense_id):
         expense.transfer = form.value.transfer.data
         expense.card = form.value.card.data
         expense.check = form.value.check.data
-        db.session.commit()
         flash(_("Labor expense has been updated."), "success")
+        db.session.commit()
+        current_app.logger.info(f"Update labor expense {expense}")
         return redirect(url_for("expense.detail", expense_id=expense_id))
     if not form.is_submitted():
         form.process(obj=expense)
@@ -434,8 +440,9 @@ def update_order_payment(expense_id):
             expense.transfer = form.value.transfer.data
             expense.card = form.value.card.data
             expense.check = form.value.check.data
-            db.session.commit()
             flash(_("Order Payment has been updated."), "success")
+            db.session.commit()
+            current_app.logger.info(f"Update order payment {expense}")
             return redirect(url_for("expense.detail", expense_id=expense_id))
     else:
         form.orders.query_factory = (
@@ -474,8 +481,9 @@ def update_salary(expense_id):
         expense.transfer = form.value.transfer.data
         expense.card = form.value.card.data
         expense.check = form.value.check.data
-        db.session.commit()
         flash(_("Salary has been updated."), "success")
+        db.session.commit()
+        current_app.logger.info(f"Update salary {expense}")
         return redirect(url_for("expense.detail", expense_id=expense_id))
     elif not form.is_submitted():
         form.process(obj=expense)
@@ -550,6 +558,7 @@ def salary_upload(month_str):
 def delete(expense_id):
     expense = Expense.get_or_404(expense_id)
     db.session.delete(expense)
-    db.session.commit()
     flash(_("Expense has been deleted."), "success")
+    db.session.commit()
+    current_app.logger.info(f"Delete expense {expense}")
     return redirect(url_for("expense.index"))
