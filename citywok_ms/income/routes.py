@@ -99,7 +99,7 @@ def new_revenue():
         flash(_("New revenue has been registed."), "success")
         db.session.commit()
         current_app.logger.info(f"Create revenue {revenue}")
-        return redirect(url_for("expense.index"))
+        return redirect(url_for("income.index"))
     if not form.is_submitted():
         date_str = request.args.get("date_str", None, type=str)
         date = datetime.datetime.strptime(date_str, "%Y-%m-%d")
@@ -133,7 +133,7 @@ def new_other_income():
         flash(_("New income has been registed."), "success")
         db.session.commit()
         current_app.logger.info(f"Create income {income}")
-        return redirect(url_for("expense.index"))
+        return redirect(url_for("income.index"))
     if not form.is_submitted():
         date_str = request.args.get("date_str", None, type=str)
         date = datetime.datetime.strptime(date_str, "%Y-%m-%d")
