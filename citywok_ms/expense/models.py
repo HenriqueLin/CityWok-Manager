@@ -1,4 +1,6 @@
 from typing import List
+
+from sqlalchemy.sql.sqltypes import Boolean
 from citywok_ms.file.models import ExpenseFile, SalaryPaymentFile
 import datetime
 from flask_babel import lazy_gettext as _l
@@ -66,6 +68,7 @@ class Expense(db.Model, CRUDMixin):
     check = Column(SqliteDecimal(2), default=0)
     card = Column(SqliteDecimal(2), default=0)
     transfer = Column(SqliteDecimal(2), default=0)
+    from_pos = Column(Boolean, default=False)
 
     files = relationship("ExpenseFile", cascade="all, delete-orphan")
     type = Column(String)
