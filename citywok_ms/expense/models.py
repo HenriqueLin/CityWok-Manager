@@ -72,6 +72,9 @@ class Expense(db.Model, CRUDMixin):
 
     __mapper_args__ = {"polymorphic_on": type, "polymorphic_identity": "expense"}
 
+    def __repr__(self):
+        return f"Expense({self.id}: {self.date}, {self.category})"
+
     @hybrid_property
     def total(self):
         return sum((self.cash, self.card, self.transfer, self.check))
@@ -115,6 +118,9 @@ class LaborExpense(Expense):
         "polymorphic_identity": "labor_expense",
     }
 
+    def __repr__(self):
+        return f"LaborExpense({self.id}: {self.date}, {self.category})"
+
 
 class NonLaborExpense(Expense):
     id = Column(Integer, ForeignKey("expense.id"), primary_key=True)
@@ -128,12 +134,18 @@ class NonLaborExpense(Expense):
         "polymorphic_identity": "non_labor_expense",
     }
 
+    def __repr__(self):
+        return f"NonLaborExpense({self.id}: {self.date}, {self.category})"
+
 
 class SalaryPayment(db.Model):
     month = Column(Date, primary_key=True)
 
     expenses = relationship("LaborExpense", backref="month")
     files = relationship("SalaryPaymentFile")
+
+    def __repr__(self):
+        return f"SalaryPayment({self.month})"
 
     @classmethod
     def get_or_create(cls, month):
