@@ -149,6 +149,17 @@ def new_other_income():
     )
 
 
+@income_bp.route("/<int:income_id>")
+def detail(income_id):
+    income = Income.get_or_404(income_id)
+    return render_template(
+        "income/detail.html",
+        title=_("Income Detail"),
+        file_form=FileForm(),
+        income=income,
+    )
+
+
 @income_bp.route("/revenue/<date_str>/upload", methods=["POST"])
 def revenue_upload(date_str):
     form = FileForm()

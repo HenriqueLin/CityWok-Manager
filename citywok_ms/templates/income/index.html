@@ -105,7 +105,7 @@
                     <td>{{ income.category }}</td>
                     <td>{{ income.total }}</td>
                     <td>
-                        <a href="#">
+                        <a href="{{url_for('income.detail',income_id=income.id)}}">
                             <span class="material-icons">
                                 more_vert
                             </span>

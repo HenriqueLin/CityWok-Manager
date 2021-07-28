@@ -40,7 +40,7 @@ class Revenue(db.Model):
         )
 
 
-class Income(db.Model):
+class Income(db.Model, CRUDMixin):
     id = Column(Integer, primary_key=True)
     date = Column(Date, nullable=False)
     category = Column(
