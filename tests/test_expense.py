@@ -1,9 +1,7 @@
-import os
-from sqlalchemy.sql.elements import not_
-from citywok_ms.employee.models import Employee
 import datetime
 import html
 import io
+import os
 
 import pytest
 from citywok_ms import db
@@ -14,23 +12,20 @@ from citywok_ms.expense.models import (
     NonLaborExpense,
     SalaryPayment,
 )
-from flask import request, url_for
-from sqlalchemy.orm.util import with_polymorphic
-from wtforms.fields.simple import FileField, HiddenField, SubmitField, BooleanField
-from citywok_ms.supplier.models import Supplier
 from citywok_ms.file.models import ExpenseFile, SalaryPaymentFile
+from flask import request, url_for
+from sqlalchemy.sql.elements import not_
+from wtforms.fields.simple import BooleanField, FileField, HiddenField, SubmitField
 
 
 @pytest.mark.role("admin")
-def test_index_get(client, user, expenses):
+def test_index_get(client, user, expenses, today):
     response = client.get(url_for("expense.index"), follow_redirects=True)
     data = response.data.decode()
 
     # state code
     assert response.status_code == 200
-    assert request.url.endswith(
-        url_for("expense.index", date_str=datetime.date.today())
-    )
+    assert request.url.endswith(url_for("expense.index", date_str=today))
 
     for txt in (
         "Expenses",
@@ -54,15 +49,14 @@ def test_index_get(client, user, expenses):
 
 
 @pytest.mark.role("admin")
-def test_index_post(client, user):
-    date = datetime.datetime.today() - datetime.timedelta(days=1)
+def test_index_post(client, user, yesterday, today):
     response = client.post(
-        url_for("expense.index", date_str=datetime.date.today()),
-        data={"date": date.date()},
+        url_for("expense.index", date_str=today),
+        data={"date": yesterday},
         follow_redirects=True,
     )
     assert response.status_code == 200
-    assert request.url.endswith(url_for("expense.index", date_str=date.date()))
+    assert request.url.endswith(url_for("expense.index", date_str=yesterday))
 
 
 @pytest.mark.role("admin")
@@ -86,10 +80,9 @@ def test_new_non_labor_get(client, user, supplier):
 
 
 @pytest.mark.role("admin")
-def test_new_non_labor_post_valid(client, user, supplier, image):
-    today = datetime.datetime.today()
+def test_new_non_labor_post_valid(client, user, supplier, image, today):
     request_data = {
-        "date": today.date(),
+        "date": today,
         "category": "operation:water",
         "supplier": 1,
         "value-cash": 5,
@@ -106,13 +99,13 @@ def test_new_non_labor_post_valid(client, user, supplier, image):
     # state code
     assert response.status_code == 200
     # url after request
-    assert request.url.endswith(url_for("expense.index", date_str=today.date()))
+    assert request.url.endswith(url_for("expense.index", date_str=today))
 
     # database data
     assert db.session.query(Expense).count() == 1
     expense = db.session.query(NonLaborExpense).first()
     assert expense.total == 20
-    assert expense.date == today.date()
+    assert expense.date == today
     assert expense.supplier_id == 1
     assert expense.category == "operation:water"
     assert len(expense.files) == 1
@@ -161,10 +154,9 @@ def test_new_labor_get(client, user, employee):
 
 
 @pytest.mark.role("admin")
-def test_new_labor_post_valid(client, user, employee, image):
-    today = datetime.datetime.today()
+def test_new_labor_post_valid(client, user, employee, image, today):
     request_data = {
-        "date": today.date(),
+        "date": today,
         "category": "labor:advance",
         "employee": 1,
         "value-cash": 5,
@@ -181,13 +173,13 @@ def test_new_labor_post_valid(client, user, employee, image):
     # state code
     assert response.status_code == 200
     # url after request
-    assert request.url.endswith(url_for("expense.index", date_str=today.date()))
+    assert request.url.endswith(url_for("expense.index", date_str=today))
 
     # database data
     assert db.session.query(Expense).count() == 1
     expense = db.session.query(LaborExpense).first()
     assert expense.total == 20
-    assert expense.date == today.date()
+    assert expense.date == today
     assert expense.employee_id == 1
     assert expense.category == "labor:advance"
     assert len(expense.files) == 1
@@ -234,10 +226,9 @@ def test_new_order_payment_get(client, user, supplier):
 
 
 @pytest.mark.role("admin")
-def test_new_order_payment_post_valid(client, user, supplier, image, order):
-    today = datetime.datetime.today()
+def test_new_order_payment_post_valid(client, user, supplier, image, order, today):
     request_data = {
-        "date": today.date(),
+        "date": today,
         "category": "material:meat",
         "supplier": 1,
         "orders": 1,
@@ -256,13 +247,13 @@ def test_new_order_payment_post_valid(client, user, supplier, image, order):
     # state code
     assert response.status_code == 200
     # url after request
-    assert request.url.endswith(url_for("expense.index", date_str=today.date()))
+    assert request.url.endswith(url_for("expense.index", date_str=today))
 
     # database data
     assert db.session.query(Expense).count() == 1
     expense = db.session.query(NonLaborExpense).first()
     assert expense.total == 20
-    assert expense.date == today.date()
+    assert expense.date == today
     assert expense.supplier_id == 1
     assert expense.orders[0].id == 1
     assert expense.category == "material:meat"
@@ -326,11 +317,9 @@ def test_new_salary_get(client, user, employee):
 
 
 @pytest.mark.role("admin")
-def test_new_salary_post_valid(client, user, employee, image):
-    today = datetime.datetime.today()
-    month_str = today.strftime("%Y-%m")
+def test_new_salary_post_valid(client, user, employee, image, today, current_month):
     request_data = {
-        "date": today.date(),
+        "date": today,
         "value-cash": 5,
         "value-card": 5,
         "value-check": 5,
@@ -338,7 +327,7 @@ def test_new_salary_post_valid(client, user, employee, image):
         "files": (image, "test.jpg"),
     }
     response = client.post(
-        url_for("expense.new_salary", month_str=month_str, employee_id=1),
+        url_for("expense.new_salary", month_str=current_month, employee_id=1),
         data=request_data,
         follow_redirects=True,
     )
@@ -347,17 +336,19 @@ def test_new_salary_post_valid(client, user, employee, image):
     # state code
     assert response.status_code == 200
     # url after request
-    assert request.url.endswith(url_for("expense.salary_index", month_str=month_str))
+    assert request.url.endswith(
+        url_for("expense.salary_index", month_str=current_month)
+    )
 
     # database data
     assert db.session.query(Expense).count() == 1
     assert db.session.query(SalaryPayment).count() == 1
     expense = db.session.query(LaborExpense).first()
     assert expense.total == 20
-    assert expense.date == today.date()
+    assert expense.date == today
     assert expense.employee_id == 1
     assert expense.category == "labor:salary"
-    assert expense.month_id == today.replace(day=1).date()
+    assert expense.month_id == today.replace(day=1)
     assert len(expense.files) == 1
 
     # flash messege
@@ -365,10 +356,9 @@ def test_new_salary_post_valid(client, user, employee, image):
 
 
 @pytest.mark.role("admin")
-def test_new_salary_post_invalid(client, user, employee):
-    month_str = datetime.datetime.today().strftime("%Y-%m")
+def test_new_salary_post_invalid(client, user, employee, current_month):
     response = client.post(
-        url_for("expense.new_salary", month_str=month_str, employee_id=1),
+        url_for("expense.new_salary", month_str=current_month, employee_id=1),
         follow_redirects=True,
     )
     data = response.data.decode()
@@ -377,7 +367,7 @@ def test_new_salary_post_invalid(client, user, employee):
     assert response.status_code == 200
     # url after request
     assert request.url.endswith(
-        url_for("expense.new_salary", month_str=month_str, employee_id=1)
+        url_for("expense.new_salary", month_str=current_month, employee_id=1)
     )
 
     # database data
@@ -388,10 +378,9 @@ def test_new_salary_post_invalid(client, user, employee):
 
 
 @pytest.mark.role("admin")
-def test_new_salary_payed(client, user, expenses):
-    month_str = datetime.datetime.today().strftime("%Y-%m")
+def test_new_salary_payed(client, user, expenses, current_month):
     response = client.get(
-        url_for("expense.new_salary", month_str=month_str, employee_id=1),
+        url_for("expense.new_salary", month_str=current_month, employee_id=1),
         follow_redirects=True,
     )
     data = response.data.decode()
@@ -400,20 +389,20 @@ def test_new_salary_payed(client, user, expenses):
     assert response.status_code == 200
 
     assert "Employee already payed at the given month." in data
-    assert request.url.endswith(url_for("expense.salary_index", month_str=month_str))
+    assert request.url.endswith(
+        url_for("expense.salary_index", month_str=current_month)
+    )
 
 
 @pytest.mark.role("admin")
-def test_salary_index_get(client, user, expenses):
+def test_salary_index_get(client, user, expenses, current_month):
     response = client.get(url_for("expense.salary_index"), follow_redirects=True)
     data = response.data.decode()
 
     # state code
     assert response.status_code == 200
     assert request.url.endswith(
-        url_for(
-            "expense.salary_index", month_str=datetime.date.today().strftime("%Y-%m")
-        )
+        url_for("expense.salary_index", month_str=current_month)
     )
 
     for txt in (
@@ -429,17 +418,14 @@ def test_salary_index_get(client, user, expenses):
 
 
 @pytest.mark.role("admin")
-def test_salary_index_post(client, user):
-    month = (
-        datetime.datetime.today().replace(day=1) - datetime.timedelta(days=1)
-    ).strftime("%Y-%m")
+def test_salary_index_post(client, user, last_month):
     response = client.post(
-        url_for("expense.salary_index", month_str=month),
-        data={"month": month},
+        url_for("expense.salary_index", month_str=last_month),
+        data={"month": last_month},
         follow_redirects=True,
     )
     assert response.status_code == 200
-    assert request.url.endswith(url_for("expense.salary_index", month_str=month))
+    assert request.url.endswith(url_for("expense.salary_index", month_str=last_month))
 
 
 @pytest.mark.role("admin")
@@ -500,11 +486,10 @@ def test_update_non_labor_get(client, user, expenses):
 
 
 @pytest.mark.role("admin")
-def test_update_non_labor_post_valid(client, user, expenses, image):
+def test_update_non_labor_post_valid(client, user, expenses, image, today):
     expense = NonLaborExpense.query.filter(not_(NonLaborExpense.orders)).first()
-    today = datetime.datetime.today()
     request_data = {
-        "date": today.date(),
+        "date": today,
         "category": "operation:gas",
         "supplier": 1,
         "value-cash": 10,
@@ -528,7 +513,7 @@ def test_update_non_labor_post_valid(client, user, expenses, image):
     assert db.session.query(Expense).count() == 4
     expense = NonLaborExpense.query.filter(not_(NonLaborExpense.orders)).first()
     assert expense.total == 40
-    assert expense.date == today.date()
+    assert expense.date == today
     assert expense.supplier_id == 1
     assert expense.category == "operation:gas"
 
@@ -588,11 +573,10 @@ def test_update_labor_get(client, user, expenses):
 
 
 @pytest.mark.role("admin")
-def test_update_labor_post_valid(client, user, expenses, image):
+def test_update_labor_post_valid(client, user, expenses, image, today):
     expense = LaborExpense.query.filter(not_(LaborExpense.month.has())).first()
-    today = datetime.datetime.today()
     request_data = {
-        "date": today.date(),
+        "date": today,
         "category": "labor:bonus",
         "employee": 1,
         "value-cash": 10,
@@ -616,7 +600,7 @@ def test_update_labor_post_valid(client, user, expenses, image):
     assert db.session.query(Expense).count() == 4
     expense = LaborExpense.query.filter(not_(LaborExpense.month.has())).first()
     assert expense.total == 40
-    assert expense.date == today.date()
+    assert expense.date == today
     assert expense.employee_id == 1
     assert expense.category == "labor:bonus"
 
@@ -676,11 +660,10 @@ def test_update_order_payment_get(client, user, expenses):
 
 
 @pytest.mark.role("admin")
-def test_update_order_payment_post_valid(client, user, expenses, image):
+def test_update_order_payment_post_valid(client, user, expenses, image, today):
     expense = NonLaborExpense.query.filter(NonLaborExpense.orders).first()
-    today = datetime.datetime.today()
     request_data = {
-        "date": today.date(),
+        "date": today,
         "category": "operation:gas",
         "supplier": 1,
         "value-cash": 10,
@@ -706,7 +689,7 @@ def test_update_order_payment_post_valid(client, user, expenses, image):
     assert db.session.query(Expense).count() == 4
     expense = NonLaborExpense.query.filter(NonLaborExpense.orders).first()
     assert expense.total == 40
-    assert expense.date == today.date()
+    assert expense.date == today
     assert expense.supplier_id == 1
     assert len(expense.orders) == 1
     assert expense.category == "operation:gas"
@@ -770,11 +753,10 @@ def test_update_salary_get(client, user, expenses):
 
 
 @pytest.mark.role("admin")
-def test_update_salary_post_valid(client, user, expenses, image):
+def test_update_salary_post_valid(client, user, expenses, image, today):
     expense = LaborExpense.query.filter(LaborExpense.month.has()).first()
-    today = datetime.datetime.today()
     request_data = {
-        "date": today.date(),
+        "date": today,
         "value-cash": 10,
         "value-card": 10,
         "value-check": 10,
@@ -796,7 +778,7 @@ def test_update_salary_post_valid(client, user, expenses, image):
     assert db.session.query(Expense).count() == 4
     expense = LaborExpense.query.filter(LaborExpense.month.has()).first()
     assert expense.total == 40
-    assert expense.date == today.date()
+    assert expense.date == today
     assert expense.employee_id == 1
 
     # flash messege
@@ -884,20 +866,21 @@ def test_upload_post_invalid_empty(client, user, expenses):
 
 
 @pytest.mark.role("admin")
-def test_salary_upload_post_valid(client, user, expenses, image):
-    month = datetime.datetime.today().strftime("%Y-%m")
+def test_salary_upload_post_valid(client, user, expenses, image, current_month):
     request_data = {
         "file": (image, "test.jpg"),
     }
     response = client.post(
-        url_for("expense.salary_upload", month_str=month),
+        url_for("expense.salary_upload", month_str=current_month),
         data=request_data,
         content_type="multipart/form-data",
         follow_redirects=True,
     )
     data = response.data.decode()
     assert response.status_code == 200
-    assert request.url.endswith(url_for("expense.salary_index", month_str=month))
+    assert request.url.endswith(
+        url_for("expense.salary_index", month_str=current_month)
+    )
     assert 'File "test.jpg" has been uploaded.' in html.unescape(data)
     assert db.session.query(SalaryPaymentFile).count() == 1
     f = db.session.query(SalaryPaymentFile).get(1)
@@ -906,13 +889,12 @@ def test_salary_upload_post_valid(client, user, expenses, image):
 
 
 @pytest.mark.role("admin")
-def test_salary_upload_post_invalid_format(client, user, expenses):
-    month = datetime.datetime.today().strftime("%Y-%m")
+def test_salary_upload_post_invalid_format(client, user, expenses, current_month):
     request_data = {
         "file": (io.BytesIO(b"test"), "test.exe"),
     }
     response = client.post(
-        url_for("expense.salary_upload", month_str=month),
+        url_for("expense.salary_upload", month_str=current_month),
         data=request_data,
         content_type="multipart/form-data",
         follow_redirects=True,
@@ -920,15 +902,16 @@ def test_salary_upload_post_invalid_format(client, user, expenses):
     data = response.data.decode()
 
     assert response.status_code == 200
-    assert request.url.endswith(url_for("expense.salary_index", month_str=month))
+    assert request.url.endswith(
+        url_for("expense.salary_index", month_str=current_month)
+    )
     assert 'Invalid file format ".exe".' in html.unescape(data)
 
 
 @pytest.mark.role("admin")
-def test_salary_upload_post_invalid_empty(client, user, expenses):
-    month = datetime.datetime.today().strftime("%Y-%m")
+def test_salary_upload_post_invalid_empty(client, user, expenses, current_month):
     response = client.post(
-        url_for("expense.salary_upload", month_str=month),
+        url_for("expense.salary_upload", month_str=current_month),
         data={},
         content_type="multipart/form-data",
         follow_redirects=True,
@@ -936,7 +919,9 @@ def test_salary_upload_post_invalid_empty(client, user, expenses):
     data = response.data.decode()
 
     assert response.status_code == 200
-    assert request.url.endswith(url_for("expense.salary_index", month_str=month))
+    assert request.url.endswith(
+        url_for("expense.salary_index", month_str=current_month)
+    )
     assert "No file has been uploaded." in html.unescape(data)
 
 

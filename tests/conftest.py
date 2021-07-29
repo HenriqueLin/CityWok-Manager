@@ -293,3 +293,25 @@ def salary_payment_with_file():
         file.write("test_file")
     f.size = os.path.getsize(f.path)
     db.session.commit()
+
+
+@pytest.fixture
+def today():
+    return datetime.datetime.today().date()
+
+
+@pytest.fixture
+def yesterday():
+    return datetime.datetime.today().date() - datetime.timedelta(days=1)
+
+
+@pytest.fixture
+def current_month():
+    return datetime.datetime.today().strftime("%Y-%m")
+
+
+@pytest.fixture
+def last_month():
+    return (
+        datetime.datetime.today().replace(day=1) - datetime.timedelta(days=1)
+    ).strftime("%Y-%m")
