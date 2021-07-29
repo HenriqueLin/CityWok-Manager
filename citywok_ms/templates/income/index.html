@@ -81,8 +81,9 @@
                         href="{{url_for('income.new_revenue',date_str=date_str)}}">{{_("Revenue")}}</a>
                 </li>
                 {% endif %}
-                <li><a class="dropdown-item" href="{{url_for('income.new_other_income',date_str=date_str)}}">{{_("Other
-                        Income")}}</a>
+                <li>
+                    <a class="dropdown-item" href="{{url_for('income.new_other_income',date_str=date_str)}}">
+                        {{_("Other Income")}}</a>
                 </li>
             </ul>
         </div>
