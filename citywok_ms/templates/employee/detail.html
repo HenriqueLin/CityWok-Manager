@@ -71,36 +71,6 @@
         <dt class="col-4">{{_('Remark')}}:</dt>
         <dd class="col-8">{{ employee.remark or '-'}}</dd>
     </dl>
-    <div class="d-print-none">
-        <hr>
-        <h3 id="Files">{{_('Files')}}</h3>
-        <div class="mb-2">
-            <form action="{{url_for('employee.upload',employee_id=employee.id)}}" method="post"
-                enctype='multipart/form-data' class="d-inline" novalidate>
-                {{ file_form.hidden_tag() }}
-                {{ file_form.file(id="selectedFile", style="display:none", onchange="form.submit()") }}
-                <input type="button" value="{{_('New File')}}" class="btn btn-outline-success"
-                    onclick="document.getElementById('selectedFile').click();" />
-            </form>
-            {% if employee.deleted_files %}
-            <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse"
-                data-bs-target="#deletedFiles" aria-expanded="false" aria-controls="deletedFiles" id="fileButton">
-                {{_('Show deleted files')}}
-            </button>
-            {% endif %}
-        </div>
-
-        {% with files=employee.active_files %}
-        {% include 'file/active_file_table.html' %}
-        {% endwith %}
-
-        <div class="collapse" id="deletedFiles">
-            <h4>{{_('Deleted Files')}}</h4>
-            {% with files=employee.deleted_files %}
-            {% include 'file/suspend_file_table.html' %}
-            {% endwith %}
-        </div>
-    </div>
     <div>
         <hr>
         <h3 id="Expenses">{{_('Expenses')}}</h3>
@@ -158,6 +128,36 @@
         {{ macros.pagination('employee.detail',obj=expenses,page_str='expense_page',employee_id=employee.id,
         _anchor="Expenses") }}
         {% endif %}
+    </div>
+    <div class="d-print-none">
+        <hr>
+        <h3 id="Files">{{_('Files')}}</h3>
+        <div class="mb-2">
+            <form action="{{url_for('employee.upload',employee_id=employee.id)}}" method="post"
+                enctype='multipart/form-data' class="d-inline" novalidate>
+                {{ file_form.hidden_tag() }}
+                {{ file_form.file(id="selectedFile", style="display:none", onchange="form.submit()") }}
+                <input type="button" value="{{_('New File')}}" class="btn btn-outline-success"
+                    onclick="document.getElementById('selectedFile').click();" />
+            </form>
+            {% if employee.deleted_files %}
+            <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse"
+                data-bs-target="#deletedFiles" aria-expanded="false" aria-controls="deletedFiles" id="fileButton">
+                {{_('Show deleted files')}}
+            </button>
+            {% endif %}
+        </div>
+
+        {% with files=employee.active_files %}
+        {% include 'file/active_file_table.html' %}
+        {% endwith %}
+
+        <div class="collapse" id="deletedFiles">
+            <h4>{{_('Deleted Files')}}</h4>
+            {% with files=employee.deleted_files %}
+            {% include 'file/suspend_file_table.html' %}
+            {% endwith %}
+        </div>
     </div>
 </div>
 {% endblock content %}

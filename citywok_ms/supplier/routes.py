@@ -1,21 +1,22 @@
-from citywok_ms.expense.models import NonLaborExpense
-from citywok_ms.task import compress_file
-from flask.globals import current_app
 from citywok_ms import db
 from citywok_ms.auth.permissions import manager, shareholder, visitor
+from citywok_ms.expense.models import NonLaborExpense
 from citywok_ms.file.forms import FileForm
 from citywok_ms.file.models import File, SupplierFile
+from citywok_ms.order.models import Order
 from citywok_ms.supplier.forms import SupplierForm
 from citywok_ms.supplier.models import Supplier
+from citywok_ms.task import compress_file
 from flask import (
     Blueprint,
     flash,
     redirect,
     render_template,
-    url_for,
     request,
     send_file,
+    url_for,
 )
+from flask.globals import current_app
 from flask_babel import _
 
 supplier_bp = Blueprint("supplier", __name__, url_prefix="/supplier")
@@ -65,6 +66,7 @@ def new():
 @shareholder.require(403)
 def detail(supplier_id):
     expense_page = request.args.get("expense_page", 1, type=int)
+    order_page = request.args.get("order_page", 1, type=int)
     return render_template(
         "supplier/detail.html",
         title=_("Supplier Detail"),
@@ -73,6 +75,10 @@ def detail(supplier_id):
         .filter(NonLaborExpense.supplier_id == supplier_id)
         .order_by(NonLaborExpense.date.desc())
         .paginate(page=expense_page, per_page=10),
+        orders=db.session.query(Order)
+        .filter(Order.supplier_id == supplier_id)
+        .order_by(Order.delivery_date.desc())
+        .paginate(page=order_page, per_page=10),
         file_form=FileForm(),
     )
 

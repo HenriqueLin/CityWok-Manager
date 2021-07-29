@@ -33,6 +33,9 @@ income_bp = Blueprint("income", __name__, url_prefix="/income")
 def index(date_str=None):
     if date_str is None:
         return redirect(url_for("income.index", date_str=datetime.date.today()))
+    expense_page = request.args.get("expense_page", 1, type=int)
+    income_page = request.args.get("income_page", 1, type=int)
+
     form = DateForm(date=datetime.datetime.strptime(date_str, "%Y-%m-%d").date())
     if form.validate_on_submit():
         return redirect(url_for("income.index", date_str=form.date.data))
@@ -64,12 +67,12 @@ def index(date_str=None):
         "income/index.html",
         title=_("Income"),
         form=form,
-        incomes=query.all(),
+        incomes=query.paginate(page=income_page, per_page=10),
         income=income,
         revenue=revenue,
         actual_revenue=cash + card + small_expense,
         date_str=date_str,
-        expenses=expense.all(),
+        expenses=expense.paginate(page=expense_page, per_page=10),
         file_form=FileForm(),
     )
 
