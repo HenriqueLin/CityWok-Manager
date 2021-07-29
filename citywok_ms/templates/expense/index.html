@@ -85,8 +85,8 @@
             </ul>
         </div>
     </div>
-    {% if expenses %}
-    <div class="table-responsive">
+    {% if expenses.items %}
+    <div class="table-responsive" id="Expenses">
         <table class="table table-striped table-bordered text-nowrap text-center">
             <thead class="table-dark">
                 <tr>
@@ -98,7 +98,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for expense in expenses %}
+                {% for expense in expenses.items %}
                 <tr>
                     <th>{{ expense.id }}</th>
                     <td>{{ expense.category }}</td>
@@ -120,6 +120,9 @@
             </tbody>
         </table>
     </div>
+    {{
+    macros.pagination('expense.index',obj=expenses,page_str='expense_page',date_str=date_str,
+    _anchor="Expenses") }}
     {% endif %}
 </div>
 

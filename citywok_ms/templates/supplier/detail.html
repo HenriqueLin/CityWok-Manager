@@ -38,37 +38,46 @@
         <dt class="col-4">{{_('Remark')}}:</dt>
         <dd class="col-8">{{ supplier.remark or '-'}}</dd>
     </dl>
-    <div class="d-print-none">
-        <hr>
-        <h3 id="Files">{{_('Files')}}</h3>
-        <div class="mb-2">
-            <form action="{{url_for('supplier.upload',supplier_id=supplier.id)}}" method="post"
-                enctype='multipart/form-data' class="d-inline" novalidate>
-                {{ file_form.hidden_tag() }}
-                {{ file_form.file(id="selectedFile", style="display:none", onchange="form.submit()") }}
-                <input type="button" value="{{_('New File')}}" class="btn btn-outline-success"
-                    onclick="document.getElementById('selectedFile').click();" />
-            </form>
-            {% if supplier.deleted_files %}
-            <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse"
-                data-bs-target="#deletedFiles" aria-expanded="false" aria-controls="deletedFiles" id="fileButton">
-                {{_('Show deleted files')}}
-            </button>
-            {% endif %}
-        </div>
-        {% with files=supplier.active_files %}
-        {% include 'file/active_file_table.html' %}
-        {% endwith %}
-
-        <div class="collapse" id="deletedFiles">
-            <h4>{{_('Deleted Files')}}</h4>
-            {% with files=supplier.deleted_files %}
-            {% include 'file/suspend_file_table.html' %}
-            {% endwith %}
-        </div>
-    </div>
     <div>
         <hr>
+        <h3 id="Orders">{{_('Orders')}}</h3>
+        <div class="mb-2">
+            <a href="{{url_for('order.new')}}" class="btn btn-outline-success">{{_('New')}}</a>
+        </div>
+        {% if orders.items %}
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered text-nowrap text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">{{_('Order Number')}}</th>
+                        <th scope="col">{{_('Delivery Date')}}</th>
+                        <th scope="col">{{_('Value')}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders.items %}
+                    <tr>
+                        <th>
+                            <a href="{{url_for('order.detail',order_id=order.id)}}">
+                                <strong>
+                                    {{ order.order_number }}
+                                </strong>
+                            </a>
+                        </th>
+                        <td>{{ moment(order.delivery_date).format('ll') }}</td>
+                        <td>{{ order.value }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {{
+        macros.pagination('supplier.detail',obj=orders,page_str='order_page',expense_page=expenses.page,supplier_id=supplier.id,
+        _anchor="Orders") }}
+        {% endif %}
+    </div>
+    <hr>
+    <div>
         <h3 id="Expenses">{{_('Expenses')}}</h3>
         <div class="mb-2 d-print-none">
             <div class="btn-group">
@@ -121,44 +130,39 @@
                 </tbody>
             </table>
         </div>
-        {{ macros.pagination('supplier.detail',obj=expenses,page_str='expense_page',supplier_id=supplier.id,
+        {{
+        macros.pagination('supplier.detail',obj=expenses,page_str='expense_page',order_page=orders.page,supplier_id=supplier.id,
         _anchor="Expenses") }}
         {% endif %}
     </div>
-    <div>
-        <hr>
-        <h3 id="Orders">{{_('Orders')}}</h3>
+    <hr>
+    <div class="d-print-none">
+        <h3 id="Files">{{_('Files')}}</h3>
         <div class="mb-2">
-            <a href="{{url_for('order.new')}}" class="btn btn-outline-success">{{_('New')}}</a>
+            <form action="{{url_for('supplier.upload',supplier_id=supplier.id)}}" method="post"
+                enctype='multipart/form-data' class="d-inline" novalidate>
+                {{ file_form.hidden_tag() }}
+                {{ file_form.file(id="selectedFile", style="display:none", onchange="form.submit()") }}
+                <input type="button" value="{{_('New File')}}" class="btn btn-outline-success"
+                    onclick="document.getElementById('selectedFile').click();" />
+            </form>
+            {% if supplier.deleted_files %}
+            <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse"
+                data-bs-target="#deletedFiles" aria-expanded="false" aria-controls="deletedFiles" id="fileButton">
+                {{_('Show deleted files')}}
+            </button>
+            {% endif %}
         </div>
-        {% if supplier.orders %}
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered text-nowrap text-center">
-                <thead class="table-dark">
-                    <tr>
-                        <th scope="col">{{_('Order Number')}}</th>
-                        <th scope="col">{{_('Delivery Date')}}</th>
-                        <th scope="col">{{_('Value')}}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for order in supplier.orders %}
-                    <tr>
-                        <th>
-                            <a href="{{url_for('order.detail',order_id=order.id)}}">
-                                <strong>
-                                    {{ order.order_number }}
-                                </strong>
-                            </a>
-                        </th>
-                        <td>{{ moment(order.delivery_date).format('ll') }}</td>
-                        <td>{{ order.value }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        {% with files=supplier.active_files %}
+        {% include 'file/active_file_table.html' %}
+        {% endwith %}
+
+        <div class="collapse" id="deletedFiles">
+            <h4>{{_('Deleted Files')}}</h4>
+            {% with files=supplier.deleted_files %}
+            {% include 'file/suspend_file_table.html' %}
+            {% endwith %}
         </div>
-        {% endif %}
     </div>
 </div>
 {% endblock content %}

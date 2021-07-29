@@ -48,7 +48,7 @@ expense_bp = Blueprint("expense", __name__, url_prefix="/expense")
 def index(date_str=None):
     if date_str is None:
         return redirect(url_for("expense.index", date_str=datetime.date.today()))
-
+    expense_page = request.args.get("expense_page", 1, type=int)
     form = DateForm(date=datetime.datetime.strptime(date_str, "%Y-%m-%d").date())
     if form.validate_on_submit():
         return redirect(url_for("expense.index", date_str=form.date.data))
@@ -83,7 +83,10 @@ def index(date_str=None):
         category_value=category_value,
         category_label=category_label,
         method=method,
-        expenses=query.all(),
+        expenses=query.order_by(Expense.date.desc()).paginate(
+            page=expense_page, per_page=20
+        ),
+        date_str=date_str,
     )
 
 
