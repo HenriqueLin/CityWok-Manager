@@ -94,6 +94,7 @@ def load_example():
             )
         )
         # supplier
+        db.session.add(Supplier(name="Bank", is_bank=True))
         db.session.add(
             Supplier(
                 name="Pingo Doce",
