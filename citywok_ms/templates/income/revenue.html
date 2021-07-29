@@ -5,7 +5,7 @@
     <!-- title -->
     <h1>{{title}}</h1>
     <hr>
-    <form action="" method="post" enctype='multipart/form-data' novalidate autocomplete="off">
+    <form id="form" action="" method="post" enctype='multipart/form-data' novalidate autocomplete="off">
         {{ form.hidden_tag() }}
         <div class="row gy-3 overflow-hidden">
             <div>
@@ -55,20 +55,31 @@
                 {% endwith %}
             </div>
             <div class="gx-3">
-                {#
-                {% if request.endpoint == 'expense.new_non_labor' %}
-                #}
-                {{ form.submit(class="btn btn-outline-success ms-1 float-end") }}
-                {#
-                <a href="{{url_for('expense.index')}}" class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
-                {% elif request.endpoint == 'expense.update_non_labor' %}
-                {{ form.update(class="btn btn-outline-primary ms-1 float-end") }}
-                <a href="{{url_for('expense.detail',expense_id=expense_id)}}"
-                    class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
-                {% endif %}
-                #}
+                <button type="button" class="btn btn-outline-success ms-1 float-end" data-bs-toggle="modal"
+                    data-bs-target="#confirmModal">{{_("Add")}}</button>
+                <a href="{{url_for('income.index')}}" class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
             </div>
         </div>
     </form>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="confirmModalLabel">{{_("Confirmation")}}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {{_("Please confirm that the amount entered is correct, you will not be able to modify them.")}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{_("Close")}}</button>
+                <button type="submit" form="form" class="btn btn-outline-success">{{_("Confirm")}}</button>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock content %}

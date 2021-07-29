@@ -34,7 +34,6 @@ def index(date_str=None):
     form = DateForm(date=datetime.datetime.strptime(date_str, "%Y-%m-%d").date())
     if form.validate_on_submit():
         return redirect(url_for("income.index", date_str=form.date.data))
-    # if not form.is_submitted():
     date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
     query = db.session.query(Income).filter(Income.date == date)
     income = query.with_entities(
@@ -102,7 +101,7 @@ def new_revenue():
         flash(_("New revenue has been registed."), "success")
         db.session.commit()
         current_app.logger.info(f"Create revenue {revenue}")
-        return redirect(url_for("income.index"))
+        return redirect(url_for("income.index", date_str=form.date.data))
     if not form.is_submitted():
         date_str = request.args.get("date_str", None, type=str)
         date = datetime.datetime.strptime(date_str, "%Y-%m-%d")
