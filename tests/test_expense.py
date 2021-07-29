@@ -16,7 +16,7 @@ from citywok_ms.expense.models import (
 )
 from flask import request, url_for
 from sqlalchemy.orm.util import with_polymorphic
-from wtforms.fields.simple import FileField, HiddenField, SubmitField
+from wtforms.fields.simple import FileField, HiddenField, SubmitField, BooleanField
 from citywok_ms.supplier.models import Supplier
 from citywok_ms.file.models import ExpenseFile, SalaryPaymentFile
 
@@ -77,7 +77,7 @@ def test_new_non_labor_get(client, user, supplier):
     assert "New Non-Labor Expense" in data
 
     for field in NonLaborExpenseForm()._fields.values():
-        if isinstance(field, (HiddenField, SubmitField)):
+        if isinstance(field, (HiddenField, SubmitField, BooleanField)):
             continue
         assert field.id in data
     assert "Add" in data
@@ -152,7 +152,7 @@ def test_new_labor_get(client, user, employee):
     assert "New Labor Expense" in data
 
     for field in NonLaborExpenseForm()._fields.values():
-        if isinstance(field, (HiddenField, SubmitField)):
+        if isinstance(field, (HiddenField, SubmitField, BooleanField)):
             continue
         assert field.id in data
     assert "Add" in data
@@ -225,7 +225,7 @@ def test_new_order_payment_get(client, user, supplier):
     assert "New Orders Payment" in data
 
     for field in NonLaborExpenseForm()._fields.values():
-        if isinstance(field, (HiddenField, SubmitField)):
+        if isinstance(field, (HiddenField, SubmitField, BooleanField)):
             continue
         assert field.id in data
     assert "Add" in data
@@ -313,7 +313,10 @@ def test_new_salary_get(client, user, employee):
     assert "Payment" in data
 
     for field in NonLaborExpenseForm()._fields.values():
-        if isinstance(field, (HiddenField, SubmitField)) or field.id == "category":
+        if (
+            isinstance(field, (HiddenField, SubmitField, BooleanField))
+            or field.id == "category"
+        ):
             continue
         assert field.id in data
     assert "Add" in data
@@ -488,7 +491,7 @@ def test_update_non_labor_get(client, user, expenses):
     assert "Update Non-Labor Expense" in data
 
     for field in NonLaborExpenseForm()._fields.values():
-        if isinstance(field, (HiddenField, SubmitField, FileField)):
+        if isinstance(field, (HiddenField, SubmitField, BooleanField, FileField)):
             continue
         assert field.id in data
     assert "Update" in data
@@ -576,7 +579,7 @@ def test_update_labor_get(client, user, expenses):
     assert "Update Labor Expense" in data
 
     for field in NonLaborExpenseForm()._fields.values():
-        if isinstance(field, (HiddenField, SubmitField, FileField)):
+        if isinstance(field, (HiddenField, SubmitField, BooleanField, FileField)):
             continue
         assert field.id in data
     assert "Update" in data
@@ -664,7 +667,7 @@ def test_update_order_payment_get(client, user, expenses):
     assert "Update Orders Payment" in data
 
     for field in NonLaborExpenseForm()._fields.values():
-        if isinstance(field, (HiddenField, SubmitField, FileField)):
+        if isinstance(field, (HiddenField, SubmitField, BooleanField, FileField)):
             continue
         assert field.id in data
     assert "Update" in data
@@ -756,7 +759,7 @@ def test_update_salary_get(client, user, expenses):
 
     for field in NonLaborExpenseForm()._fields.values():
         if (
-            isinstance(field, (HiddenField, SubmitField, FileField))
+            isinstance(field, (HiddenField, SubmitField, BooleanField, FileField))
             or field.id == "category"
         ):
             continue
