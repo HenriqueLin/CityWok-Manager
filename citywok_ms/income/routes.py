@@ -160,6 +160,36 @@ def detail(income_id):
     )
 
 
+@income_bp.route("/update/<int:income_id>", methods=["GET", "POST"])
+def update_other_income(income_id):
+    income = Income.get_or_404(income_id)
+    form = IncomeForm()
+    del form.files
+    if form.validate_on_submit():
+        income.date = form.date.data
+        income.remark = form.remark.data
+        income.cash = form.value.cash.data
+        income.transfer = form.value.transfer.data
+        income.card = form.value.card.data
+        income.check = form.value.check.data
+        flash(_("Income has been updated."), "success")
+        db.session.commit()
+        current_app.logger.info(f"Update income {income}")
+        return redirect(url_for("income.detail", income_id=income_id))
+    if not form.is_submitted():
+        form.process(obj=income)
+        form.value.cash.data = income.cash
+        form.value.transfer.data = income.transfer
+        form.value.card.data = income.card
+        form.value.check.data = income.check
+    return render_template(
+        "income/other_income.html",
+        title=_("Update Income"),
+        form=form,
+        income_id=income_id,
+    )
+
+
 @income_bp.route("delete/<int:income_id>", methods=["POST"])
 def delete(income_id):
     income = Income.get_or_404(income_id)

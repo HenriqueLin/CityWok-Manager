@@ -5,11 +5,9 @@
     <!-- title -->
     <h1>{{title}}</h1>
     <div class="d-print-none">
-        {#
-        <a href="{{url_for('income.update',income_id=income.id)}}" class="btn btn-outline-primary "
-            id="update_button">{{_('Update')}}</a>
-        #}
         {% if income.category != "revenue" %}
+        <a href="{{url_for('income.update_other_income',income_id=income.id)}}" class="btn btn-outline-primary "
+            id="update_button">{{_('Update')}}</a>
         <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
             data-bs-target="#deleteModal">{{_("Delete")}}</button>
         {% endif %}
@@ -22,8 +20,8 @@
         <dt class="col-4">{{_('ID')}}:</dt>
         <dd class="col-8">{{ income.id }}</dd>
         <dt class="col-4">{{_('Date')}}:</dt>
-        <dd class="col-8"><a href="{{url_for('income.index',date_str=income.date.strftime('%Y-%m-%d'))}}"
-                target="_blank">{{ income.date }}</a></dd>
+        <dd class="col-8"><a href="{{url_for('income.index',date_str=income.date.strftime('%Y-%m-%d'))}}">{{ income.date
+                }}</a></dd>
         <dt class="col-4">{{_('Category')}}:</dt>
         <dd class="col-8">{{ income.category }}</dd>
         <dt class="col-4">{{_('Total')}}:</dt>

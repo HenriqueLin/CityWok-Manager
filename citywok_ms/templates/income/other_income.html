@@ -29,18 +29,14 @@
                 {% endwith %}
             </div>
             <div class="gx-3">
-                {#
-                {% if request.endpoint == 'expense.new_non_labor' %}
-                #}
+                {% if request.endpoint == 'income.new_other_income' %}
                 {{ form.submit(class="btn btn-outline-success ms-1 float-end") }}
-                {#
-                <a href="{{url_for('expense.index')}}" class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
-                {% elif request.endpoint == 'expense.update_non_labor' %}
+                <a href="{{url_for('income.index')}}" class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
+                {% elif request.endpoint == 'income.update_other_income' %}
                 {{ form.update(class="btn btn-outline-primary ms-1 float-end") }}
-                <a href="{{url_for('expense.detail',expense_id=expense_id)}}"
+                <a href="{{url_for('income.detail',income_id=income_id)}}"
                     class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
                 {% endif %}
-                #}
             </div>
         </div>
 </div>
