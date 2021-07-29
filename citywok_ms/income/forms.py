@@ -69,10 +69,6 @@ class RevenueForm(FlaskForm):
     submit = SubmitField(label=_l("Add"))
 
     @property
-    def cards_total(self):
-        return sum([card.total.data for card in self.cards])
-
-    @property
     def cards_fee(self):
         return sum([card.fee.data for card in self.cards])
 

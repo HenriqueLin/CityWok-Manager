@@ -11,7 +11,9 @@ from citywok_ms.file.forms import FileForm
 from citywok_ms.file.models import (
     EmployeeFile,
     ExpenseFile,
+    IncomeFile,
     OrderFile,
+    RevenueFile,
     SalaryPaymentFile,
     SupplierFile,
 )
@@ -212,6 +214,54 @@ def test_update_get_salary_payment_file(client, user, salary_payment_with_file):
         )
         in data
     )
+
+
+@pytest.mark.role("admin")
+def test_update_get_income_file(client, user, income_with_file):
+    response = client.get(url_for("file.update", file_id=1))
+    data = response.data.decode()
+
+    # state code
+    assert response.status_code == 200
+    # titles
+    assert "Update File" in data
+    # form
+    for field in FileForm()._fields.values():
+        if isinstance(field, (HiddenField, SubmitField)):
+            continue
+        assert field.id in data
+
+    f = IncomeFile.get_or_404(1)
+    assert f.base_name in data
+    assert f.format in data
+    assert "Update" in data
+
+    # links
+    assert url_for("income.detail", income_id=1) in data
+
+
+@pytest.mark.role("admin")
+def test_update_get_revenue_file(client, user, revenue_with_file, today):
+    response = client.get(url_for("file.update", file_id=1))
+    data = response.data.decode()
+
+    # state code
+    assert response.status_code == 200
+    # titles
+    assert "Update File" in data
+    # form
+    for field in FileForm()._fields.values():
+        if isinstance(field, (HiddenField, SubmitField)):
+            continue
+        assert field.id in data
+
+    f = RevenueFile.get_or_404(1)
+    assert f.base_name in data
+    assert f.format in data
+    assert "Update" in data
+
+    # links
+    assert url_for("income.index", date_str=today) in data
 
 
 @pytest.mark.role("admin")

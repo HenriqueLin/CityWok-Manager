@@ -168,6 +168,9 @@ def detail(income_id):
 @manager.require(403)
 def update_other_income(income_id):
     income = Income.get_or_404(income_id)
+    if income.category == "revenue":
+        flash(_("This income can not be updated."), "danger")
+        return redirect(url_for("income.detail", income_id=income_id))
     form = IncomeForm()
     del form.files
     if form.validate_on_submit():
