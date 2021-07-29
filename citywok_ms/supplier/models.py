@@ -44,6 +44,7 @@ class Supplier(db.Model, CRUDMixin):
         "postcode": _l("Postcode"),
         "city": _l("City"),
         "remark": _l("Remark"),
+        "is_bank": _l("Is_Bank"),
     }
 
     @property
