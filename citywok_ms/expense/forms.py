@@ -21,7 +21,7 @@ from flask_babel import lazy_gettext as _l
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, TextAreaField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField, QuerySelectMultipleField
-from wtforms.fields.core import FormField
+from wtforms.fields.core import BooleanField, FormField
 from wtforms.fields.html5 import DateField, DecimalField
 from wtforms.validators import (
     DataRequired,
@@ -120,9 +120,30 @@ class NonLaborExpenseForm(FlaskForm):
         label=_l("Files"),
         validators=[FilesRequired(), FilesAllowed(FILEALLOWED)],
     )
+    from_pos = BooleanField(
+        label="From POS",
+        default=False,
+    )
 
     submit = SubmitField(label=_l("Add"))
     update = SubmitField(label=_l("Update"))
+
+    def validate_from_pos(self, from_pos):
+        if (
+            self.from_pos.data
+            and sum(
+                filter(
+                    None,
+                    [
+                        self.value.card.data,
+                        self.value.transfer.data,
+                        self.value.check.data,
+                    ],
+                )
+            )
+            > 0
+        ):
+            raise ValidationError(_l("Expense from POS must be payed with cash."))
 
 
 class OrderPaymentForm(FlaskForm):
@@ -209,9 +230,30 @@ class LaborExpenseForm(FlaskForm):
         label=_l("Files"),
         validators=[FilesRequired(), FilesAllowed(FILEALLOWED)],
     )
+    from_pos = BooleanField(
+        label="From POS",
+        default=False,
+    )
 
     submit = SubmitField(label=_l("Add"))
     update = SubmitField(label=_l("Update"))
+
+    def validate_from_pos(self, from_pos):
+        if (
+            self.from_pos.data
+            and sum(
+                filter(
+                    None,
+                    [
+                        self.value.card.data,
+                        self.value.transfer.data,
+                        self.value.check.data,
+                    ],
+                )
+            )
+            > 0
+        ):
+            raise ValidationError(_l("Expense from POS must be payed with cash."))
 
 
 class DateForm(FlaskForm):

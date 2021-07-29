@@ -1,4 +1,10 @@
-from citywok_ms.expense.models import LaborExpense, NonLaborExpense, SalaryPayment
+from sqlalchemy.sql.visitors import traverse
+from citywok_ms.expense.models import (
+    Expense,
+    LaborExpense,
+    NonLaborExpense,
+    SalaryPayment,
+)
 import datetime
 from io import BytesIO
 import os
@@ -12,12 +18,15 @@ from citywok_ms.employee.models import Employee
 from citywok_ms.file.models import (
     EmployeeFile,
     ExpenseFile,
+    IncomeFile,
     OrderFile,
+    RevenueFile,
     SalaryPaymentFile,
     SupplierFile,
 )
 from citywok_ms.supplier.models import Supplier
 from citywok_ms.order.models import Order
+from citywok_ms.income.models import Revenue, Income
 from config import TestConfig
 from flask_login import login_user
 from flask_principal import Identity
@@ -150,6 +159,7 @@ def supplier():
     supplier = Supplier(
         name="BASIC",
         principal="basic",
+        is_bank=True,
     )
     db.session.add(supplier)
     supplier = Supplier(
@@ -293,3 +303,104 @@ def salary_payment_with_file():
         file.write("test_file")
     f.size = os.path.getsize(f.path)
     db.session.commit()
+
+
+@pytest.fixture
+def incomes(supplier):
+    date = datetime.datetime.today().date()
+    revenue = Revenue(
+        date=date,
+        t_revenue=1000,
+    )
+    cash = Income(
+        date=date,
+        category="revenue",
+        cash=150.00,
+    )
+    card = Income(
+        date=date,
+        category="revenue",
+        card=500.00,
+    )
+    fee = NonLaborExpense(
+        date=date,
+        category="operation:bank",
+        transfer=10,
+        supplier=Supplier.bank(),
+    )
+    other = Income(
+        date=date,
+        category="other_income",
+        cash=50,
+    )
+    small = Expense(
+        date=date,
+        category="operation:other",
+        cash=10,
+        from_pos=True,
+    )
+    db.session.add_all([revenue, card, cash, fee, other, small])
+    db.session.commit()
+
+
+@pytest.fixture
+def income_with_file(today):
+    income = Income(
+        date=today,
+        category="other_income",
+        cash=50,
+    )
+    f = IncomeFile(
+        full_name="test_file.txt",
+    )
+    income.files.append(f)
+    db.session.add(income)
+    db.session.flush()
+    with open(
+        os.path.join(current_app.config["UPLOAD_FOLDER"], str(f.id) + ".txt"), "x"
+    ) as file:
+        file.write("test_file")
+    f.size = os.path.getsize(f.path)
+    db.session.commit()
+
+
+@pytest.fixture
+def revenue_with_file(today):
+    revenue = Revenue(
+        date=today,
+        t_revenue=1000,
+    )
+    f = RevenueFile(
+        full_name="test_file.txt",
+    )
+    revenue.files.append(f)
+    db.session.add(revenue)
+    db.session.flush()
+    with open(
+        os.path.join(current_app.config["UPLOAD_FOLDER"], str(f.id) + ".txt"), "x"
+    ) as file:
+        file.write("test_file")
+    f.size = os.path.getsize(f.path)
+    db.session.commit()
+
+
+@pytest.fixture
+def today():
+    return datetime.datetime.today().date()
+
+
+@pytest.fixture
+def yesterday():
+    return datetime.datetime.today().date() - datetime.timedelta(days=1)
+
+
+@pytest.fixture
+def current_month():
+    return datetime.datetime.today().strftime("%Y-%m")
+
+
+@pytest.fixture
+def last_month():
+    return (
+        datetime.datetime.today().replace(day=1) - datetime.timedelta(days=1)
+    ).strftime("%Y-%m")

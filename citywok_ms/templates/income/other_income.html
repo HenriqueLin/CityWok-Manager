@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% set active_page = "expense" %}
+{% set active_page = "income" %}
 {% block content %}
 <div>
     <!-- title -->
@@ -8,36 +8,15 @@
     <form action="" method="post" enctype='multipart/form-data' novalidate autocomplete="off">
         {{ form.hidden_tag() }}
         <div class="row gy-3 overflow-hidden">
-            <div class="col-12">
-                <div class="form-check">
-                    {{form.from_pos(class="form-check-input")}}
-                    {{form.from_pos.label(class="form-check-label")}}
-                    {% if form.from_pos.errors %}
-                    {% for error in form.from_pos.errors %}
-                    <small class="text-danger small">{{ error }}</small>
-                    {% endfor %}
-                    {% endif %}
-                </div>
-            </div>
             <div>
                 {% with field=form.date %}
-                {% include 'field.html' %}
-                {% endwith %}
-            </div>
-            <div>
-                {% with field=form.category %}
-                {% include 'field.html' %}
-                {% endwith %}
-            </div>
-            <div>
-                {% with field=form.employee %}
                 {% include 'field.html' %}
                 {% endwith %}
             </div>
             {% with money_form=form.value %}
             {% include 'expense/money.html' %}
             {% endwith %}
-            {% if request.endpoint == 'expense.new_labor' %}
+            {% if request.endpoint == 'income.new_other_income' %}
             <div>
                 {% with field=form.files %}
                 {% include 'field.html' %}
@@ -50,12 +29,12 @@
                 {% endwith %}
             </div>
             <div class="gx-3">
-                {% if request.endpoint == 'expense.new_labor' %}
+                {% if request.endpoint == 'income.new_other_income' %}
                 {{ form.submit(class="btn btn-outline-success ms-1 float-end") }}
-                <a href="{{url_for('expense.index')}}" class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
-                {% elif request.endpoint == 'expense.update_labor' %}
+                <a href="{{url_for('income.index')}}" class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
+                {% elif request.endpoint == 'income.update_other_income' %}
                 {{ form.update(class="btn btn-outline-primary ms-1 float-end") }}
-                <a href="{{url_for('expense.detail',expense_id=expense_id)}}"
+                <a href="{{url_for('income.detail',income_id=income_id)}}"
                     class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
                 {% endif %}
             </div>

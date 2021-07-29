@@ -168,3 +168,41 @@ class SalaryPaymentFile(File):
         f.save(os.path.join(current_app.config["UPLOAD_FOLDER"], db_file.internal_name))
         db_file.size = os.path.getsize(db_file.path)
         return db_file
+
+
+class IncomeFile(File):
+    income_id = Column(Integer, ForeignKey("income.id"))
+
+    __mapper_args__ = {"polymorphic_identity": "income_file"}
+
+    @property
+    def owner_url(self) -> str:
+        return url_for("income.detail", income_id=self.income_id, _anchor="Files")
+
+    @staticmethod
+    def create(f: FileStorage) -> "File":
+        db_file = IncomeFile(full_name=f.filename)
+        db.session.add(db_file)
+        db.session.flush()
+        f.save(os.path.join(current_app.config["UPLOAD_FOLDER"], db_file.internal_name))
+        db_file.size = os.path.getsize(db_file.path)
+        return db_file
+
+
+class RevenueFile(File):
+    revenue_id = Column(Integer, ForeignKey("revenue.date"))
+
+    __mapper_args__ = {"polymorphic_identity": "revenue_file"}
+
+    @property
+    def owner_url(self) -> str:
+        return url_for("income.index", date_str=self.revenue_id, _anchor="Files")
+
+    @staticmethod
+    def create(f: FileStorage) -> "File":
+        db_file = RevenueFile(full_name=f.filename)
+        db.session.add(db_file)
+        db.session.flush()
+        f.save(os.path.join(current_app.config["UPLOAD_FOLDER"], db_file.internal_name))
+        db_file.size = os.path.getsize(db_file.path)
+        return db_file

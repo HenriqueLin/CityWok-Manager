@@ -101,6 +101,7 @@ def new_non_labor():
             transfer=form.value.transfer.data,
             card=form.value.card.data,
             check=form.value.check.data,
+            from_pos=form.from_pos.data,
         )
         for f in form.files.data:
             db_file = ExpenseFile.create(f)
@@ -136,6 +137,7 @@ def new_labor():
             transfer=form.value.transfer.data,
             card=form.value.card.data,
             check=form.value.check.data,
+            from_pos=form.from_pos.data,
         )
         for f in form.files.data:
             db_file = ExpenseFile.create(f)

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-07-28 02:11+0100\n"
+"POT-Creation-Date: 2021-07-29 20:04+0100\n"
 "PO-Revision-Date: 2021-06-19 22:05+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -39,7 +39,7 @@ msgid "Role"
 msgstr "权限"
 
 #: citywok_ms/auth/forms.py:37 citywok_ms/auth/routes.py:82
-#: citywok_ms/templates/layout.html:62
+#: citywok_ms/templates/layout.html:63
 msgid "Invite"
 msgstr "邀请"
 
@@ -191,7 +191,7 @@ msgid "Birthday"
 msgstr "生日"
 
 #: citywok_ms/employee/forms.py:57 citywok_ms/employee/models.py:50
-#: citywok_ms/supplier/forms.py:24 citywok_ms/supplier/models.py:38
+#: citywok_ms/supplier/forms.py:24 citywok_ms/supplier/models.py:39
 #: citywok_ms/supplier/routes.py:34
 #: citywok_ms/templates/employee/detail.html:41
 #: citywok_ms/templates/supplier/detail.html:22
@@ -199,7 +199,7 @@ msgid "Contact"
 msgstr "联系方式"
 
 #: citywok_ms/employee/forms.py:60 citywok_ms/employee/models.py:51
-#: citywok_ms/supplier/forms.py:29 citywok_ms/supplier/models.py:39
+#: citywok_ms/supplier/forms.py:29 citywok_ms/supplier/models.py:40
 #: citywok_ms/supplier/routes.py:35
 #: citywok_ms/templates/supplier/detail.html:24
 msgid "E-mail"
@@ -227,7 +227,7 @@ msgstr "国籍"
 
 #: citywok_ms/employee/forms.py:85 citywok_ms/employee/models.py:56
 #: citywok_ms/employee/routes.py:34 citywok_ms/supplier/forms.py:33
-#: citywok_ms/supplier/models.py:40 citywok_ms/supplier/routes.py:32
+#: citywok_ms/supplier/models.py:41 citywok_ms/supplier/routes.py:32
 #: citywok_ms/templates/employee/detail.html:55
 #: citywok_ms/templates/supplier/detail.html:28
 msgid "NIF"
@@ -240,7 +240,7 @@ msgid "NISS"
 msgstr "NISS"
 
 #: citywok_ms/employee/forms.py:93 citywok_ms/employee/models.py:58
-#: citywok_ms/supplier/forms.py:37 citywok_ms/supplier/models.py:41
+#: citywok_ms/supplier/forms.py:37 citywok_ms/supplier/models.py:42
 #: citywok_ms/supplier/routes.py:33
 #: citywok_ms/templates/employee/detail.html:59
 #: citywok_ms/templates/expense/salary.html:22
@@ -265,31 +265,35 @@ msgid "Taxed Salary"
 msgstr "纳税工资"
 
 #: citywok_ms/employee/forms.py:112 citywok_ms/employee/models.py:62
-#: citywok_ms/expense/forms.py:114 citywok_ms/expense/forms.py:163
-#: citywok_ms/expense/forms.py:203 citywok_ms/expense/forms.py:243
-#: citywok_ms/file/forms.py:22 citywok_ms/supplier/forms.py:55
-#: citywok_ms/supplier/models.py:45
+#: citywok_ms/expense/forms.py:114 citywok_ms/expense/forms.py:184
+#: citywok_ms/expense/forms.py:224 citywok_ms/expense/forms.py:285
+#: citywok_ms/file/forms.py:22 citywok_ms/income/forms.py:61
+#: citywok_ms/income/forms.py:90 citywok_ms/supplier/forms.py:55
+#: citywok_ms/supplier/models.py:46
 #: citywok_ms/templates/employee/detail.html:71
 #: citywok_ms/templates/expense/detail.html:49
 #: citywok_ms/templates/expense/salary.html:30
+#: citywok_ms/templates/income/detail.html:33
 #: citywok_ms/templates/order/detail.html:41
 #: citywok_ms/templates/supplier/detail.html:38
 msgid "Remark"
 msgstr "备注"
 
-#: citywok_ms/employee/forms.py:117 citywok_ms/expense/forms.py:124
-#: citywok_ms/expense/forms.py:174 citywok_ms/expense/forms.py:213
-#: citywok_ms/expense/forms.py:253 citywok_ms/order/forms.py:44
-#: citywok_ms/supplier/forms.py:59
+#: citywok_ms/employee/forms.py:117 citywok_ms/expense/forms.py:128
+#: citywok_ms/expense/forms.py:195 citywok_ms/expense/forms.py:238
+#: citywok_ms/expense/forms.py:295 citywok_ms/income/forms.py:69
+#: citywok_ms/income/forms.py:99 citywok_ms/order/forms.py:44
+#: citywok_ms/supplier/forms.py:59 citywok_ms/templates/income/revenue.html:59
 msgid "Add"
 msgstr "添加"
 
-#: citywok_ms/employee/forms.py:118 citywok_ms/expense/forms.py:125
-#: citywok_ms/expense/forms.py:175 citywok_ms/expense/forms.py:214
-#: citywok_ms/expense/forms.py:254 citywok_ms/file/forms.py:23
-#: citywok_ms/order/forms.py:74 citywok_ms/supplier/forms.py:60
-#: citywok_ms/templates/employee/detail.html:12
+#: citywok_ms/employee/forms.py:118 citywok_ms/expense/forms.py:129
+#: citywok_ms/expense/forms.py:196 citywok_ms/expense/forms.py:239
+#: citywok_ms/expense/forms.py:296 citywok_ms/file/forms.py:23
+#: citywok_ms/income/forms.py:100 citywok_ms/order/forms.py:74
+#: citywok_ms/supplier/forms.py:60 citywok_ms/templates/employee/detail.html:12
 #: citywok_ms/templates/expense/detail.html:9
+#: citywok_ms/templates/income/detail.html:10
 #: citywok_ms/templates/order/detail.html:13
 #: citywok_ms/templates/supplier/detail.html:9
 msgid "Update"
@@ -316,7 +320,7 @@ msgid "This Accountant ID already existe"
 msgstr "账房ID已存在"
 
 #: citywok_ms/employee/models.py:43 citywok_ms/employee/routes.py:28
-#: citywok_ms/supplier/models.py:34 citywok_ms/supplier/routes.py:28
+#: citywok_ms/supplier/models.py:35 citywok_ms/supplier/routes.py:28
 #: citywok_ms/templates/employee/detail.html:29
 #: citywok_ms/templates/employee/detail.html:132
 #: citywok_ms/templates/expense/detail.html:17
@@ -324,6 +328,9 @@ msgstr "账房ID已存在"
 #: citywok_ms/templates/expense/salary.html:10
 #: citywok_ms/templates/expense/salary_index.html:55
 #: citywok_ms/templates/expense/salary_index.html:85
+#: citywok_ms/templates/income/detail.html:20
+#: citywok_ms/templates/income/index.html:96
+#: citywok_ms/templates/income/index.html:127
 #: citywok_ms/templates/supplier/detail.html:14
 #: citywok_ms/templates/supplier/detail.html:98
 msgid "ID"
@@ -369,22 +376,25 @@ msgstr "员工 \"%(name)s\" 冻结."
 msgid "Employee \"%(name)s\" has been activated."
 msgstr "员工 \"%(name)s\" 已激活."
 
-#: citywok_ms/employee/routes.py:142 citywok_ms/expense/routes.py:505
-#: citywok_ms/expense/routes.py:532 citywok_ms/order/routes.py:115
+#: citywok_ms/employee/routes.py:142 citywok_ms/expense/routes.py:515
+#: citywok_ms/expense/routes.py:542 citywok_ms/income/routes.py:224
+#: citywok_ms/income/routes.py:249 citywok_ms/order/routes.py:115
 #: citywok_ms/supplier/routes.py:111
 #, python-format
 msgid "File \"%(name)s\" has been uploaded."
 msgstr "文件成功上传."
 
-#: citywok_ms/employee/routes.py:150 citywok_ms/expense/routes.py:513
-#: citywok_ms/expense/routes.py:540 citywok_ms/order/routes.py:123
+#: citywok_ms/employee/routes.py:150 citywok_ms/expense/routes.py:523
+#: citywok_ms/expense/routes.py:550 citywok_ms/income/routes.py:232
+#: citywok_ms/income/routes.py:257 citywok_ms/order/routes.py:123
 #: citywok_ms/supplier/routes.py:119
 #, python-format
 msgid "Invalid file format \"%(format)s\"."
 msgstr "无效的文件格式 \"%(format)s\"."
 
-#: citywok_ms/employee/routes.py:154 citywok_ms/expense/routes.py:517
-#: citywok_ms/expense/routes.py:544 citywok_ms/order/routes.py:127
+#: citywok_ms/employee/routes.py:154 citywok_ms/expense/routes.py:527
+#: citywok_ms/expense/routes.py:554 citywok_ms/income/routes.py:236
+#: citywok_ms/income/routes.py:261 citywok_ms/order/routes.py:127
 #: citywok_ms/supplier/routes.py:123
 msgid "No file has been uploaded."
 msgstr "未上传文件."
@@ -397,11 +407,14 @@ msgstr "会话已过期，请重新登录."
 msgid "Please log in to access this page."
 msgstr "请登录以访问该页面."
 
-#: citywok_ms/expense/forms.py:42 citywok_ms/templates/expense/detail.html:38
+#: citywok_ms/expense/forms.py:42 citywok_ms/income/forms.py:50
+#: citywok_ms/templates/expense/detail.html:38
 #: citywok_ms/templates/expense/index.html:31
 #: citywok_ms/templates/expense/index.html:161
 #: citywok_ms/templates/expense/salary_index.html:31
 #: citywok_ms/templates/expense/salary_index.html:88
+#: citywok_ms/templates/income/detail.html:29
+#: citywok_ms/templates/income/index.html:31
 msgid "Cash"
 msgstr "现金"
 
@@ -421,38 +434,43 @@ msgstr "支票"
 msgid "Total value must be greater than 0."
 msgstr "总金额必选大于0."
 
-#: citywok_ms/expense/forms.py:87 citywok_ms/expense/forms.py:130
-#: citywok_ms/expense/forms.py:187 citywok_ms/expense/forms.py:219
+#: citywok_ms/expense/forms.py:87 citywok_ms/expense/forms.py:151
+#: citywok_ms/expense/forms.py:208 citywok_ms/expense/forms.py:261
+#: citywok_ms/income/forms.py:40 citywok_ms/income/forms.py:84
+#: citywok_ms/templates/income/detail.html:22
 msgid "Date"
 msgstr "日期"
 
-#: citywok_ms/expense/forms.py:92 citywok_ms/expense/forms.py:135
-#: citywok_ms/expense/forms.py:180
+#: citywok_ms/expense/forms.py:92 citywok_ms/expense/forms.py:156
+#: citywok_ms/expense/forms.py:201
 #: citywok_ms/templates/employee/detail.html:134
 #: citywok_ms/templates/expense/detail.html:22
 #: citywok_ms/templates/expense/index.html:54
 #: citywok_ms/templates/expense/index.html:94
 #: citywok_ms/templates/expense/salary.html:40
+#: citywok_ms/templates/income/detail.html:25
+#: citywok_ms/templates/income/index.html:97
+#: citywok_ms/templates/income/index.html:128
 #: citywok_ms/templates/supplier/detail.html:100
 msgid "Category"
 msgstr "分类"
 
-#: citywok_ms/expense/forms.py:94 citywok_ms/expense/forms.py:137
-#: citywok_ms/expense/models.py:51
+#: citywok_ms/expense/forms.py:94 citywok_ms/expense/forms.py:158
+#: citywok_ms/expense/models.py:53
 msgid "Operation"
 msgstr "运营"
 
-#: citywok_ms/expense/forms.py:95 citywok_ms/expense/forms.py:138
-#: citywok_ms/expense/models.py:50
+#: citywok_ms/expense/forms.py:95 citywok_ms/expense/forms.py:159
+#: citywok_ms/expense/models.py:52
 msgid "Material"
 msgstr "物料"
 
-#: citywok_ms/expense/forms.py:96 citywok_ms/expense/forms.py:139
-#: citywok_ms/expense/models.py:52
+#: citywok_ms/expense/forms.py:96 citywok_ms/expense/forms.py:160
+#: citywok_ms/expense/models.py:54
 msgid "Tax"
 msgstr "税务"
 
-#: citywok_ms/expense/forms.py:105 citywok_ms/expense/forms.py:148
+#: citywok_ms/expense/forms.py:105 citywok_ms/expense/forms.py:169
 #: citywok_ms/order/forms.py:30 citywok_ms/order/forms.py:65
 #: citywok_ms/templates/layout.html:35
 #: citywok_ms/templates/order/detail.html:25
@@ -461,30 +479,37 @@ msgstr "税务"
 msgid "Supplier"
 msgstr "供应商"
 
-#: citywok_ms/expense/forms.py:120 citywok_ms/expense/forms.py:169
-#: citywok_ms/expense/forms.py:209 citywok_ms/expense/forms.py:249
+#: citywok_ms/expense/forms.py:120 citywok_ms/expense/forms.py:190
+#: citywok_ms/expense/forms.py:230 citywok_ms/expense/forms.py:291
+#: citywok_ms/income/forms.py:66 citywok_ms/income/forms.py:95
 #: citywok_ms/order/forms.py:40 citywok_ms/templates/employee/detail.html:76
 #: citywok_ms/templates/expense/detail.html:86
 #: citywok_ms/templates/expense/salary_index.html:115
+#: citywok_ms/templates/income/detail.html:38
+#: citywok_ms/templates/income/index.html:160
 #: citywok_ms/templates/order/detail.html:46
 #: citywok_ms/templates/supplier/detail.html:43
 msgid "Files"
 msgstr "文件"
 
-#: citywok_ms/expense/forms.py:157
+#: citywok_ms/expense/forms.py:146 citywok_ms/expense/forms.py:256
+msgid "Expense from POS must be payed with cash."
+msgstr "收银台支出必选使用现金."
+
+#: citywok_ms/expense/forms.py:178
 #: citywok_ms/templates/supplier/detail.html:130
 msgid "Orders"
 msgstr "订单"
 
-#: citywok_ms/expense/forms.py:194 citywok_ms/templates/layout.html:34
+#: citywok_ms/expense/forms.py:215 citywok_ms/templates/layout.html:34
 msgid "Employee"
 msgstr "员工"
 
-#: citywok_ms/expense/forms.py:227 citywok_ms/templates/expense/detail.html:43
+#: citywok_ms/expense/forms.py:269 citywok_ms/templates/expense/detail.html:43
 msgid "Month"
 msgstr "月份"
 
-#: citywok_ms/expense/forms.py:237
+#: citywok_ms/expense/forms.py:279
 #: citywok_ms/templates/employee/detail.html:133
 #: citywok_ms/templates/expense/detail.html:19
 #: citywok_ms/templates/expense/salary.html:41
@@ -492,223 +517,223 @@ msgstr "月份"
 msgid "Payment Date"
 msgstr "付款日期"
 
-#: citywok_ms/expense/models.py:13
+#: citywok_ms/expense/models.py:15
 #: citywok_ms/templates/employee/detail.html:121
 #: citywok_ms/templates/expense/index.html:84
 msgid "Salary"
 msgstr "工资"
 
-#: citywok_ms/expense/models.py:13
+#: citywok_ms/expense/models.py:15
 msgid "Labor - Salary"
 msgstr "人工 - 工资"
 
-#: citywok_ms/expense/models.py:14
+#: citywok_ms/expense/models.py:16
 msgid "Overtime"
 msgstr "加班"
 
-#: citywok_ms/expense/models.py:14
+#: citywok_ms/expense/models.py:16
 msgid "Labor - Overtime"
 msgstr "人工 - 加班"
 
-#: citywok_ms/expense/models.py:15
+#: citywok_ms/expense/models.py:17
 msgid "Advance"
 msgstr "预支"
 
-#: citywok_ms/expense/models.py:15
+#: citywok_ms/expense/models.py:17
 msgid "Labor - Advance"
 msgstr "人工 - 预支"
 
-#: citywok_ms/expense/models.py:16
+#: citywok_ms/expense/models.py:18
 msgid "Bonus"
 msgstr "加薪"
 
-#: citywok_ms/expense/models.py:16
+#: citywok_ms/expense/models.py:18
 msgid "Labor - Bonus"
 msgstr "人工 - 加薪"
 
-#: citywok_ms/expense/models.py:17 citywok_ms/expense/models.py:28
-#: citywok_ms/expense/models.py:39 citywok_ms/expense/models.py:46
+#: citywok_ms/expense/models.py:19 citywok_ms/expense/models.py:30
+#: citywok_ms/expense/models.py:41 citywok_ms/expense/models.py:48
 #: citywok_ms/utils/__init__.py:10
 msgid "Other"
 msgstr "其他"
 
-#: citywok_ms/expense/models.py:17
+#: citywok_ms/expense/models.py:19
 msgid "Labor - Other"
 msgstr "人工 - 其他"
 
-#: citywok_ms/expense/models.py:20
+#: citywok_ms/expense/models.py:22
 msgid "Rent"
 msgstr "房租"
 
-#: citywok_ms/expense/models.py:20
+#: citywok_ms/expense/models.py:22
 msgid "Operation - Rent"
 msgstr "运营 - 房租"
 
-#: citywok_ms/expense/models.py:21
+#: citywok_ms/expense/models.py:23
 msgid "Water"
 msgstr "水费"
 
-#: citywok_ms/expense/models.py:21
+#: citywok_ms/expense/models.py:23
 msgid "Operation - Water"
 msgstr "运营 - 水费"
 
-#: citywok_ms/expense/models.py:22
+#: citywok_ms/expense/models.py:24
 msgid "Electricity"
 msgstr "电费"
 
-#: citywok_ms/expense/models.py:22
+#: citywok_ms/expense/models.py:24
 msgid "Operation - Electricity"
 msgstr "运营 - 电费"
 
-#: citywok_ms/expense/models.py:23
+#: citywok_ms/expense/models.py:25
 msgid "Gas"
 msgstr "燃气"
 
-#: citywok_ms/expense/models.py:23
+#: citywok_ms/expense/models.py:25
 msgid "Operation - Gas"
 msgstr "运营 - 燃气"
 
-#: citywok_ms/expense/models.py:24
+#: citywok_ms/expense/models.py:26
 msgid "Communication"
 msgstr "通讯"
 
-#: citywok_ms/expense/models.py:24
+#: citywok_ms/expense/models.py:26
 msgid "Operation - Communication"
 msgstr "运营 - 通讯"
 
-#: citywok_ms/expense/models.py:25
+#: citywok_ms/expense/models.py:27
 msgid "Fuel"
 msgstr "燃油"
 
-#: citywok_ms/expense/models.py:25
+#: citywok_ms/expense/models.py:27
 msgid "Operation - Fuel"
 msgstr "运营 - 燃油"
 
-#: citywok_ms/expense/models.py:26
+#: citywok_ms/expense/models.py:28
 msgid "Bank"
 msgstr "银行"
 
-#: citywok_ms/expense/models.py:26
+#: citywok_ms/expense/models.py:28
 msgid "Operation - Bank"
 msgstr "运营 - 银行"
 
-#: citywok_ms/expense/models.py:27
+#: citywok_ms/expense/models.py:29
 msgid "Server"
 msgstr "服务"
 
-#: citywok_ms/expense/models.py:27
+#: citywok_ms/expense/models.py:29
 msgid "Operation - Server"
 msgstr "运营 - 服务"
 
-#: citywok_ms/expense/models.py:28
+#: citywok_ms/expense/models.py:30
 msgid "Operation - Other"
 msgstr "运营 - 其他"
 
-#: citywok_ms/expense/models.py:31
+#: citywok_ms/expense/models.py:33
 msgid "Meat"
 msgstr "肉类"
 
-#: citywok_ms/expense/models.py:31
+#: citywok_ms/expense/models.py:33
 msgid "Material - Meat"
 msgstr "物料 - 肉类"
 
-#: citywok_ms/expense/models.py:32
+#: citywok_ms/expense/models.py:34
 msgid "SeaFood"
 msgstr "海鲜"
 
-#: citywok_ms/expense/models.py:32
+#: citywok_ms/expense/models.py:34
 msgid "Material - SeaFood"
 msgstr "物料 - 海鲜"
 
-#: citywok_ms/expense/models.py:33
+#: citywok_ms/expense/models.py:35
 msgid "Fruit/Vegetable"
 msgstr "蔬果"
 
-#: citywok_ms/expense/models.py:33
+#: citywok_ms/expense/models.py:35
 msgid "Material - Fruit/Vegetable"
 msgstr "物料 - 蔬果"
 
-#: citywok_ms/expense/models.py:34
+#: citywok_ms/expense/models.py:36
 msgid "Frozen"
 msgstr "冰冻"
 
-#: citywok_ms/expense/models.py:34
+#: citywok_ms/expense/models.py:36
 msgid "Material - Frozen"
 msgstr "物料 - 冰冻"
 
-#: citywok_ms/expense/models.py:35
+#: citywok_ms/expense/models.py:37
 msgid "Drinks"
 msgstr "酒水"
 
-#: citywok_ms/expense/models.py:35
+#: citywok_ms/expense/models.py:37
 msgid "Material - Drinks"
 msgstr "物料 - 酒水"
 
-#: citywok_ms/expense/models.py:36
+#: citywok_ms/expense/models.py:38
 msgid "Chinese Goods"
 msgstr "中国货"
 
-#: citywok_ms/expense/models.py:36
+#: citywok_ms/expense/models.py:38
 msgid "Material - Chinese Goods"
 msgstr "物料 - 中国货"
 
-#: citywok_ms/expense/models.py:37
+#: citywok_ms/expense/models.py:39
 msgid "Sanitary"
 msgstr "洁具"
 
-#: citywok_ms/expense/models.py:37
+#: citywok_ms/expense/models.py:39
 msgid "Material - Sanitary"
 msgstr "物料 - 洁具"
 
-#: citywok_ms/expense/models.py:38
+#: citywok_ms/expense/models.py:40
 msgid "Stationery"
 msgstr "文具"
 
-#: citywok_ms/expense/models.py:38
+#: citywok_ms/expense/models.py:40
 msgid "Material - Stationery"
 msgstr "物料 - 文具"
 
-#: citywok_ms/expense/models.py:39
+#: citywok_ms/expense/models.py:41
 msgid "Material - Others"
 msgstr "物料 - 其他"
 
-#: citywok_ms/expense/models.py:42
+#: citywok_ms/expense/models.py:44
 msgid "IRS"
 msgstr "IRS"
 
-#: citywok_ms/expense/models.py:42
+#: citywok_ms/expense/models.py:44
 msgid "Tax - IRS"
 msgstr "税务 - IRS"
 
-#: citywok_ms/expense/models.py:43
+#: citywok_ms/expense/models.py:45
 msgid "IVA"
 msgstr "IVA"
 
-#: citywok_ms/expense/models.py:43
+#: citywok_ms/expense/models.py:45
 msgid "Tax - IVA"
 msgstr "税务 - IVA"
 
-#: citywok_ms/expense/models.py:44
+#: citywok_ms/expense/models.py:46
 msgid "Social Security"
 msgstr "社会保险"
 
-#: citywok_ms/expense/models.py:44
+#: citywok_ms/expense/models.py:46
 msgid "Tax - Social Security"
 msgstr "税务 - 社会保险"
 
-#: citywok_ms/expense/models.py:45
+#: citywok_ms/expense/models.py:47
 msgid "IUC"
 msgstr "IUC"
 
-#: citywok_ms/expense/models.py:45
+#: citywok_ms/expense/models.py:47
 msgid "Tax - IUC"
 msgstr "税务 - IUC"
 
-#: citywok_ms/expense/models.py:46
+#: citywok_ms/expense/models.py:48
 msgid "Tax - Other"
 msgstr "税务 - Other"
 
-#: citywok_ms/expense/models.py:49
+#: citywok_ms/expense/models.py:51
 #: citywok_ms/templates/employee/detail.html:116
 #: citywok_ms/templates/expense/index.html:82
 msgid "Labor"
@@ -724,79 +749,79 @@ msgstr "支出"
 msgid "New non-labor expense has been registed."
 msgstr "非人工支出已登记."
 
-#: citywok_ms/expense/routes.py:119
+#: citywok_ms/expense/routes.py:121
 msgid "New Non-Labor Expense"
 msgstr "添加非人工支出"
 
-#: citywok_ms/expense/routes.py:145
+#: citywok_ms/expense/routes.py:147
 msgid "New labor expense has been registed."
 msgstr "人工支出已登记."
 
-#: citywok_ms/expense/routes.py:152
+#: citywok_ms/expense/routes.py:156
 msgid "New Labor Expense"
 msgstr "添加人工支出"
 
-#: citywok_ms/expense/routes.py:190
+#: citywok_ms/expense/routes.py:193
 msgid "New order payment has been registed."
 msgstr "订单支付已登记."
 
-#: citywok_ms/expense/routes.py:207
+#: citywok_ms/expense/routes.py:212
 msgid "New Orders Payment"
 msgstr "添加订单支付"
 
-#: citywok_ms/expense/routes.py:220
+#: citywok_ms/expense/routes.py:225
 msgid "Employee already payed at the given month."
 msgstr "该员工已领取了给定月份的工资."
 
-#: citywok_ms/expense/routes.py:241
+#: citywok_ms/expense/routes.py:245
 msgid "New salary has been registed."
 msgstr "工资已登记."
 
-#: citywok_ms/expense/routes.py:245
+#: citywok_ms/expense/routes.py:251
 msgid "New Salary"
 msgstr "添加工资"
 
-#: citywok_ms/expense/routes.py:295
+#: citywok_ms/expense/routes.py:301
 msgid "Salary Payment"
 msgstr "工资支付"
 
-#: citywok_ms/expense/routes.py:315
+#: citywok_ms/expense/routes.py:321
 msgid "Expense Detail"
 msgstr "付款详情"
 
-#: citywok_ms/expense/routes.py:358
+#: citywok_ms/expense/routes.py:363
 msgid "Non-labor expense has been updated."
 msgstr "非人工支出已更新."
 
-#: citywok_ms/expense/routes.py:368
+#: citywok_ms/expense/routes.py:375
 msgid "Update Non-Labor Expense"
 msgstr "更新非人工支出"
 
-#: citywok_ms/expense/routes.py:390
+#: citywok_ms/expense/routes.py:396
 msgid "Labor expense has been updated."
 msgstr "人工支出已更新."
 
-#: citywok_ms/expense/routes.py:400
+#: citywok_ms/expense/routes.py:408
 msgid "Update Labor Expense"
 msgstr "更新人工支出"
 
-#: citywok_ms/expense/routes.py:438
+#: citywok_ms/expense/routes.py:445
 msgid "Order Payment has been updated."
 msgstr "订单支付已更新."
 
-#: citywok_ms/expense/routes.py:457
+#: citywok_ms/expense/routes.py:466
 msgid "Update Orders Payment"
 msgstr "更新订单支付"
 
-#: citywok_ms/expense/routes.py:478
+#: citywok_ms/expense/routes.py:486
 msgid "Salary has been updated."
 msgstr "工资已更新"
 
-#: citywok_ms/expense/routes.py:488
+#: citywok_ms/expense/routes.py:498
 msgid "Update Salary"
 msgstr "更新工资"
 
-#: citywok_ms/expense/routes.py:554
+#: citywok_ms/expense/routes.py:563
 msgid "Expense has been deleted."
 msgstr "支出已删除."
 
@@ -838,6 +863,82 @@ msgstr "文件 \"%(name)s\" 已更新."
 #: citywok_ms/file/routes.py:71
 msgid "Update File"
 msgstr "更新文件"
+
+#: citywok_ms/income/forms.py:23 citywok_ms/templates/expense/detail.html:36
+#: citywok_ms/templates/expense/index.html:21
+#: citywok_ms/templates/expense/salary_index.html:21
+#: citywok_ms/templates/income/detail.html:27
+msgid "Total"
+msgstr "总计"
+
+#: citywok_ms/income/forms.py:28
+msgid "Fee"
+msgstr "手续费"
+
+#: citywok_ms/income/forms.py:35
+msgid "Total value must be greater than fee."
+msgstr "总金额必选大于手续费."
+
+#: citywok_ms/income/forms.py:45 citywok_ms/templates/income/index.html:53
+msgid "Theoretical Revenue"
+msgstr "理论营收"
+
+#: citywok_ms/income/forms.py:78
+#, python-format
+msgid "Revenue of \"%(date)s\" already existe."
+msgstr "\"%(date)s\"的营收已存在."
+
+#: citywok_ms/income/models.py:11 citywok_ms/templates/income/index.html:81
+msgid "Revenue"
+msgstr "营收"
+
+#: citywok_ms/income/models.py:11 citywok_ms/templates/income/index.html:86
+msgid "Other Income"
+msgstr "其他收入"
+
+#: citywok_ms/income/routes.py:65 citywok_ms/templates/layout.html:38
+msgid "Income"
+msgstr "收入"
+
+#: citywok_ms/income/routes.py:104
+msgid "New revenue has been registed."
+msgstr "营收已添加."
+
+#: citywok_ms/income/routes.py:115
+msgid "New Revenue"
+msgstr "添加营收"
+
+#: citywok_ms/income/routes.py:139
+msgid "New income has been registed."
+msgstr "收入已添加."
+
+#: citywok_ms/income/routes.py:150
+msgid "New Income"
+msgstr "添加收入"
+
+#: citywok_ms/income/routes.py:161
+msgid "Income Detail"
+msgstr "收入详情"
+
+#: citywok_ms/income/routes.py:172
+msgid "This income can not be updated."
+msgstr "此收入无法更新."
+
+#: citywok_ms/income/routes.py:183
+msgid "Income has been updated."
+msgstr "收入已更新."
+
+#: citywok_ms/income/routes.py:195
+msgid "Update Income"
+msgstr "更新收入"
+
+#: citywok_ms/income/routes.py:206
+msgid "This income can not be deleted."
+msgstr "此收入无法删除."
+
+#: citywok_ms/income/routes.py:209
+msgid "Income has been deleted."
+msgstr "收入已删除."
 
 #: citywok_ms/order/forms.py:16 citywok_ms/order/forms.py:51
 #: citywok_ms/templates/expense/detail.html:57
@@ -890,38 +991,42 @@ msgstr "更新订单"
 msgid "Order Detail"
 msgstr "订单详情"
 
-#: citywok_ms/supplier/forms.py:12 citywok_ms/supplier/models.py:35
+#: citywok_ms/supplier/forms.py:12 citywok_ms/supplier/models.py:36
 #: citywok_ms/supplier/routes.py:29
 #: citywok_ms/templates/supplier/detail.html:16
 msgid "Company Name"
 msgstr "公司名称"
 
-#: citywok_ms/supplier/forms.py:16 citywok_ms/supplier/models.py:36
+#: citywok_ms/supplier/forms.py:16 citywok_ms/supplier/models.py:37
 #: citywok_ms/supplier/routes.py:31
 #: citywok_ms/templates/supplier/detail.html:18
 msgid "Abbreviation"
 msgstr "简称"
 
-#: citywok_ms/supplier/forms.py:20 citywok_ms/supplier/models.py:37
+#: citywok_ms/supplier/forms.py:20 citywok_ms/supplier/models.py:38
 #: citywok_ms/supplier/routes.py:30
 #: citywok_ms/templates/supplier/detail.html:20
 msgid "Principal"
 msgstr "负责人"
 
-#: citywok_ms/supplier/forms.py:42 citywok_ms/supplier/models.py:42
+#: citywok_ms/supplier/forms.py:42 citywok_ms/supplier/models.py:43
 #: citywok_ms/templates/supplier/detail.html:32
 msgid "Address"
 msgstr "地址"
 
-#: citywok_ms/supplier/forms.py:46 citywok_ms/supplier/models.py:43
+#: citywok_ms/supplier/forms.py:46 citywok_ms/supplier/models.py:44
 #: citywok_ms/templates/supplier/detail.html:34
 msgid "Postcode"
 msgstr "邮编"
 
-#: citywok_ms/supplier/forms.py:50 citywok_ms/supplier/models.py:44
+#: citywok_ms/supplier/forms.py:50 citywok_ms/supplier/models.py:45
 #: citywok_ms/templates/supplier/detail.html:36
 msgid "City"
 msgstr "城市"
+
+#: citywok_ms/supplier/models.py:47
+msgid "Is_Bank"
+msgstr "是银行"
 
 #: citywok_ms/supplier/routes.py:41
 msgid "Suppliers"
@@ -954,7 +1059,7 @@ msgstr "更新供应商"
 msgid "Expense"
 msgstr "支出"
 
-#: citywok_ms/templates/layout.html:64
+#: citywok_ms/templates/layout.html:65
 msgid "Logout"
 msgstr "登出"
 
@@ -964,15 +1069,18 @@ msgstr "登出"
 #: citywok_ms/templates/auth/reset_password.html:24
 #: citywok_ms/templates/employee/form.html:108
 #: citywok_ms/templates/employee/form.html:112
-#: citywok_ms/templates/expense/labor.html:44
-#: citywok_ms/templates/expense/labor.html:48
-#: citywok_ms/templates/expense/non_labor.html:44
-#: citywok_ms/templates/expense/non_labor.html:48
+#: citywok_ms/templates/expense/labor.html:55
+#: citywok_ms/templates/expense/labor.html:59
+#: citywok_ms/templates/expense/non_labor.html:55
+#: citywok_ms/templates/expense/non_labor.html:59
 #: citywok_ms/templates/expense/order_payment.html:50
 #: citywok_ms/templates/expense/order_payment.html:54
 #: citywok_ms/templates/expense/salary.html:97
 #: citywok_ms/templates/expense/salary.html:101
 #: citywok_ms/templates/file/update.html:37
+#: citywok_ms/templates/income/other_income.html:34
+#: citywok_ms/templates/income/other_income.html:38
+#: citywok_ms/templates/income/revenue.html:60
 #: citywok_ms/templates/order/new.html:43
 #: citywok_ms/templates/order/update.html:38
 #: citywok_ms/templates/supplier/form.html:69
@@ -1015,6 +1123,8 @@ msgstr "就职日期"
 #: citywok_ms/templates/employee/detail.html:82
 #: citywok_ms/templates/expense/detail.html:92
 #: citywok_ms/templates/expense/salary_index.html:121
+#: citywok_ms/templates/income/detail.html:44
+#: citywok_ms/templates/income/index.html:166
 #: citywok_ms/templates/order/detail.html:52
 #: citywok_ms/templates/supplier/detail.html:49
 msgid "New File"
@@ -1026,6 +1136,10 @@ msgstr "添加文件"
 #: citywok_ms/templates/expense/detail.html:146
 #: citywok_ms/templates/expense/salary_index.html:127
 #: citywok_ms/templates/expense/salary_index.html:152
+#: citywok_ms/templates/income/detail.html:50
+#: citywok_ms/templates/income/detail.html:97
+#: citywok_ms/templates/income/index.html:172
+#: citywok_ms/templates/income/index.html:196
 #: citywok_ms/templates/order/detail.html:58
 #: citywok_ms/templates/order/detail.html:82
 #: citywok_ms/templates/supplier/detail.html:55
@@ -1036,6 +1150,8 @@ msgstr "显示已删除文件"
 #: citywok_ms/templates/employee/detail.html:98
 #: citywok_ms/templates/expense/detail.html:108
 #: citywok_ms/templates/expense/salary_index.html:137
+#: citywok_ms/templates/income/detail.html:60
+#: citywok_ms/templates/income/index.html:182
 #: citywok_ms/templates/order/detail.html:68
 #: citywok_ms/templates/supplier/detail.html:64
 msgid "Deleted Files"
@@ -1044,6 +1160,7 @@ msgstr "已删除文件"
 #: citywok_ms/templates/employee/detail.html:111
 #: citywok_ms/templates/employee/index.html:9
 #: citywok_ms/templates/expense/index.html:78
+#: citywok_ms/templates/income/index.html:76
 #: citywok_ms/templates/order/index.html:8
 #: citywok_ms/templates/supplier/detail.html:77
 #: citywok_ms/templates/supplier/detail.html:132
@@ -1054,6 +1171,8 @@ msgstr "添加"
 #: citywok_ms/templates/employee/detail.html:135
 #: citywok_ms/templates/expense/detail.html:59
 #: citywok_ms/templates/expense/index.html:95
+#: citywok_ms/templates/income/index.html:98
+#: citywok_ms/templates/income/index.html:129
 #: citywok_ms/templates/supplier/detail.html:101
 msgid "Amount"
 msgstr "金额"
@@ -1064,6 +1183,8 @@ msgstr "金额"
 #: citywok_ms/templates/expense/index.html:97
 #: citywok_ms/templates/expense/salary.html:43
 #: citywok_ms/templates/expense/salary_index.html:90
+#: citywok_ms/templates/income/index.html:99
+#: citywok_ms/templates/income/index.html:131
 #: citywok_ms/templates/order/index.html:20
 #: citywok_ms/templates/order/index.html:62
 #: citywok_ms/templates/supplier/detail.html:102
@@ -1074,6 +1195,8 @@ msgstr "详情"
 #: citywok_ms/templates/employee/detail.html:170
 #: citywok_ms/templates/expense/detail.html:146
 #: citywok_ms/templates/expense/salary_index.html:152
+#: citywok_ms/templates/income/detail.html:97
+#: citywok_ms/templates/income/index.html:196
 #: citywok_ms/templates/order/detail.html:82
 #: citywok_ms/templates/supplier/detail.html:171
 msgid "Hide deleted files"
@@ -1125,28 +1248,28 @@ msgstr "已通知管理员."
 #: citywok_ms/templates/expense/detail.html:11
 #: citywok_ms/templates/expense/detail.html:132
 #: citywok_ms/templates/file/active_file_table.html:10
+#: citywok_ms/templates/income/detail.html:12
+#: citywok_ms/templates/income/detail.html:84
 msgid "Delete"
 msgstr "删除"
 
 #: citywok_ms/templates/expense/detail.html:24
 #: citywok_ms/templates/expense/index.html:96
+#: citywok_ms/templates/income/index.html:130
 msgid "Payee"
 msgstr "收款人"
-
-#: citywok_ms/templates/expense/detail.html:36
-#: citywok_ms/templates/expense/index.html:21
-#: citywok_ms/templates/expense/salary_index.html:21
-msgid "Total"
-msgstr "总计"
 
 #: citywok_ms/templates/expense/detail.html:40
 #: citywok_ms/templates/expense/index.html:41
 #: citywok_ms/templates/expense/salary_index.html:41
 #: citywok_ms/templates/expense/salary_index.html:89
+#: citywok_ms/templates/income/detail.html:31
+#: citywok_ms/templates/income/index.html:41
 msgid "Non-Cash"
 msgstr "非现金"
 
 #: citywok_ms/templates/expense/detail.html:120
+#: citywok_ms/templates/income/detail.html:72
 msgid "Warning"
 msgstr "警告"
 
@@ -1158,6 +1281,8 @@ msgid ""
 msgstr "所有关联文件将一并删除，如有需求请下载相关文件."
 
 #: citywok_ms/templates/expense/detail.html:129
+#: citywok_ms/templates/income/detail.html:81
+#: citywok_ms/templates/income/revenue.html:79
 msgid "Close"
 msgstr "关闭"
 
@@ -1226,6 +1351,39 @@ msgstr "复原"
 #: citywok_ms/templates/file/suspend_file_table.html:43
 msgid "These files will be permanente removed 30 days after being deleted"
 msgstr "这些文件将在被删除后30天后被彻底移除."
+
+#: citywok_ms/templates/income/detail.html:77
+msgid ""
+"All files associated with this income will also be deleted, please "
+"download the files if\n"
+"                needed."
+msgstr "所有关联文件将一并删除，如有需求请下载相关文件."
+
+#: citywok_ms/templates/income/index.html:21
+msgid "Total Income"
+msgstr "总收入"
+
+#: citywok_ms/templates/income/index.html:63
+msgid "Actual Revenue"
+msgstr "实际营收"
+
+#: citywok_ms/templates/income/index.html:122
+msgid "Small Expenditure"
+msgstr "小额支出"
+
+#: citywok_ms/templates/income/revenue.html:71
+msgid "Confirmation"
+msgstr "确认"
+
+#: citywok_ms/templates/income/revenue.html:76
+msgid ""
+"Please confirm that the amount entered is correct, you will not be able "
+"to modify them."
+msgstr "请确认输入的金额无误, 你将无法修改它们."
+
+#: citywok_ms/templates/income/revenue.html:80
+msgid "Confirm"
+msgstr "确认"
 
 #: citywok_ms/templates/order/index.html:50
 msgid "No unpayed orders"
@@ -1299,11 +1457,4 @@ msgstr "无效的文件格式"
 
 #~ msgid "Copy"
 #~ msgstr "复制"
-
-#~ msgid ""
-#~ "All files associated with this expense"
-#~ " will also be deleted, please "
-#~ "download the files if\n"
-#~ "                needed."
-#~ msgstr ""
 

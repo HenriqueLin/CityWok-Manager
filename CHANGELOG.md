@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ## [Unreleased]
 ### Added
+- New `income` module
+  + `Income` and `Revenue` model
+  + Relative `File` model
+  + Relatives forms, views and tests
+- Add `is_bank` flag in `Supplier` model
+- Add `from_pos` flag in `Expense` model
 - New `expense` module
   + `Expense`, `LaborExpense`, `NonLaborExpense` and `SalaryPayment` model
   + Relative `File` model
