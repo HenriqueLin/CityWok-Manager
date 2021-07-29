@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-07-29 02:37+0100\n"
+"POT-Creation-Date: 2021-07-29 20:04+0100\n"
 "PO-Revision-Date: 2021-06-19 22:05+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -268,7 +268,7 @@ msgstr "纳税工资"
 #: citywok_ms/expense/forms.py:114 citywok_ms/expense/forms.py:184
 #: citywok_ms/expense/forms.py:224 citywok_ms/expense/forms.py:285
 #: citywok_ms/file/forms.py:22 citywok_ms/income/forms.py:61
-#: citywok_ms/income/forms.py:94 citywok_ms/supplier/forms.py:55
+#: citywok_ms/income/forms.py:90 citywok_ms/supplier/forms.py:55
 #: citywok_ms/supplier/models.py:46
 #: citywok_ms/templates/employee/detail.html:71
 #: citywok_ms/templates/expense/detail.html:49
@@ -282,7 +282,7 @@ msgstr "备注"
 #: citywok_ms/employee/forms.py:117 citywok_ms/expense/forms.py:128
 #: citywok_ms/expense/forms.py:195 citywok_ms/expense/forms.py:238
 #: citywok_ms/expense/forms.py:295 citywok_ms/income/forms.py:69
-#: citywok_ms/income/forms.py:103 citywok_ms/order/forms.py:44
+#: citywok_ms/income/forms.py:99 citywok_ms/order/forms.py:44
 #: citywok_ms/supplier/forms.py:59 citywok_ms/templates/income/revenue.html:59
 msgid "Add"
 msgstr "添加"
@@ -290,7 +290,7 @@ msgstr "添加"
 #: citywok_ms/employee/forms.py:118 citywok_ms/expense/forms.py:129
 #: citywok_ms/expense/forms.py:196 citywok_ms/expense/forms.py:239
 #: citywok_ms/expense/forms.py:296 citywok_ms/file/forms.py:23
-#: citywok_ms/income/forms.py:104 citywok_ms/order/forms.py:74
+#: citywok_ms/income/forms.py:100 citywok_ms/order/forms.py:74
 #: citywok_ms/supplier/forms.py:60 citywok_ms/templates/employee/detail.html:12
 #: citywok_ms/templates/expense/detail.html:9
 #: citywok_ms/templates/income/detail.html:10
@@ -377,24 +377,24 @@ msgid "Employee \"%(name)s\" has been activated."
 msgstr "员工 \"%(name)s\" 已激活."
 
 #: citywok_ms/employee/routes.py:142 citywok_ms/expense/routes.py:515
-#: citywok_ms/expense/routes.py:542 citywok_ms/income/routes.py:213
-#: citywok_ms/income/routes.py:237 citywok_ms/order/routes.py:115
+#: citywok_ms/expense/routes.py:542 citywok_ms/income/routes.py:224
+#: citywok_ms/income/routes.py:249 citywok_ms/order/routes.py:115
 #: citywok_ms/supplier/routes.py:111
 #, python-format
 msgid "File \"%(name)s\" has been uploaded."
 msgstr "文件成功上传."
 
 #: citywok_ms/employee/routes.py:150 citywok_ms/expense/routes.py:523
-#: citywok_ms/expense/routes.py:550 citywok_ms/income/routes.py:221
-#: citywok_ms/income/routes.py:245 citywok_ms/order/routes.py:123
+#: citywok_ms/expense/routes.py:550 citywok_ms/income/routes.py:232
+#: citywok_ms/income/routes.py:257 citywok_ms/order/routes.py:123
 #: citywok_ms/supplier/routes.py:119
 #, python-format
 msgid "Invalid file format \"%(format)s\"."
 msgstr "无效的文件格式 \"%(format)s\"."
 
 #: citywok_ms/employee/routes.py:154 citywok_ms/expense/routes.py:527
-#: citywok_ms/expense/routes.py:554 citywok_ms/income/routes.py:225
-#: citywok_ms/income/routes.py:249 citywok_ms/order/routes.py:127
+#: citywok_ms/expense/routes.py:554 citywok_ms/income/routes.py:236
+#: citywok_ms/income/routes.py:261 citywok_ms/order/routes.py:127
 #: citywok_ms/supplier/routes.py:123
 msgid "No file has been uploaded."
 msgstr "未上传文件."
@@ -436,7 +436,7 @@ msgstr "总金额必选大于0."
 
 #: citywok_ms/expense/forms.py:87 citywok_ms/expense/forms.py:151
 #: citywok_ms/expense/forms.py:208 citywok_ms/expense/forms.py:261
-#: citywok_ms/income/forms.py:40 citywok_ms/income/forms.py:88
+#: citywok_ms/income/forms.py:40 citywok_ms/income/forms.py:84
 #: citywok_ms/templates/income/detail.html:22
 msgid "Date"
 msgstr "日期"
@@ -481,7 +481,7 @@ msgstr "供应商"
 
 #: citywok_ms/expense/forms.py:120 citywok_ms/expense/forms.py:190
 #: citywok_ms/expense/forms.py:230 citywok_ms/expense/forms.py:291
-#: citywok_ms/income/forms.py:66 citywok_ms/income/forms.py:99
+#: citywok_ms/income/forms.py:66 citywok_ms/income/forms.py:95
 #: citywok_ms/order/forms.py:40 citywok_ms/templates/employee/detail.html:76
 #: citywok_ms/templates/expense/detail.html:86
 #: citywok_ms/templates/expense/salary_index.html:115
@@ -883,7 +883,7 @@ msgstr "总金额必选大于手续费."
 msgid "Theoretical Revenue"
 msgstr "理论营收"
 
-#: citywok_ms/income/forms.py:82
+#: citywok_ms/income/forms.py:78
 #, python-format
 msgid "Revenue of \"%(date)s\" already existe."
 msgstr "\"%(date)s\"的营收已存在."
@@ -896,43 +896,47 @@ msgstr "营收"
 msgid "Other Income"
 msgstr "其他收入"
 
-#: citywok_ms/income/routes.py:63 citywok_ms/templates/layout.html:38
+#: citywok_ms/income/routes.py:65 citywok_ms/templates/layout.html:38
 msgid "Income"
 msgstr "收入"
 
-#: citywok_ms/income/routes.py:101
+#: citywok_ms/income/routes.py:104
 msgid "New revenue has been registed."
 msgstr "营收已添加."
 
-#: citywok_ms/income/routes.py:112
+#: citywok_ms/income/routes.py:115
 msgid "New Revenue"
 msgstr "添加营收"
 
-#: citywok_ms/income/routes.py:135
+#: citywok_ms/income/routes.py:139
 msgid "New income has been registed."
 msgstr "收入已添加."
 
-#: citywok_ms/income/routes.py:146
+#: citywok_ms/income/routes.py:150
 msgid "New Income"
 msgstr "添加收入"
 
-#: citywok_ms/income/routes.py:156
+#: citywok_ms/income/routes.py:161
 msgid "Income Detail"
 msgstr "收入详情"
 
-#: citywok_ms/income/routes.py:174
+#: citywok_ms/income/routes.py:172
+msgid "This income can not be updated."
+msgstr "此收入无法更新."
+
+#: citywok_ms/income/routes.py:183
 msgid "Income has been updated."
 msgstr "收入已更新."
 
-#: citywok_ms/income/routes.py:186
+#: citywok_ms/income/routes.py:195
 msgid "Update Income"
 msgstr "更新收入"
 
-#: citywok_ms/income/routes.py:196
+#: citywok_ms/income/routes.py:206
 msgid "This income can not be deleted."
 msgstr "此收入无法删除."
 
-#: citywok_ms/income/routes.py:199
+#: citywok_ms/income/routes.py:209
 msgid "Income has been deleted."
 msgstr "收入已删除."
 
@@ -1019,6 +1023,10 @@ msgstr "邮编"
 #: citywok_ms/templates/supplier/detail.html:36
 msgid "City"
 msgstr "城市"
+
+#: citywok_ms/supplier/models.py:47
+msgid "Is_Bank"
+msgstr "是银行"
 
 #: citywok_ms/supplier/routes.py:41
 msgid "Suppliers"
@@ -1449,5 +1457,4 @@ msgstr "无效的文件格式"
 
 #~ msgid "Copy"
 #~ msgstr "复制"
-
 
