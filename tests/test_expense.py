@@ -134,6 +134,29 @@ def test_new_non_labor_post_invalid(client, user):
 
 
 @pytest.mark.role("admin")
+def test_new_non_labor_post_from_pos(client, user, today, image):
+    request_data = {
+        "from_pos": True,
+        "value-cash": 5,
+        "value-card": 5,
+    }
+    response = client.post(
+        url_for("expense.new_non_labor"), data=request_data, follow_redirects=True
+    )
+    data = response.data.decode()
+
+    # state code
+    assert response.status_code == 200
+    # url after request
+    assert request.url.endswith(url_for("expense.new_non_labor"))
+
+    # database data
+    assert db.session.query(Expense).count() == 0
+
+    assert "Expense from POS must be payed with cash." in html.unescape(data)
+
+
+@pytest.mark.role("admin")
 def test_new_labor_get(client, user, employee):
     response = client.get(url_for("expense.new_labor", employee_id=1))
     data = response.data.decode()
@@ -203,6 +226,33 @@ def test_new_labor_post_invalid(client, user):
 
     assert "This field is required." in html.unescape(data)
     assert "Total value must be greater than 0." in html.unescape(data)
+
+
+@pytest.mark.role("admin")
+def test_new_labor_post_from_pos(client, user, today, image):
+    request_data = {
+        "date": today,
+        "category": "labor:advance",
+        "employee": 1,
+        "from_pos": True,
+        "value-cash": 5,
+        "value-card": 5,
+        "files": (image, "test.jpg"),
+    }
+    response = client.post(
+        url_for("expense.new_labor"), data=request_data, follow_redirects=True
+    )
+    data = response.data.decode()
+
+    # state code
+    assert response.status_code == 200
+    # url after request
+    assert request.url.endswith(url_for("expense.new_labor"))
+
+    # database data
+    assert db.session.query(Expense).count() == 0
+
+    assert "Expense from POS must be payed with cash." in html.unescape(data)
 
 
 @pytest.mark.role("admin")
