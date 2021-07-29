@@ -1,5 +1,6 @@
 {% macro pagination(endpoint, obj, page_str) -%}
 <!-- Pagination Links-->
+{% if obj.pages > 1 %}
 <div class="text-end">
     {% do kwargs.update({page_str:obj.prev_num}) %}
     <a href="{{ url_for(endpoint, **kwargs) }}"
@@ -28,4 +29,5 @@
     <a href="{{ url_for(endpoint, **kwargs) }}"
         class="btn btn-sm btn-outline-dark {% if obj.page == obj.pages %}disabled{% endif %}">&raquo;</a>
 </div>
+{% endif %}
 {%- endmacro %}
