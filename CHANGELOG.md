@@ -18,7 +18,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - New `order` module, including relatives database model, forms, views and tests
 
 ### Changed
-- Improve tables' pagination
 - Improve `order.index` endpoint with pagination
 ### Fixed
 - Typo of `Cancel` button and change it's CSS for consistency
