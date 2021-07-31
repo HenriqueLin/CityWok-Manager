@@ -8,7 +8,7 @@ error_bp = Blueprint("error", __name__)
 
 
 @error_bp.app_errorhandler(CSRFError)
-def handle_csrf_error(error):
+def handle_csrf_error(error):  # test: no cover
     flash(_("Session expired, please log in again."), "warning")
     return redirect(url_for("auth.login"))
 
@@ -33,11 +33,6 @@ def not_found_error(error):
 def internal_error(error):
     db.session.rollback()
     return render_template("error/500.html"), 500
-
-
-@error_bp.route("/400")
-def _400():
-    abort(400)
 
 
 @error_bp.route("/401")

@@ -2,16 +2,6 @@ import html
 from flask import url_for, request
 
 
-def test_400(client):
-    response = client.get(url_for("error._400"), follow_redirects=True)
-    data = response.data.decode()
-
-    assert response.status_code == 200
-
-    assert "Session expired, please log in again." in data
-    assert request.url.endswith(url_for("auth.login"))
-
-
 def test_401(client):
     response = client.get(url_for("error._401"), follow_redirects=True)
     data = response.data.decode()
