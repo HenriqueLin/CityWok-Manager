@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - New `order` module, including relatives database model, forms, views and tests
 
 ### Changed
+- Improve CSS/HTML
 - Improve handler for session timeout
 - Finer permission for each endpoint
 - Improve tables' pagination
