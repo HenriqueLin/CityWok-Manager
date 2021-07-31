@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-07-31 19:30+0100\n"
+"POT-Creation-Date: 2021-07-31 19:36+0100\n"
 "PO-Revision-Date: 2021-06-19 22:05+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -382,7 +382,7 @@ msgstr "员工 \"%(name)s\" 已激活."
 
 #: citywok_ms/employee/routes.py:150 citywok_ms/expense/routes.py:533
 #: citywok_ms/expense/routes.py:561 citywok_ms/income/routes.py:236
-#: citywok_ms/income/routes.py:262 citywok_ms/order/routes.py:121
+#: citywok_ms/income/routes.py:262 citywok_ms/order/routes.py:129
 #: citywok_ms/supplier/routes.py:131
 #, python-format
 msgid "File \"%(name)s\" has been uploaded."
@@ -390,7 +390,7 @@ msgstr "文件成功上传."
 
 #: citywok_ms/employee/routes.py:158 citywok_ms/expense/routes.py:541
 #: citywok_ms/expense/routes.py:569 citywok_ms/income/routes.py:244
-#: citywok_ms/income/routes.py:270 citywok_ms/order/routes.py:129
+#: citywok_ms/income/routes.py:270 citywok_ms/order/routes.py:137
 #: citywok_ms/supplier/routes.py:139
 #, python-format
 msgid "Invalid file format \"%(format)s\"."
@@ -398,7 +398,7 @@ msgstr "无效的文件格式 \"%(format)s\"."
 
 #: citywok_ms/employee/routes.py:162 citywok_ms/expense/routes.py:545
 #: citywok_ms/expense/routes.py:573 citywok_ms/income/routes.py:248
-#: citywok_ms/income/routes.py:274 citywok_ms/order/routes.py:133
+#: citywok_ms/income/routes.py:274 citywok_ms/order/routes.py:141
 #: citywok_ms/supplier/routes.py:143
 msgid "No file has been uploaded."
 msgstr "未上传文件."
@@ -967,27 +967,27 @@ msgstr "交付日期"
 msgid "Value"
 msgstr "金额"
 
-#: citywok_ms/order/routes.py:31 citywok_ms/templates/layout.html:36
+#: citywok_ms/order/routes.py:39 citywok_ms/templates/layout.html:36
 msgid "Order"
 msgstr "订单"
 
-#: citywok_ms/order/routes.py:61
+#: citywok_ms/order/routes.py:69
 msgid "New order has been registe."
 msgstr "新订单已登记"
 
-#: citywok_ms/order/routes.py:67
+#: citywok_ms/order/routes.py:75
 msgid "New Order"
 msgstr "新订单"
 
-#: citywok_ms/order/routes.py:81
+#: citywok_ms/order/routes.py:89
 msgid "Order has been updated."
 msgstr "订单已更新"
 
-#: citywok_ms/order/routes.py:94
+#: citywok_ms/order/routes.py:102
 msgid "Update Order"
 msgstr "更新订单"
 
-#: citywok_ms/order/routes.py:105
+#: citywok_ms/order/routes.py:113
 msgid "Order Detail"
 msgstr "订单详情"
 
@@ -1383,13 +1383,14 @@ msgstr "请确认输入的金额无误, 你将无法修改它们."
 msgid "Confirm"
 msgstr "确认"
 
-#: citywok_ms/templates/order/index.html:50
-msgid "No unpayed orders"
-msgstr "没有未付款订单"
-
+#: citywok_ms/templates/order/index.html:10
 #: citywok_ms/templates/supplier/detail.html:43
 msgid "Unpayed Value"
 msgstr "待付金额"
+
+#: citywok_ms/templates/order/index.html:50
+msgid "No unpayed orders"
+msgstr "没有未付款订单"
 
 #: citywok_ms/utils/__init__.py:3
 msgid "Male"

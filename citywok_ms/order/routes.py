@@ -1,4 +1,4 @@
-from flask_login.utils import login_required
+from sqlalchemy.sql.elements import not_
 from citywok_ms import db
 from citywok_ms.auth.permissions import manager, shareholder
 from citywok_ms.file.forms import FileForm
@@ -12,10 +12,12 @@ from flask import (
     flash,
     redirect,
     render_template,
-    url_for,
     request,
+    url_for,
 )
 from flask_babel import _
+from flask_login.utils import login_required
+from sqlalchemy import func
 
 order_bp = Blueprint("order", __name__, url_prefix="/order")
 
@@ -26,6 +28,12 @@ order_bp = Blueprint("order", __name__, url_prefix="/order")
 def index():
     payed_page = request.args.get("payed_page", 1, type=int)
     unpayed_page = request.args.get("unpayed_page", 1, type=int)
+    unpayed_query = db.session.query(Order).filter(Order.expense_id.is_(None))
+    unpay_value = (
+        unpayed_query.with_entities(func.coalesce(func.sum(Order.value), 0))
+        .filter(not_(Order.expense.has()))
+        .first()[0]
+    )
     return render_template(
         "order/index.html",
         title=_("Order"),
@@ -33,10 +41,10 @@ def index():
         .filter(Order.expense_id.isnot(None))
         .order_by(Order.delivery_date.desc())
         .paginate(page=payed_page, per_page=10),
-        unpayed=db.session.query(Order)
-        .filter(Order.expense_id.is_(None))
-        .order_by(Order.delivery_date.desc())
-        .paginate(page=unpayed_page, per_page=10),
+        unpayed=unpayed_query.order_by(Order.delivery_date.desc()).paginate(
+            page=unpayed_page, per_page=10
+        ),
+        unpay_value=unpay_value,
     )
 
 
