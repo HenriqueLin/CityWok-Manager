@@ -3,7 +3,7 @@ import datetime
 from flask_login.utils import login_required
 
 from citywok_ms import db
-from citywok_ms.auth.permissions import manager
+from citywok_ms.auth.permissions import manager, shareholder
 from citywok_ms.expense.forms import DateForm
 from citywok_ms.expense.models import Expense, NonLaborExpense
 from citywok_ms.file.forms import FileForm
@@ -32,7 +32,7 @@ income_bp = Blueprint("income", __name__, url_prefix="/income")
 @income_bp.route("/", methods=["GET", "POST"])
 @income_bp.route("/<date_str>", methods=["GET", "POST"])
 @login_required
-@manager.require(403)
+@shareholder.require(403)
 def index(date_str=None):
     if date_str is None:
         return redirect(url_for("income.index", date_str=datetime.date.today()))
@@ -162,7 +162,7 @@ def new_other_income():
 
 @income_bp.route("/<int:income_id>")
 @login_required
-@manager.require(403)
+@shareholder.require(403)
 def detail(income_id):
     income = Income.get_or_404(income_id)
     return render_template(
