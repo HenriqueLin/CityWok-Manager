@@ -31,7 +31,6 @@
                 </th>
                 {% endif %}
                 {% endfor %}
-                <th scope="col">{{_('Detail')}}</th>
             </tr>
         </thead>
         <tbody>
@@ -39,17 +38,13 @@
             <tr>
                 {% for c,_ in keys %}
                 {% if c=="id" %}
-                <th>
-                    <strong>{{ employee.id }}</strong>
+                <th><a href="{{url_for('employee.detail',employee_id=employee.id)}}">
+                        <strong>{{ employee.id }}</strong></a>
                 </th>
                 {% else %}
                 <td>{{ employee[c] or '-' }}</td>
                 {% endif %}
                 {% endfor %}
-
-                <td><a href="{{url_for('employee.detail',employee_id=employee.id)}}"><span class="material-icons">
-                            more_vert
-                        </span></a></td>
             </tr>
             {% endfor %}
         </tbody>
