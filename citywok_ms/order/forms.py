@@ -23,7 +23,7 @@ class OrderForm(FlaskForm):
     )
     value = DecimalField(
         label=_l("Value"),
-        validators=[InputRequired(), NumberRange(min=0)],
+        validators=[InputRequired()],
     )
 
     supplier = QuerySelectField(
