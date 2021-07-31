@@ -121,7 +121,7 @@ class NonLaborExpenseForm(FlaskForm):
         validators=[FilesRequired(), FilesAllowed(FILEALLOWED)],
     )
     from_pos = BooleanField(
-        label="From POS",
+        label=_l("From POS"),
         default=False,
     )
 
@@ -289,7 +289,7 @@ class SalaryForm(FlaskForm):
 
     files = MultipleFileField(
         label=_l("Files"),
-        validators=[FilesRequired(), FilesAllowed(FILEALLOWED)],
+        validators=[FilesAllowed(FILEALLOWED)],
     )
 
     submit = SubmitField(label=_l("Add"))
