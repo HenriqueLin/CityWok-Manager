@@ -1,5 +1,7 @@
 import datetime
 
+from flask_login.utils import login_required
+
 from citywok_ms import db
 from citywok_ms.auth.permissions import manager, shareholder
 from citywok_ms.expense.forms import DateForm
@@ -29,6 +31,7 @@ income_bp = Blueprint("income", __name__, url_prefix="/income")
 
 @income_bp.route("/", methods=["GET", "POST"])
 @income_bp.route("/<date_str>", methods=["GET", "POST"])
+@login_required
 @shareholder.require(403)
 def index(date_str=None):
     if date_str is None:
@@ -78,6 +81,7 @@ def index(date_str=None):
 
 
 @income_bp.route("/new/revenue", methods=["GET", "POST"])
+@login_required
 @manager.require(403)
 def new_revenue():
     form = RevenueForm()
@@ -121,6 +125,7 @@ def new_revenue():
 
 
 @income_bp.route("/new/other_income", methods=["GET", "POST"])
+@login_required
 @manager.require(403)
 def new_other_income():
     form = IncomeForm()
@@ -156,6 +161,7 @@ def new_other_income():
 
 
 @income_bp.route("/<int:income_id>")
+@login_required
 @shareholder.require(403)
 def detail(income_id):
     income = Income.get_or_404(income_id)
@@ -168,6 +174,7 @@ def detail(income_id):
 
 
 @income_bp.route("/update/<int:income_id>", methods=["GET", "POST"])
+@login_required
 @manager.require(403)
 def update_other_income(income_id):
     income = Income.get_or_404(income_id)
@@ -202,6 +209,7 @@ def update_other_income(income_id):
 
 
 @income_bp.route("delete/<int:income_id>", methods=["POST"])
+@login_required
 @manager.require(403)
 def delete(income_id):
     income = Income.get_or_404(income_id)
@@ -216,6 +224,7 @@ def delete(income_id):
 
 
 @income_bp.route("/<int:income_id>/upload", methods=["POST"])
+@login_required
 @manager.require(403)
 def upload(income_id):
     form = FileForm()
@@ -241,6 +250,7 @@ def upload(income_id):
 
 
 @income_bp.route("/revenue/<date_str>/upload", methods=["POST"])
+@login_required
 @manager.require(403)
 def revenue_upload(date_str):
     form = FileForm()
