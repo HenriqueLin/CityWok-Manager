@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ## [Unreleased]
 
 ## [0.3.1] - 2021-07-31
+### Changed
+- Order selection in OrderPayment won't close after each selection
+- Order's value now can be negative
+### Fixed
+- Missing remark field of `order`
+## [0.3.1] - 2021-07-31
 ### Added
 - Unpay value in Supplier's detail page and Order's index page
 ### Changed
