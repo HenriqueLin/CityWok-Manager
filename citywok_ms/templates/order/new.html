@@ -38,6 +38,12 @@
                 {% endwith %}
             </div>
             <div class="w-100 my-0"></div>
+            <div class="col-sm-6">
+                {% with field=form.remark %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <div class="w-100 my-0"></div>
             <div class="gx-3 col-sm-6">
                 {{ form.submit(class="btn btn-outline-success ms-1 float-end") }}
                 <a href="{{url_for('order.index')}}" class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
