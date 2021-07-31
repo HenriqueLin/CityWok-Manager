@@ -1,7 +1,7 @@
 import datetime
 
 from citywok_ms import db
-from citywok_ms.auth.permissions import manager
+from citywok_ms.auth.permissions import manager, shareholder
 from citywok_ms.employee.models import Employee
 from citywok_ms.expense.forms import (
     DateForm,
@@ -44,7 +44,7 @@ expense_bp = Blueprint("expense", __name__, url_prefix="/expense")
 # Expenses
 @expense_bp.route("/", methods=["GET", "POST"])
 @expense_bp.route("/<date_str>", methods=["GET", "POST"])
-@manager.require(403)
+@shareholder.require(403)
 def index(date_str=None):
     if date_str is None:
         return redirect(url_for("expense.index", date_str=datetime.date.today()))
@@ -265,7 +265,7 @@ def new_salary(employee_id, month_str):
 
 @expense_bp.route("/salary", methods=["GET", "POST"])
 @expense_bp.route("/salary/<month_str>", methods=["GET", "POST"])
-@manager.require(403)
+@shareholder.require(403)
 def salary_index(month_str=None):
     if month_str is None:
         return redirect(
@@ -313,7 +313,7 @@ def salary_index(month_str=None):
 
 
 @expense_bp.route("/<int:expense_id>")
-@manager.require(403)
+@shareholder.require(403)
 def detail(expense_id):
     polymorphic = with_polymorphic(Expense, "*")
     expense = db.session.query(polymorphic).filter(Expense.id == expense_id).first()
@@ -328,6 +328,7 @@ def detail(expense_id):
 
 
 @expense_bp.route("/update/<int:expense_id>")
+@manager.require(403)
 def update(expense_id):
     polymorphic = with_polymorphic(Expense, "*")
     expense = db.session.query(polymorphic).filter(Expense.id == expense_id).first()
