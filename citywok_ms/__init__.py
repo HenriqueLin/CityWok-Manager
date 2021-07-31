@@ -20,7 +20,7 @@ from flask_wtf.csrf import CSRFProtect
 from sentry_sdk.integrations.flask import FlaskIntegration
 from sqlalchemy import MetaData
 from sqlalchemy_utils import i18n
-
+from flask_babel import lazy_gettext as _l
 from citywok_ms.utils.admin import MyAdminIndexView
 from citywok_ms.utils.logging import formatter
 
@@ -44,11 +44,16 @@ migrate = Migrate()
 f_admin = Admin(template_mode="bootstrap4", index_view=MyAdminIndexView())
 rq = RQ()
 
+login.login_view = "auth.login"
+login.login_message = _l("Please log in to access this page.")
+login.login_message_category = "info"
+
 
 def create_app(config_class=Config):
     # create the app instance
     app = Flask(__name__)
     app.config.from_object(config_class)
+    app.jinja_env.add_extension("jinja2.ext.do")
 
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 
@@ -84,6 +89,9 @@ def create_app(config_class=Config):
         from citywok_ms.file.routes import file_bp
         from citywok_ms.main.routes import main_bp
         from citywok_ms.supplier.routes import supplier_bp
+        from citywok_ms.order.routes import order_bp
+        from citywok_ms.expense.routes import expense_bp
+        from citywok_ms.income.routes import income_bp
 
         # blueprints
         app.register_blueprint(auth_bp)
@@ -94,6 +102,9 @@ def create_app(config_class=Config):
         app.register_blueprint(main_bp)
         app.register_blueprint(error_bp)
         app.register_blueprint(admin_bp)
+        app.register_blueprint(order_bp)
+        app.register_blueprint(expense_bp)
+        app.register_blueprint(income_bp)
 
         app.logger.removeHandler(default_handler)
         if not app.testing:  # test: no cover

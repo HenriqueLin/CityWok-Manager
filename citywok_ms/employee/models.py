@@ -1,12 +1,14 @@
+import datetime
 from typing import List
 
 from citywok_ms import db
 from citywok_ms.file.models import EmployeeFile
+from citywok_ms.expense.models import LaborExpense, SalaryPayment
 from citywok_ms.utils import ID, SEX
 from citywok_ms.utils.models import CRUDMixin, SqliteDecimal
 from flask_babel import lazy_gettext as _l
 from sqlalchemy import Boolean, Column, Date, Integer, String, Text
-from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 from sqlalchemy.orm import relationship, validates
 from sqlalchemy.sql.expression import nullslast
 from sqlalchemy_utils import ChoiceType, CountryType
@@ -67,6 +69,14 @@ class Employee(db.Model, CRUDMixin):
     @hybrid_property
     def full_name(self) -> str:
         return f"{self.first_name} {self.last_name}"
+
+    @hybrid_method
+    def payed(self, month):
+        return any(expense.month_id == month for expense in self.expenses)
+
+    @payed.expression
+    def payed(self, month):
+        return Employee.expenses.any(LaborExpense.month_id == month)
 
     @validates("sex")
     def validate_sex(self, key, sex):

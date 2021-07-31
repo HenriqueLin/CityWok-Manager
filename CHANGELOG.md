@@ -2,6 +2,31 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
+## [Unreleased]
+
+## [0.3.0] - 2021-07-31
+### Added
+- New `income` module
+  + `Income` and `Revenue` model
+  + Relative `File` model
+  + Relatives forms, views and tests
+- Add `is_bank` flag in `Supplier` model
+- Add `from_pos` flag in `Expense` model
+- New `expense` module
+  + `Expense`, `LaborExpense`, `NonLaborExpense` and `SalaryPayment` model
+  + Relative `File` model
+  + Relatives forms, views and tests
+- Add `expense` content to `employee`, `supplier` and `order` pages
+- New `order` module, including relatives database model, forms, views and tests
+
+### Changed
+- Improve CSS/HTML
+- Improve handler for session timeout
+- Finer permission for each endpoint
+- Improve tables' pagination
+- Improve `order.index` endpoint with pagination
+### Fixed
+- Typo of `Cancel` button and change it's CSS for consistency
 
 ## [0.2.1] - 2021-06-30
 ### Fixed

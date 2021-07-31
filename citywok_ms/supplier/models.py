@@ -1,10 +1,12 @@
-from citywok_ms.utils.models import CRUDMixin
-from citywok_ms.file.models import SupplierFile
 from typing import List
+
 from citywok_ms import db
-from sqlalchemy import Column, Integer, String, Text
-from sqlalchemy.orm import relationship
+from citywok_ms.file.models import SupplierFile
+from citywok_ms.order.models import Order
+from citywok_ms.utils.models import CRUDMixin
 from flask_babel import lazy_gettext as _l
+from sqlalchemy import Boolean, Column, Integer, String, Text
+from sqlalchemy.orm import relationship
 
 
 class Supplier(db.Model, CRUDMixin):
@@ -20,6 +22,9 @@ class Supplier(db.Model, CRUDMixin):
     postcode = Column(String)
     city = Column(String)
     remark = Column(Text)
+    is_bank = Column(Boolean, default=False)
+
+    orders = relationship("Order", backref="supplier")
 
     files = relationship("File")
 
@@ -39,6 +44,7 @@ class Supplier(db.Model, CRUDMixin):
         "postcode": _l("Postcode"),
         "city": _l("City"),
         "remark": _l("Remark"),
+        "is_bank": _l("Is_Bank"),
     }
 
     @property
@@ -62,3 +68,7 @@ class Supplier(db.Model, CRUDMixin):
             )
             .all()
         )
+
+    @classmethod
+    def bank(cls):
+        return db.session.query(cls).filter(cls.is_bank).first()

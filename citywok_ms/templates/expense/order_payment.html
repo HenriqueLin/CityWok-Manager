@@ -1,0 +1,77 @@
+{% extends 'layout.html' %}
+{% set active_page = "expense" %}
+{% block content %}
+<div>
+    <!-- title -->
+    <h1>{{title}}</h1>
+    <hr>
+    <form action="" method="post" enctype='multipart/form-data' novalidate autocomplete="off">
+        {{ form.hidden_tag() }}
+        <div class="row gy-3 overflow-hidden">
+            <div>
+                {% with field=form.date %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <div>
+                {% with field=form.category %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <div>
+                {% with field=form.supplier %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <div>
+                {% with field=form.orders %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            {% with money_form=form.value %}
+            {% include 'expense/money.html' %}
+            {% endwith %}
+            {% if request.endpoint == 'expense.new_order_payment' %}
+            <div>
+                {% with field=form.files %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            {% endif %}
+            <div>
+                {% with field=form.remark %}
+                {% include 'field.html' %}
+                {% endwith %}
+            </div>
+            <div class="gx-3">
+                {{ form.load(class="invisible") }}
+                {% if request.endpoint == 'expense.new_order_payment' %}
+                {{ form.submit(class="btn btn-outline-success ms-1 float-end") }}
+                <a href="{{url_for('expense.index')}}" class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
+                {% elif request.endpoint == 'expense.update_order_payment' %}
+                {{ form.update(class="btn btn-outline-primary ms-1 float-end") }}
+                <a href="{{url_for('expense.detail',expense_id=expense_id)}}"
+                    class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock content %}
+
+{% block js %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#supplier').change(function () {
+            $("#load").trigger("click");
+        });
+        $('select#orders').select2({
+            theme: 'bootstrap4',
+            multiple: true
+        });
+        $('select#category,select#supplier').select2({
+            theme: 'bootstrap4',
+        });
+    });
+</script>
+{% endblock js %}

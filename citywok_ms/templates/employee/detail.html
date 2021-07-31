@@ -71,6 +71,64 @@
         <dt class="col-4">{{_('Remark')}}:</dt>
         <dd class="col-8">{{ employee.remark or '-'}}</dd>
     </dl>
+    <div>
+        <hr>
+        <h3 id="Expenses">{{_('Expenses')}}</h3>
+        <div class="mb-2 d-print-none">
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    {{ _("New") }}
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" href="{{url_for('expense.new_labor',employee_id=employee.id)}}">
+                            {{_("Labor")}}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{url_for('expense.salary_index')}}">
+                            {{_("Salary")}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        {% if expenses.items %}
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered text-nowrap text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">{{_('ID')}}</th>
+                        <th scope="col">{{_('Payment Date')}}</th>
+                        <th scope="col">{{_('Category')}}</th>
+                        <th scope="col">{{_('Amount')}}</th>
+                        <th scope="col">{{_('Detail')}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for expense in expenses.items %}
+                    <tr>
+                        <th>{{ expense.id }}</th>
+                        <td>{{ moment(expense.date).format('ll') }}</td>
+                        <td>{{ expense.category }}</td>
+                        <td>{{ expense.total }}</td>
+                        <td>
+                            <a href="{{url_for('expense.detail',expense_id=expense.id)}}">
+                                <span class="material-icons">
+                                    more_vert
+                                </span>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {{ macros.pagination('employee.detail',obj=expenses,page_str='expense_page',employee_id=employee.id,
+        _anchor="Expenses") }}
+        {% endif %}
+    </div>
     <div class="d-print-none">
         <hr>
         <h3 id="Files">{{_('Files')}}</h3>

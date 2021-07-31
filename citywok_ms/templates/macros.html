@@ -1,0 +1,33 @@
+{% macro pagination(endpoint, obj, page_str) -%}
+<!-- Pagination Links-->
+{% if obj.pages > 1 %}
+<div class="text-end">
+    {% do kwargs.update({page_str:obj.prev_num}) %}
+    <a href="{{ url_for(endpoint, **kwargs) }}"
+        class="btn btn-outline-dark btn-sm {% if obj.page == 1 %}disabled{% endif %}">
+        &laquo;
+    </a>
+    <!-- Loop through the number of pages to display a link for each-->
+    {% for page_num in obj.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+    {% if page_num %}
+    <!-- Check for the active page and set the link to " Active"-->
+    {% do kwargs.update({page_str:page_num}) %}
+    {% if obj.page == page_num %}
+    <a href="{{ url_for(endpoint,**kwargs) }}" class="btn btn-sm btn-dark">
+        {{ page_num }}
+    </a>
+    {% else %}
+    <a href="{{ url_for(endpoint,**kwargs) }}" class="btn btn-sm btn-outline-dark">
+        {{ page_num }}
+    </a>
+    {% endif %}
+    {% else %}
+    <span class="material-icons">more_horiz</span>
+    {% endif %}
+    {% endfor %}
+    {% do kwargs.update({page_str:obj.next_num}) %}
+    <a href="{{ url_for(endpoint, **kwargs) }}"
+        class="btn btn-sm btn-outline-dark {% if obj.page == obj.pages %}disabled{% endif %}">&raquo;</a>
+</div>
+{% endif %}
+{%- endmacro %}

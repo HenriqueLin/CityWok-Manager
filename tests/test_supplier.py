@@ -5,6 +5,7 @@ import os
 import pandas as pd
 
 import pytest
+from wtforms.fields.core import BooleanField
 from citywok_ms import db
 from citywok_ms.file.models import SupplierFile
 from citywok_ms.supplier.forms import SupplierForm
@@ -156,7 +157,7 @@ def test_detail_get(client, user, supplier_with_file, id):
 
     # database data
     for attr in Supplier.__table__.columns:
-        if getattr(supplier, attr.name) is None:
+        if getattr(supplier, attr.name) is None or attr.name == "is_bank":
             continue
         assert str(getattr(supplier, attr.name)) in data
 
@@ -190,13 +191,13 @@ def test_update_get(client, user, supplier, id):
     assert "Update Supplier" in data
     # form
     for field in SupplierForm()._fields.values():
-        if isinstance(field, (HiddenField, SubmitField)):
+        if isinstance(field, (HiddenField, SubmitField, BooleanField)):
             continue
         assert field.id in data
 
     supplier = Supplier.get_or_404(id)
     for attr in Supplier.__table__.columns:
-        if getattr(supplier, attr.name) is None:
+        if getattr(supplier, attr.name) is None or attr.name == "is_bank":
             continue
         assert str(getattr(supplier, attr.name)) in data
     assert "Update" in data
@@ -334,7 +335,7 @@ def test_export_csv(client, user, supplier):
     assert response.status_code == 200
     for name in Supplier.columns_name.values():
         assert str(name) in data
-    for supplier in Supplier.get_all(sort="id", desc=False):
+    for supplier in Supplier.get_all():
         for attr in Supplier.__table__.columns:
             assert str(getattr(supplier, attr.name) or "-") in data
 
@@ -350,7 +351,7 @@ def test_export_excel(client, user, supplier):
     for name in Supplier.columns_name.values():
         assert str(name) in data
 
-    for supplier in Supplier.get_all(sort="id", desc=False):
+    for supplier in Supplier.get_all():
         for attr in ("name", "id"):
             value = getattr(supplier, attr)
             assert value in data.values

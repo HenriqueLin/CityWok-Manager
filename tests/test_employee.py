@@ -417,7 +417,7 @@ def test_export_csv(client, user, employee):
     assert response.status_code == 200
     for name in Employee.columns_name.values():
         assert str(name) in data
-    for employee in Employee.get_all(sort="id", desc=False):
+    for employee in Employee.get_all():
         for attr in Employee.__table__.columns:
             assert str(getattr(employee, attr.name) or "-") in data
 
@@ -433,7 +433,7 @@ def test_export_excel(client, user, employee):
     for name in Employee.columns_name.values():
         assert str(name) in data
 
-    for employee in Employee.get_all(sort="id", desc=False):
+    for employee in Employee.get_all():
         for attr in ("first_name", "last_name", "id"):
             value = getattr(employee, attr)
             assert value in data.values

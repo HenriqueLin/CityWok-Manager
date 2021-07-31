@@ -15,6 +15,7 @@ class SqliteDecimal(TypeDecorator):
     # This TypeDecorator use Sqlalchemy Integer as impl. It converts Decimals
     # from Python to Integers which is later stored in Sqlite database.
     impl = Integer
+    cache_ok = False
 
     def __init__(self, scale):
         # It takes a 'scale' parameter, which specifies the number of digits
@@ -52,7 +53,7 @@ class CRUDMixin(object):
         form.populate_obj(self)
 
     @classmethod
-    def get_all(cls, sort, desc):
+    def get_all(cls, sort="id", desc=False):
         result = db.session.query(cls)
         if desc:
             result = result.order_by(nullslast(getattr(cls, sort).desc())).all()

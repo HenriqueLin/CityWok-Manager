@@ -4,7 +4,7 @@
     <!-- title -->
     <h1>{{title}}</h1>
     <hr>
-    <form action="" method="post" novalidate>
+    <form action="" method="post" novalidate autocomplete="off">
         {{ form.hidden_tag() }}
         <div class="row gy-3 overflow-hidden justify-content-center">
             <div class="col-sm-6">
@@ -21,7 +21,7 @@
             <div class="w-100 my-0"></div>
             <div class="gx-3 col-sm-6">
                 {{ form.submit(class="btn btn-outline-success ms-1 float-end") }}
-                <a href="{{url_for('main.index')}}" class="btn btn-secondary float-end">{{_('Cancle')}}</a>
+                <a href="{{url_for('main.index')}}" class="btn btn-outline-secondary float-end">{{_('Cancel')}}</a>
             </div>
         </div>
 </div>
