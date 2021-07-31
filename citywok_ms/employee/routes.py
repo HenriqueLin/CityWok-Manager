@@ -1,3 +1,4 @@
+from flask_login.utils import login_required
 from citywok_ms.expense.models import LaborExpense
 from citywok_ms import db
 from citywok_ms.auth.permissions import manager, shareholder, visitor
@@ -22,6 +23,7 @@ employee_bp = Blueprint("employee", __name__, url_prefix="/employee")
 
 
 @employee_bp.route("/")
+@login_required
 @visitor.require(401)
 def index():
     keys = (
@@ -48,6 +50,7 @@ def index():
 
 
 @employee_bp.route("/new", methods=["GET", "POST"])
+@login_required
 @manager.require(403)
 def new():
     form = EmployeeForm()
@@ -64,6 +67,7 @@ def new():
 
 
 @employee_bp.route("/<int:employee_id>")
+@login_required
 @shareholder.require(403)
 def detail(employee_id):
     expense_page = request.args.get("expense_page", 1, type=int)
@@ -80,6 +84,7 @@ def detail(employee_id):
 
 
 @employee_bp.route("/<int:employee_id>/update", methods=["GET", "POST"])
+@login_required
 @manager.require(403)
 def update(employee_id):
     employee = Employee.get_or_404(employee_id)
@@ -106,6 +111,7 @@ def update(employee_id):
 
 
 @employee_bp.route("/<int:employee_id>/suspend", methods=["POST"])
+@login_required
 @manager.require(403)
 def suspend(employee_id):
     employee = Employee.get_or_404(employee_id)
@@ -119,6 +125,7 @@ def suspend(employee_id):
 
 
 @employee_bp.route("/<int:employee_id>/activate", methods=["POST"])
+@login_required
 @manager.require(403)
 def activate(employee_id):
     employee = Employee.get_or_404(employee_id)
@@ -132,6 +139,7 @@ def activate(employee_id):
 
 
 @employee_bp.route("/<int:employee_id>/upload", methods=["POST"])
+@login_required
 @manager.require(403)
 def upload(employee_id):
     form = FileForm()
@@ -156,6 +164,7 @@ def upload(employee_id):
 
 
 @employee_bp.route("/export/<export_format>")
+@login_required
 @manager.require(403)
 def export(export_format):
     current_app.logger.info(f"Export employee {export_format} file")

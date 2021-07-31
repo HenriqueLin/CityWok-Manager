@@ -1,5 +1,7 @@
 import datetime
 
+from flask_login.utils import login_required
+
 from citywok_ms import db
 from citywok_ms.auth.permissions import manager
 from citywok_ms.employee.models import Employee
@@ -44,6 +46,7 @@ expense_bp = Blueprint("expense", __name__, url_prefix="/expense")
 # Expenses
 @expense_bp.route("/", methods=["GET", "POST"])
 @expense_bp.route("/<date_str>", methods=["GET", "POST"])
+@login_required
 @manager.require(403)
 def index(date_str=None):
     if date_str is None:
@@ -91,6 +94,7 @@ def index(date_str=None):
 
 
 @expense_bp.route("/new/non_labor", methods=["GET", "POST"])
+@login_required
 @manager.require(403)
 def new_non_labor():
     form = NonLaborExpenseForm()
@@ -127,6 +131,7 @@ def new_non_labor():
 
 
 @expense_bp.route("/new/labor", methods=["GET", "POST"])
+@login_required
 @manager.require(403)
 def new_labor():
     form = LaborExpenseForm()
@@ -161,6 +166,7 @@ def new_labor():
 
 
 @expense_bp.route("/new/order_payment", methods=["GET", "POST"])
+@login_required
 @manager.require(403)
 def new_order_payment():
     form = OrderPaymentForm()
@@ -218,6 +224,7 @@ def new_order_payment():
 
 
 @expense_bp.route("/new/salary/<int:employee_id>/<month_str>", methods=["GET", "POST"])
+@login_required
 @manager.require(403)
 def new_salary(employee_id, month_str):
 
@@ -265,6 +272,7 @@ def new_salary(employee_id, month_str):
 
 @expense_bp.route("/salary", methods=["GET", "POST"])
 @expense_bp.route("/salary/<month_str>", methods=["GET", "POST"])
+@login_required
 @manager.require(403)
 def salary_index(month_str=None):
     if month_str is None:
@@ -313,6 +321,7 @@ def salary_index(month_str=None):
 
 
 @expense_bp.route("/<int:expense_id>")
+@login_required
 @manager.require(403)
 def detail(expense_id):
     polymorphic = with_polymorphic(Expense, "*")
@@ -349,6 +358,7 @@ def update(expense_id):
 
 
 @expense_bp.route("/update/non_labor/<int:expense_id>", methods=["GET", "POST"])
+@login_required
 @manager.require(403)
 def update_non_labor(expense_id):
     expense = NonLaborExpense.get_or_404(expense_id)
@@ -382,6 +392,7 @@ def update_non_labor(expense_id):
 
 
 @expense_bp.route("/update/labor/<int:expense_id>", methods=["GET", "POST"])
+@login_required
 @manager.require(403)
 def update_labor(expense_id):
     expense = LaborExpense.get_or_404(expense_id)
@@ -415,6 +426,7 @@ def update_labor(expense_id):
 
 
 @expense_bp.route("/update/order_payment/<int:expense_id>", methods=["GET", "POST"])
+@login_required
 @manager.require(403)
 def update_order_payment(expense_id):
     expense = NonLaborExpense.get_or_404(expense_id)
@@ -473,6 +485,7 @@ def update_order_payment(expense_id):
 
 
 @expense_bp.route("/update/salary/<int:expense_id>", methods=["GET", "POST"])
+@login_required
 @manager.require(403)
 def update_salary(expense_id):
     expense = LaborExpense.get_or_404(expense_id)
@@ -507,6 +520,7 @@ def update_salary(expense_id):
 
 
 @expense_bp.route("/<int:expense_id>/upload", methods=["POST"])
+@login_required
 @manager.require(403)
 def upload(expense_id):
     form = FileForm()
@@ -532,6 +546,7 @@ def upload(expense_id):
 
 
 @expense_bp.route("salary/<month_str>/upload", methods=["POST"])
+@login_required
 @manager.require(403)
 def salary_upload(month_str):
     month = datetime.datetime.strptime(month_str, "%Y-%m").date()
@@ -559,6 +574,7 @@ def salary_upload(month_str):
 
 
 @expense_bp.route("delete/<int:expense_id>", methods=["POST"])
+@login_required
 @manager.require(403)
 def delete(expense_id):
     expense = Expense.get_or_404(expense_id)

@@ -8,21 +8,20 @@ from citywok_ms.auth.forms import (
 )
 from citywok_ms.auth.models import User
 from citywok_ms.auth.permissions import manager
-from citywok_ms.email import (
-    send_invite_email,
-    send_password_reset_email,
-)
+from citywok_ms.email import send_invite_email, send_password_reset_email
 from flask import (
     Blueprint,
     current_app,
     flash,
     redirect,
     render_template,
-    url_for,
+    request,
     session,
+    url_for,
 )
 from flask_babel import _
 from flask_login import current_user, login_user, logout_user
+from flask_login.utils import login_required
 from flask_principal import AnonymousIdentity, Identity, identity_changed
 
 auth_bp = Blueprint("auth", __name__)
@@ -49,7 +48,7 @@ def login():
                 category="success",
             )
             current_app.logger.info("Log in")
-            return redirect(url_for("main.index"))
+            return redirect(request.args.get("next") or url_for("main.index"))
         else:
             flash(_("Please check your username/password."), category="danger")
     return render_template("auth/login.html", title=_("Login"), form=form)
@@ -67,6 +66,7 @@ def logout():
 
 
 @auth_bp.route("/invite", methods=["GET", "POST"])
+@login_required
 @manager.require(403)
 def invite():
     form = InviteForm()

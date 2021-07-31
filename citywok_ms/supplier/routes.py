@@ -1,3 +1,4 @@
+from flask_login.utils import login_required
 from citywok_ms import db
 from citywok_ms.auth.permissions import manager, shareholder, visitor
 from citywok_ms.expense.models import NonLaborExpense
@@ -23,6 +24,7 @@ supplier_bp = Blueprint("supplier", __name__, url_prefix="/supplier")
 
 
 @supplier_bp.route("/")
+@login_required
 @visitor.require(401)
 def index():
     keys = (
@@ -48,6 +50,7 @@ def index():
 
 
 @supplier_bp.route("/new", methods=["GET", "POST"])
+@login_required
 @manager.require(403)
 def new():
     form = SupplierForm()
@@ -63,6 +66,7 @@ def new():
 
 
 @supplier_bp.route("/<int:supplier_id>")
+@login_required
 @shareholder.require(403)
 def detail(supplier_id):
     expense_page = request.args.get("expense_page", 1, type=int)
@@ -84,6 +88,7 @@ def detail(supplier_id):
 
 
 @supplier_bp.route("/<int:supplier_id>/update", methods=["GET", "POST"])
+@login_required
 @manager.require(403)
 def update(supplier_id):
     supplier = Supplier.get_or_404(supplier_id)
@@ -107,6 +112,7 @@ def update(supplier_id):
 
 
 @supplier_bp.route("/<int:supplier_id>/upload", methods=["POST"])
+@login_required
 @manager.require(403)
 def upload(supplier_id):
     form = FileForm()
@@ -131,6 +137,7 @@ def upload(supplier_id):
 
 
 @supplier_bp.route("/export/<export_format>")
+@login_required
 @manager.require(403)
 def export(export_format):
     current_app.logger.info(f"Export supplier {export_format} file")

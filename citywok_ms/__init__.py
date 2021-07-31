@@ -20,7 +20,7 @@ from flask_wtf.csrf import CSRFProtect
 from sentry_sdk.integrations.flask import FlaskIntegration
 from sqlalchemy import MetaData
 from sqlalchemy_utils import i18n
-
+from flask_babel import lazy_gettext as _l
 from citywok_ms.utils.admin import MyAdminIndexView
 from citywok_ms.utils.logging import formatter
 
@@ -43,6 +43,10 @@ mail = Mail()
 migrate = Migrate()
 f_admin = Admin(template_mode="bootstrap4", index_view=MyAdminIndexView())
 rq = RQ()
+
+login.login_view = "auth.login"
+login.login_message = _l("Please log in to access this page.")
+login.login_message_category = "info"
 
 
 def create_app(config_class=Config):

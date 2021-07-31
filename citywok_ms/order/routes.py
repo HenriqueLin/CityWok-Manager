@@ -1,3 +1,4 @@
+from flask_login.utils import login_required
 from citywok_ms import db
 from citywok_ms.auth.permissions import manager, shareholder
 from citywok_ms.file.forms import FileForm
@@ -20,6 +21,7 @@ order_bp = Blueprint("order", __name__, url_prefix="/order")
 
 
 @order_bp.route("/")
+@login_required
 @shareholder.require(403)
 def index():
     payed_page = request.args.get("payed_page", 1, type=int)
@@ -39,6 +41,7 @@ def index():
 
 
 @order_bp.route("/new", methods=["GET", "POST"])
+@login_required
 @manager.require(403)
 def new():
     form = OrderForm()
@@ -65,6 +68,7 @@ def new():
 
 
 @order_bp.route("/<order_id>/update", methods=["GET", "POST"])
+@login_required
 @manager.require(403)
 def update(order_id):
     order = Order.get_or_404(order_id)
@@ -92,6 +96,7 @@ def update(order_id):
 
 
 @order_bp.route("/<int:order_id>")
+@login_required
 @shareholder.require(403)
 def detail(order_id):
     order = Order.get_or_404(order_id)
@@ -104,6 +109,7 @@ def detail(order_id):
 
 
 @order_bp.route("/<int:order_id>/upload", methods=["POST"])
+@login_required
 @manager.require(403)
 def upload(order_id):
     form = FileForm()
