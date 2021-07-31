@@ -2,12 +2,13 @@ from flask import Blueprint, render_template, redirect, abort
 from flask.helpers import flash, url_for
 from citywok_ms import db
 from flask_babel import _
+from flask_wtf.csrf import CSRFError
 
 error_bp = Blueprint("error", __name__)
 
 
-@error_bp.app_errorhandler(400)
-def bad_request(error):
+@error_bp.app_errorhandler(CSRFError)
+def handle_csrf_error(error):
     flash(_("Session expired, please log in again."), "warning")
     return redirect(url_for("auth.login"))
 
