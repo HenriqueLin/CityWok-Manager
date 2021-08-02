@@ -231,7 +231,7 @@ class LaborExpenseForm(FlaskForm):
         validators=[FilesRequired(), FilesAllowed(FILEALLOWED)],
     )
     from_pos = BooleanField(
-        label="From POS",
+        label=_l("From POS"),
         default=False,
     )
 
