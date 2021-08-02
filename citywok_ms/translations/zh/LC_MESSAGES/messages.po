@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-07-31 19:36+0100\n"
+"POT-Creation-Date: 2021-08-02 21:29+0100\n"
 "PO-Revision-Date: 2021-06-19 22:05+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -271,8 +271,9 @@ msgstr "纳税工资"
 #: citywok_ms/employee/forms.py:112 citywok_ms/employee/models.py:62
 #: citywok_ms/expense/forms.py:114 citywok_ms/expense/forms.py:184
 #: citywok_ms/expense/forms.py:224 citywok_ms/expense/forms.py:285
-#: citywok_ms/file/forms.py:22 citywok_ms/income/forms.py:61
-#: citywok_ms/income/forms.py:90 citywok_ms/supplier/forms.py:55
+#: citywok_ms/file/forms.py:22 citywok_ms/income/forms.py:65
+#: citywok_ms/income/forms.py:94 citywok_ms/order/forms.py:44
+#: citywok_ms/order/forms.py:79 citywok_ms/supplier/forms.py:55
 #: citywok_ms/supplier/models.py:46
 #: citywok_ms/templates/employee/detail.html:71
 #: citywok_ms/templates/expense/detail.html:49
@@ -285,16 +286,16 @@ msgstr "备注"
 
 #: citywok_ms/employee/forms.py:117 citywok_ms/expense/forms.py:128
 #: citywok_ms/expense/forms.py:195 citywok_ms/expense/forms.py:238
-#: citywok_ms/expense/forms.py:295 citywok_ms/income/forms.py:69
-#: citywok_ms/income/forms.py:99 citywok_ms/order/forms.py:44
-#: citywok_ms/supplier/forms.py:59 citywok_ms/templates/income/revenue.html:59
+#: citywok_ms/expense/forms.py:295 citywok_ms/income/forms.py:73
+#: citywok_ms/income/forms.py:103 citywok_ms/order/forms.py:49
+#: citywok_ms/supplier/forms.py:59 citywok_ms/templates/income/revenue.html:55
 msgid "Add"
 msgstr "添加"
 
 #: citywok_ms/employee/forms.py:118 citywok_ms/expense/forms.py:129
 #: citywok_ms/expense/forms.py:196 citywok_ms/expense/forms.py:239
 #: citywok_ms/expense/forms.py:296 citywok_ms/file/forms.py:23
-#: citywok_ms/income/forms.py:100 citywok_ms/order/forms.py:74
+#: citywok_ms/income/forms.py:104 citywok_ms/order/forms.py:84
 #: citywok_ms/supplier/forms.py:60 citywok_ms/templates/employee/detail.html:12
 #: citywok_ms/templates/expense/detail.html:9
 #: citywok_ms/templates/income/detail.html:10
@@ -407,7 +408,7 @@ msgstr "未上传文件."
 msgid "Session expired, please log in again."
 msgstr "会话已过期，请重新登录."
 
-#: citywok_ms/expense/forms.py:42 citywok_ms/income/forms.py:50
+#: citywok_ms/expense/forms.py:42 citywok_ms/income/forms.py:54
 #: citywok_ms/templates/expense/detail.html:38
 #: citywok_ms/templates/expense/index.html:31
 #: citywok_ms/templates/expense/index.html:164
@@ -436,7 +437,7 @@ msgstr "总金额必选大于0."
 
 #: citywok_ms/expense/forms.py:87 citywok_ms/expense/forms.py:151
 #: citywok_ms/expense/forms.py:208 citywok_ms/expense/forms.py:261
-#: citywok_ms/income/forms.py:40 citywok_ms/income/forms.py:84
+#: citywok_ms/income/forms.py:44 citywok_ms/income/forms.py:88
 #: citywok_ms/templates/income/detail.html:22
 msgid "Date"
 msgstr "日期"
@@ -471,7 +472,7 @@ msgid "Tax"
 msgstr "税务"
 
 #: citywok_ms/expense/forms.py:105 citywok_ms/expense/forms.py:169
-#: citywok_ms/order/forms.py:30 citywok_ms/order/forms.py:65
+#: citywok_ms/order/forms.py:30 citywok_ms/order/forms.py:70
 #: citywok_ms/templates/layout.html:35
 #: citywok_ms/templates/order/detail.html:25
 #: citywok_ms/templates/order/index.html:19
@@ -481,7 +482,7 @@ msgstr "供应商"
 
 #: citywok_ms/expense/forms.py:120 citywok_ms/expense/forms.py:190
 #: citywok_ms/expense/forms.py:230 citywok_ms/expense/forms.py:291
-#: citywok_ms/income/forms.py:66 citywok_ms/income/forms.py:95
+#: citywok_ms/income/forms.py:70 citywok_ms/income/forms.py:99
 #: citywok_ms/order/forms.py:40 citywok_ms/templates/employee/detail.html:134
 #: citywok_ms/templates/expense/detail.html:86
 #: citywok_ms/templates/expense/salary_index.html:115
@@ -492,7 +493,7 @@ msgstr "供应商"
 msgid "Files"
 msgstr "文件"
 
-#: citywok_ms/expense/forms.py:124
+#: citywok_ms/expense/forms.py:124 citywok_ms/expense/forms.py:234
 msgid "From POS"
 msgstr "收银台付款"
 
@@ -872,18 +873,18 @@ msgid "Total"
 msgstr "总计"
 
 #: citywok_ms/income/forms.py:28
-msgid "Fee"
-msgstr "手续费"
+msgid "Actual"
+msgstr "实际"
 
-#: citywok_ms/income/forms.py:35
-msgid "Total value must be greater than fee."
-msgstr "总金额必选大于手续费."
+#: citywok_ms/income/forms.py:39
+msgid "Total value must be greater than actual."
+msgstr "总金额必选大于实际收入."
 
-#: citywok_ms/income/forms.py:45 citywok_ms/templates/income/index.html:53
+#: citywok_ms/income/forms.py:49 citywok_ms/templates/income/index.html:53
 msgid "Theoretical Revenue"
 msgstr "理论营收"
 
-#: citywok_ms/income/forms.py:78
+#: citywok_ms/income/forms.py:82
 #, python-format
 msgid "Revenue of \"%(date)s\" already existe."
 msgstr "\"%(date)s\"的营收已存在."
@@ -940,7 +941,7 @@ msgstr "此收入无法删除."
 msgid "Income has been deleted."
 msgstr "收入已删除."
 
-#: citywok_ms/order/forms.py:16 citywok_ms/order/forms.py:51
+#: citywok_ms/order/forms.py:16 citywok_ms/order/forms.py:56
 #: citywok_ms/templates/expense/detail.html:57
 #: citywok_ms/templates/order/detail.html:19
 #: citywok_ms/templates/order/index.html:16
@@ -949,7 +950,7 @@ msgstr "收入已删除."
 msgid "Order Number"
 msgstr "订单号"
 
-#: citywok_ms/order/forms.py:20 citywok_ms/order/forms.py:55
+#: citywok_ms/order/forms.py:20 citywok_ms/order/forms.py:60
 #: citywok_ms/templates/expense/detail.html:58
 #: citywok_ms/templates/order/detail.html:21
 #: citywok_ms/templates/order/index.html:17
@@ -958,7 +959,7 @@ msgstr "订单号"
 msgid "Delivery Date"
 msgstr "交付日期"
 
-#: citywok_ms/order/forms.py:25 citywok_ms/order/forms.py:60
+#: citywok_ms/order/forms.py:25 citywok_ms/order/forms.py:65
 #: citywok_ms/templates/expense/salary.html:42
 #: citywok_ms/templates/order/detail.html:23
 #: citywok_ms/templates/order/index.html:18
@@ -1080,9 +1081,9 @@ msgstr "登出"
 #: citywok_ms/templates/file/update.html:37
 #: citywok_ms/templates/income/other_income.html:34
 #: citywok_ms/templates/income/other_income.html:38
-#: citywok_ms/templates/income/revenue.html:60
-#: citywok_ms/templates/order/new.html:43
-#: citywok_ms/templates/order/update.html:38
+#: citywok_ms/templates/income/revenue.html:56
+#: citywok_ms/templates/order/new.html:49
+#: citywok_ms/templates/order/update.html:44
 #: citywok_ms/templates/supplier/form.html:69
 #: citywok_ms/templates/supplier/form.html:73
 msgid "Cancel"
@@ -1280,7 +1281,7 @@ msgstr "所有关联文件将一并删除，如有需求请下载相关文件."
 
 #: citywok_ms/templates/expense/detail.html:129
 #: citywok_ms/templates/income/detail.html:81
-#: citywok_ms/templates/income/revenue.html:79
+#: citywok_ms/templates/income/revenue.html:75
 msgid "Close"
 msgstr "关闭"
 
@@ -1369,17 +1370,17 @@ msgstr "实际营收"
 msgid "Small Expenditure"
 msgstr "小额支出"
 
-#: citywok_ms/templates/income/revenue.html:71
+#: citywok_ms/templates/income/revenue.html:67
 msgid "Confirmation"
 msgstr "确认"
 
-#: citywok_ms/templates/income/revenue.html:76
+#: citywok_ms/templates/income/revenue.html:72
 msgid ""
 "Please confirm that the amount entered is correct, you will not be able "
 "to modify them."
 msgstr "请确认输入的金额无误, 你将无法修改它们."
 
-#: citywok_ms/templates/income/revenue.html:80
+#: citywok_ms/templates/income/revenue.html:76
 msgid "Confirm"
 msgstr "确认"
 
@@ -1460,4 +1461,10 @@ msgstr "无效的文件格式"
 
 #~ msgid "Copy"
 #~ msgstr "复制"
+
+#~ msgid "Fee"
+#~ msgstr "手续费"
+
+#~ msgid "Total value must be greater than fee."
+#~ msgstr "总金额必选大于手续费."
 
