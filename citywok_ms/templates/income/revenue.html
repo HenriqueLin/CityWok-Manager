@@ -25,17 +25,13 @@
             </div>
             {% for subform in form.cards %}
             <div class="col-sm-4">
-                <div>
+                <div class="mb-3">
                     {% with field=subform.total %}
                     {% include 'field.html' %}
                     {% endwith %}
                 </div>
-            </div>
-            {% endfor %}
-            {% for subform in form.cards %}
-            <div class="col-sm-4">
                 <div>
-                    {% with field=subform.fee %}
+                    {% with field=subform.actual %}
                     {% include 'field.html' %}
                     {% endwith %}
                 </div>
