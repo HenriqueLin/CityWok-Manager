@@ -24,15 +24,19 @@ class CardForm(FlaskForm):
         default=0,
         validators=[NumberRange(min=0), InputRequired()],
     )
-    fee = DecimalField(
-        label=_l("Fee"),
+    actual = DecimalField(
+        label=_l("Actual"),
         default=0,
         validators=[NumberRange(min=0), InputRequired()],
     )
 
+    @property
+    def fee(self):
+        return self.total.data - self.actual.data
+
     def validate_total(self, total):
-        if self.total.data < self.fee.data:
-            raise ValidationError(_l("Total value must be greater than fee."))
+        if self.total.data < self.actual.data:
+            raise ValidationError(_l("Total value must be greater than actual."))
 
 
 class RevenueForm(FlaskForm):
@@ -70,7 +74,7 @@ class RevenueForm(FlaskForm):
 
     @property
     def cards_fee(self):
-        return sum([card.fee.data for card in self.cards])
+        return sum([card.fee for card in self.cards])
 
     def validate_date(self, date):
         if db.session.query(Revenue).get(self.date.data):

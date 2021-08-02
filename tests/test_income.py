@@ -97,11 +97,11 @@ def test_new_revenue_post_valid(client, user, supplier, image, today):
         "t_revenue": 200,
         "cash": 50,
         "cards-0-total": 50,
-        "cards-0-fee": 2,
+        "cards-0-actual": 2,
         "cards-1-total": 0,
-        "cards-1-fee": 0,
+        "cards-1-actual": 0,
         "cards-2-total": 0,
-        "cards-2-fee": 0,
+        "cards-2-actual": 0,
         "files": (image, "test.jpg"),
     }
     response = client.post(
@@ -133,11 +133,11 @@ def test_new_revenue_post_invalid(client, user, supplier, image, today, incomes)
         "t_revenue": 0,
         "cash": 0,
         "cards-0-total": 1,
-        "cards-0-fee": 3,
+        "cards-0-actual": 3,
         "cards-1-total": 0,
-        "cards-1-fee": 0,
+        "cards-1-actual": 0,
         "cards-2-total": 0,
-        "cards-2-fee": 0,
+        "cards-2-actual": 0,
     }
     response = client.post(
         url_for("income.new_revenue"), data=request_data, follow_redirects=True
@@ -150,7 +150,7 @@ def test_new_revenue_post_invalid(client, user, supplier, image, today, incomes)
     assert request.url.endswith(url_for("income.new_revenue"))
 
     assert "This field is required." in html.unescape(data)
-    assert "Total value must be greater than fee." in html.unescape(data)
+    assert "Total value must be greater than actual." in html.unescape(data)
     assert f'Revenue of "{today}" already existe.' in html.unescape(data)
     # database data
     assert db.session.query(Revenue).count() == 1
