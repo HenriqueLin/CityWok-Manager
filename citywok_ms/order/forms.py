@@ -19,7 +19,7 @@ class OrderForm(FlaskForm):
     delivery_date = DateField(
         label=_l("Delivery Date"),
         validators=[InputRequired()],
-        default=datetime.date.today(),
+        default=datetime.date.today,
     )
     value = DecimalField(
         label=_l("Value"),
@@ -59,7 +59,7 @@ class OrderUpdateForm(FlaskForm):
     delivery_date = DateField(
         label=_l("Delivery Date"),
         validators=[InputRequired()],
-        default=datetime.date.today(),
+        default=datetime.date.today,
     )
     value = DecimalField(
         label=_l("Value"),
