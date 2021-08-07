@@ -246,7 +246,7 @@ def new_salary(employee_id, month_str):
             card=form.value.card.data,
             check=form.value.check.data,
         )
-        for f in form.files.data:
+        for f in form.files.data or []:
             db_file = ExpenseFile.create(f)
             expense.files.append(db_file)
             compress_file.queue(db_file.id)
