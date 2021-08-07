@@ -86,7 +86,7 @@ class NonLaborExpenseForm(FlaskForm):
     date = DateField(
         label=_l("Date"),
         validators=[InputRequired()],
-        default=datetime.date.today(),
+        default=datetime.date.today,
     )
     category = BlankSelectField(
         label=_l("Category"),
@@ -150,7 +150,7 @@ class OrderPaymentForm(FlaskForm):
     date = DateField(
         label=_l("Date"),
         validators=[InputRequired()],
-        default=datetime.date.today(),
+        default=datetime.date.today,
     )
     category = BlankSelectField(
         label=_l("Category"),
@@ -207,7 +207,7 @@ class LaborExpenseForm(FlaskForm):
     date = DateField(
         label=_l("Date"),
         validators=[InputRequired()],
-        default=datetime.date.today(),
+        default=datetime.date.today,
     )
     value = FormField(MoneyForm)
 
@@ -278,7 +278,7 @@ class SalaryForm(FlaskForm):
     date = DateField(
         label=_l("Payment Date"),
         validators=[InputRequired()],
-        default=datetime.date.today(),
+        default=datetime.date.today,
     )
     value = FormField(MoneyForm)
     remark = TextAreaField(

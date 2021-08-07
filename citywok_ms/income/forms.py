@@ -43,7 +43,7 @@ class RevenueForm(FlaskForm):
     date = DateField(
         label=_l("Date"),
         validators=[InputRequired()],
-        default=datetime.date.today(),
+        default=datetime.date.today,
     )
     t_revenue = DecimalField(
         label=_l("Theoretical Revenue"),
@@ -87,7 +87,7 @@ class IncomeForm(FlaskForm):
     date = DateField(
         label=_l("Date"),
         validators=[InputRequired()],
-        default=datetime.date.today(),
+        default=datetime.date.today,
     )
     value = FormField(MoneyForm)
     remark = TextAreaField(
