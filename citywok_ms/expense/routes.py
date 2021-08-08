@@ -227,7 +227,6 @@ def new_order_payment():
 @login_required
 @manager.require(403)
 def new_salary(employee_id, month_str):
-
     month = datetime.datetime.strptime(month_str, "%Y-%m").date()
     form = SalaryForm()
     employee = Employee.get_or_404(employee_id)
@@ -255,7 +254,7 @@ def new_salary(employee_id, month_str):
         flash(_("New salary has been registed."), "success")
         db.session.commit()
         current_app.logger.info(f"Create salary {expense}")
-        return redirect(url_for("expense.salary_index"))
+        return redirect(url_for("expense.salary_index", month_str=month_str))
     return render_template(
         "expense/salary.html",
         title=_("New Salary"),
