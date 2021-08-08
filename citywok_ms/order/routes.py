@@ -60,7 +60,7 @@ def new():
             value=form.value.data,
             supplier=form.supplier.data,
         )
-        for f in form.files.data:
+        for f in form.files.data or []:
             db_file = OrderFile.create(f)
             order.files.append(db_file)
             compress_file.queue(db_file.id)
@@ -140,3 +140,18 @@ def upload(order_id):
     else:
         flash(_("No file has been uploaded."), "danger")
     return redirect(url_for("order.detail", order_id=order_id))
+
+
+@order_bp.route("<int:order_id>/delete", methods=["POST"])
+@login_required
+@manager.require(403)
+def delete(order_id):
+    order = Order.get_or_404(order_id)
+    if order.expense_id:
+        flash(_("Payed Order can not be deleted."), "danger")
+        return redirect(url_for("order.index"))
+    db.session.delete(order)
+    flash(_("Order has been deleted."), "success")
+    db.session.commit()
+    current_app.logger.info(f"Delete order {order}")
+    return redirect(url_for("order.index"))

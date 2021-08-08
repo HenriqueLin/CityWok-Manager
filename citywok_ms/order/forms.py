@@ -38,7 +38,7 @@ class OrderForm(FlaskForm):
 
     files = MultipleFileField(
         label=_l("Files"),
-        validators=[FilesRequired(), FilesAllowed(FILEALLOWED)],
+        validators=[FilesAllowed(FILEALLOWED)],
     )
     remark = TextAreaField(
         label=_l("Remark"),
