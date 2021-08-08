@@ -374,6 +374,7 @@ def update_non_labor(expense_id):
         expense.transfer = form.value.transfer.data
         expense.card = form.value.card.data
         expense.check = form.value.check.data
+        expense.from_pos = form.from_pos.data
         flash(_("Non-labor expense has been updated."), "success")
         db.session.commit()
         current_app.logger.info(f"Update non-labor expense {expense}")
@@ -408,6 +409,7 @@ def update_labor(expense_id):
         expense.transfer = form.value.transfer.data
         expense.card = form.value.card.data
         expense.check = form.value.check.data
+        expense.from_pos = form.from_pos.data
         flash(_("Labor expense has been updated."), "success")
         db.session.commit()
         current_app.logger.info(f"Update labor expense {expense}")
