@@ -11,6 +11,10 @@
     <div class="d-print-none">
         <a href="{{url_for('order.update',order_id=order.id)}}" class="btn btn-outline-primary"
             id="update_button">{{_('Update')}}</a>
+        {% if not order.expense %}
+        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+            data-bs-target="#deleteModal">{{_("Delete")}}</button>
+        {% endif %}
     </div>
 
     <hr>
@@ -69,6 +73,29 @@
             {% with files=order.deleted_files %}
             {% include 'file/suspend_file_table.html' %}
             {% endwith %}
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="deleteModalLabel">{{_("Warning")}}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {{_("All files associated with this order will also be deleted, please download the files if
+                needed.")}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{_("Close")}}</button>
+                <form action="{{url_for('order.delete',order_id=order.id)}}" method="post" class="d-inline">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="submit" value="{{_('Delete')}}" class="btn btn-outline-danger">
+                </form>
+            </div>
         </div>
     </div>
 </div>

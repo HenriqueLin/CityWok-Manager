@@ -118,7 +118,7 @@ class NonLaborExpenseForm(FlaskForm):
 
     files = MultipleFileField(
         label=_l("Files"),
-        validators=[FilesRequired(), FilesAllowed(FILEALLOWED)],
+        validators=[FilesAllowed(FILEALLOWED)],
     )
     from_pos = BooleanField(
         label=_l("From POS"),
@@ -188,7 +188,7 @@ class OrderPaymentForm(FlaskForm):
 
     files = MultipleFileField(
         label=_l("Files"),
-        validators=[FilesRequired(), FilesAllowed(FILEALLOWED)],
+        validators=[FilesAllowed(FILEALLOWED)],
     )
 
     load = SubmitField()
@@ -228,7 +228,7 @@ class LaborExpenseForm(FlaskForm):
 
     files = MultipleFileField(
         label=_l("Files"),
-        validators=[FilesRequired(), FilesAllowed(FILEALLOWED)],
+        validators=[FilesAllowed(FILEALLOWED)],
     )
     from_pos = BooleanField(
         label=_l("From POS"),

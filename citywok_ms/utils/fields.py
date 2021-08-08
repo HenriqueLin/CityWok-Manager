@@ -88,7 +88,7 @@ class FilesRequired(DataRequired):
     You can also use the synonym ``files_required``.
     """
 
-    def __call__(self, form, field):
+    def __call__(self, form, field):  # test: no cover
         if not (
             field.data and all(isinstance(x, FileStorage) and x for x in field.data)
         ):

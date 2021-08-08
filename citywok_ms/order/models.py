@@ -15,7 +15,7 @@ class Order(db.Model, CRUDMixin):
 
     supplier_id = Column(Integer, ForeignKey("supplier.id"), nullable=False)
     expense_id = Column(Integer, ForeignKey("expense.id"))
-    files = relationship("OrderFile")
+    files = relationship("OrderFile", cascade="all, delete-orphan")
 
     @property
     def active_files(self) -> List[OrderFile]:

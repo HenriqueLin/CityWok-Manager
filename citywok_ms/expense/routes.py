@@ -110,7 +110,7 @@ def new_non_labor():
             check=form.value.check.data,
             from_pos=form.from_pos.data,
         )
-        for f in form.files.data:
+        for f in form.files.data or []:
             db_file = ExpenseFile.create(f)
             expense.files.append(db_file)
             compress_file.queue(db_file.id)
@@ -147,7 +147,7 @@ def new_labor():
             check=form.value.check.data,
             from_pos=form.from_pos.data,
         )
-        for f in form.files.data:
+        for f in form.files.data or []:
             db_file = ExpenseFile.create(f)
             expense.files.append(db_file)
             compress_file.queue(db_file.id)
@@ -194,7 +194,7 @@ def new_order_payment():
                 card=form.value.card.data,
                 check=form.value.check.data,
             )
-            for f in form.files.data:
+            for f in form.files.data or []:
                 db_file = ExpenseFile.create(f)
                 expense.files.append(db_file)
                 compress_file.queue(db_file.id)
@@ -227,7 +227,6 @@ def new_order_payment():
 @login_required
 @manager.require(403)
 def new_salary(employee_id, month_str):
-
     month = datetime.datetime.strptime(month_str, "%Y-%m").date()
     form = SalaryForm()
     employee = Employee.get_or_404(employee_id)
@@ -255,7 +254,7 @@ def new_salary(employee_id, month_str):
         flash(_("New salary has been registed."), "success")
         db.session.commit()
         current_app.logger.info(f"Create salary {expense}")
-        return redirect(url_for("expense.salary_index"))
+        return redirect(url_for("expense.salary_index", month_str=month_str))
     return render_template(
         "expense/salary.html",
         title=_("New Salary"),
@@ -374,6 +373,7 @@ def update_non_labor(expense_id):
         expense.transfer = form.value.transfer.data
         expense.card = form.value.card.data
         expense.check = form.value.check.data
+        expense.from_pos = form.from_pos.data
         flash(_("Non-labor expense has been updated."), "success")
         db.session.commit()
         current_app.logger.info(f"Update non-labor expense {expense}")
@@ -408,6 +408,7 @@ def update_labor(expense_id):
         expense.transfer = form.value.transfer.data
         expense.card = form.value.card.data
         expense.check = form.value.check.data
+        expense.from_pos = form.from_pos.data
         flash(_("Labor expense has been updated."), "success")
         db.session.commit()
         current_app.logger.info(f"Update labor expense {expense}")

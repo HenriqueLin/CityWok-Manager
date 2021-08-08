@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ## [Unreleased]
 
+## [0.3.7] - 2021-08-08
+### Changed
+- Remove filesRequired restriction from multiple forms
+- Redirect to the payed month after create a new_salary
+- Able to delete unpayed orders
+### Fixed
+- from_pos field not being update
 ## [0.3.6] - 2021-08-07
 ### Fixed
 - NoneType loop when files being empty in new_salary's form
