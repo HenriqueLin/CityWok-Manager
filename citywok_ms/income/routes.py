@@ -104,7 +104,7 @@ def new_revenue():
                 transfer=form.cards_fee,
             )
             db.session.add(fee)
-        for f in form.files.data:
+        for f in form.files.data or []:
             db_file = RevenueFile.create(f)
             revenue.files.append(db_file)
             compress_file.queue(db_file.id)
@@ -140,7 +140,7 @@ def new_other_income():
             remark=form.remark.data,
         )
         db.session.add(income)
-        for f in form.files.data:
+        for f in form.files.data or []:
             db_file = IncomeFile.create(f)
             income.files.append(db_file)
             compress_file.queue(db_file.id)

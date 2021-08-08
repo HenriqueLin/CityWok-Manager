@@ -110,7 +110,7 @@ def new_non_labor():
             check=form.value.check.data,
             from_pos=form.from_pos.data,
         )
-        for f in form.files.data:
+        for f in form.files.data or []:
             db_file = ExpenseFile.create(f)
             expense.files.append(db_file)
             compress_file.queue(db_file.id)
@@ -147,7 +147,7 @@ def new_labor():
             check=form.value.check.data,
             from_pos=form.from_pos.data,
         )
-        for f in form.files.data:
+        for f in form.files.data or []:
             db_file = ExpenseFile.create(f)
             expense.files.append(db_file)
             compress_file.queue(db_file.id)
@@ -194,7 +194,7 @@ def new_order_payment():
                 card=form.value.card.data,
                 check=form.value.check.data,
             )
-            for f in form.files.data:
+            for f in form.files.data or []:
                 db_file = ExpenseFile.create(f)
                 expense.files.append(db_file)
                 compress_file.queue(db_file.id)

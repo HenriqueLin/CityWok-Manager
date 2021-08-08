@@ -60,7 +60,7 @@ def new():
             value=form.value.data,
             supplier=form.supplier.data,
         )
-        for f in form.files.data:
+        for f in form.files.data or []:
             db_file = OrderFile.create(f)
             order.files.append(db_file)
             compress_file.queue(db_file.id)
