@@ -296,3 +296,35 @@ def test_upload_post_invalid_empty(client, user, order):
     assert response.status_code == 200
     assert request.url.endswith(url_for("order.detail", order_id=1))
     assert "No file has been uploaded." in html.unescape(data)
+
+
+@pytest.mark.role("admin")
+def test_delete_post(client, user, order):
+    response = client.post(
+        url_for("order.delete", order_id=1),
+        follow_redirects=True,
+    )
+    data = response.data.decode()
+
+    assert response.status_code == 200
+    assert request.url.endswith(url_for("order.index"))
+    assert "Order has been deleted." in html.unescape(data)
+
+    assert not Order.query.get(1)
+
+
+@pytest.mark.role("admin")
+def test_delete_post_payed(client, user, expenses):
+    print(Order.query.get(1))
+    response = client.post(
+        url_for("order.delete", order_id=1),
+        follow_redirects=True,
+    )
+    data = response.data.decode()
+
+    assert response.status_code == 200
+    assert request.url.endswith(url_for("order.index"))
+    assert "Order has been deleted." not in html.unescape(data)
+    assert "Payed Order can not be deleted." in html.unescape(data)
+
+    assert Order.query.get(1)
