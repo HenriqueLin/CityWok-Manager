@@ -149,7 +149,6 @@ def test_new_revenue_post_invalid(client, user, supplier, image, today, incomes)
     # url after request
     assert request.url.endswith(url_for("income.new_revenue"))
 
-    assert "This field is required." in html.unescape(data)
     assert "Total value must be greater than actual." in html.unescape(data)
     assert f'Revenue of "{today}" already existe.' in html.unescape(data)
     # database data
