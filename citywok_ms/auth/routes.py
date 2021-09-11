@@ -51,7 +51,9 @@ def login():
             return redirect(request.args.get("next") or url_for("main.index"))
         else:
             flash(_("Please check your username/password."), category="danger")
-    return render_template("auth/login.html", title=_("Login"), form=form)
+    return render_template(
+        "auth/login.html", title=_("Login"), form=form, app_name=current_app.name
+    )
 
 
 @auth_bp.route("/logout", methods=["GET", "POST"])
