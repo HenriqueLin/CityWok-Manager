@@ -49,12 +49,25 @@ login.login_message = _l("Please log in to access this page.")
 login.login_message_category = "info"
 
 
-def create_app(config_class=Config):
+def create_app(config_class=Config, instance_name=None, instance_path=None):
     # create the app instance
-    app = Flask(__name__)
-    app.config.from_object(config_class)
-    app.jinja_env.add_extension("jinja2.ext.do")
+    if instance_name:  # test: no cover
+        app = Flask(
+            instance_name,
+            instance_path=instance_path,
+            root_path=os.path.abspath(os.path.dirname(__file__)),
+        )
+        app.config.from_object(config_class)
+        app.config["UPLOAD_FOLDER"] = os.path.join(app.instance_path, "uploads")
+        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
+            app.instance_path, instance_name + ".db"
+        )
+        os.makedirs(app.instance_path, exist_ok=True)
+    else:
+        app = Flask(__name__)
+        app.config.from_object(config_class)
 
+    app.jinja_env.add_extension("jinja2.ext.do")
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 
     i18n.get_locale = flask_babel.get_locale
