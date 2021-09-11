@@ -62,6 +62,7 @@ def create_app(config_class=Config, instance_name=None, instance_path=None):
         app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
             app.instance_path, instance_name + ".db"
         )
+        app.config["LOG_FOLDER"] = os.path.join(app.instance_path, "logs")
         os.makedirs(app.instance_path, exist_ok=True)
     else:
         app = Flask(__name__)
@@ -131,9 +132,11 @@ def create_app(config_class=Config, instance_name=None, instance_path=None):
                 app.logger.addHandler(stream_handler)
             else:
                 app.logger.setLevel(logging.INFO)
-                os.makedirs("logs", exist_ok=True)
+                os.makedirs(app.config["LOG_FOLDER"], exist_ok=True)
                 file_handler = RotatingFileHandler(
-                    "logs/citywok_ms.log", maxBytes=5 * 1024 * 1024, backupCount=10
+                    os.path.join(app.config["LOG_FOLDER"], "log.log"),
+                    maxBytes=5 * 1024 * 1024,
+                    backupCount=10,
                 )
                 file_handler.setFormatter(formatter)
                 file_handler.setLevel(logging.INFO)

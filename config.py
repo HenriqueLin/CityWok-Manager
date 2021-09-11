@@ -11,6 +11,7 @@ class Config(object):
     SECRET_KEY = os.environ.get("SECRET_KEY") or "you-will-never-guess"
     LANGUAGES = ["en", "zh"]
     UPLOAD_FOLDER = os.environ.get("UPLOAD_FOLDER") or os.path.join(basedir, "uploads")
+    LOG_FOLDER = os.path.join(basedir, "logs")
     PERMANENT_SESSION_LIFETIME = timedelta(hours=2)
 
     # sqlalchemy
