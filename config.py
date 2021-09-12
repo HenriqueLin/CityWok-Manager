@@ -39,7 +39,7 @@ class Config(object):
     # rq
     RQ_SCHEDULER_INTERVAL = 30 * 60  # seconds
 
-    APP_NAME = os.environ.get("APP_NAME")
+    APP_NAME = os.environ.get("APP_NAME") or ""
 
 
 class TestConfig(Config):
