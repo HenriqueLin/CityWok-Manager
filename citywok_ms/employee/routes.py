@@ -151,7 +151,7 @@ def upload(employee_id):
         )
         db.session.commit()
         current_app.logger.info(f"Upload employee file {db_file}")
-        compress_file.queue(db_file.id)
+        compress_file(db_file.id)
 
     elif file is not None:
         flash(

@@ -63,7 +63,7 @@ def new():
         for f in form.files.data or []:
             db_file = OrderFile.create(f)
             order.files.append(db_file)
-            compress_file.queue(db_file.id)
+            compress_file(db_file.id)
         db.session.add(order)
         flash(
             _("New order has been registe."),
@@ -130,7 +130,7 @@ def upload(order_id):
         )
         db.session.commit()
         current_app.logger.info(f"Upload employee file {db_file}")
-        compress_file.queue(db_file.id)
+        compress_file(db_file.id)
 
     elif file is not None:
         flash(

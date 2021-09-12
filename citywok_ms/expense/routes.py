@@ -113,7 +113,7 @@ def new_non_labor():
         for f in form.files.data or []:
             db_file = ExpenseFile.create(f)
             expense.files.append(db_file)
-            compress_file.queue(db_file.id)
+            compress_file(db_file.id)
         db.session.add(expense)
         flash(_("New non-labor expense has been registed."), "success")
         db.session.commit()
@@ -150,7 +150,7 @@ def new_labor():
         for f in form.files.data or []:
             db_file = ExpenseFile.create(f)
             expense.files.append(db_file)
-            compress_file.queue(db_file.id)
+            compress_file(db_file.id)
         db.session.add(expense)
         flash(_("New labor expense has been registed."), "success")
         db.session.commit()
@@ -197,7 +197,7 @@ def new_order_payment():
             for f in form.files.data or []:
                 db_file = ExpenseFile.create(f)
                 expense.files.append(db_file)
-                compress_file.queue(db_file.id)
+                compress_file(db_file.id)
             db.session.add(expense)
             flash(_("New order payment has been registed."), "success")
             db.session.commit()
@@ -248,7 +248,7 @@ def new_salary(employee_id, month_str):
         for f in form.files.data or []:
             db_file = ExpenseFile.create(f)
             expense.files.append(db_file)
-            compress_file.queue(db_file.id)
+            compress_file(db_file.id)
         db.session.add(expense)
         expense.month = salary_payment
         flash(_("New salary has been registed."), "success")
@@ -535,7 +535,7 @@ def upload(expense_id):
         )
         db.session.commit()
         current_app.logger.info(f"Upload expense file {db_file}")
-        compress_file.queue(db_file.id)
+        compress_file(db_file.id)
 
     elif file is not None:
         flash(
@@ -563,7 +563,7 @@ def salary_upload(month_str):
         )
         db.session.commit()
         current_app.logger.info(f"Upload salary_payment file {db_file}")
-        compress_file.queue(db_file.id)
+        compress_file(db_file.id)
 
     elif file is not None:
         flash(

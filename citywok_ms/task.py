@@ -50,7 +50,7 @@ def delete_file():
         current_app.logger.info(f"Delete {f} from system")
 
 
-delete_file.cron("0 5 * * *", "delete_file")
+# delete_file.cron("0 5 * * *", "delete_file")
 
 
 @rq.exception_handler

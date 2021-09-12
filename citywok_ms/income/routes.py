@@ -107,7 +107,7 @@ def new_revenue():
         for f in form.files.data or []:
             db_file = RevenueFile.create(f)
             revenue.files.append(db_file)
-            compress_file.queue(db_file.id)
+            compress_file(db_file.id)
         flash(_("New revenue has been registed."), "success")
         db.session.commit()
         current_app.logger.info(f"Create revenue {revenue}")
@@ -143,7 +143,7 @@ def new_other_income():
         for f in form.files.data or []:
             db_file = IncomeFile.create(f)
             income.files.append(db_file)
-            compress_file.queue(db_file.id)
+            compress_file(db_file.id)
         flash(_("New income has been registed."), "success")
         db.session.commit()
         current_app.logger.info(f"Create income {income}")
@@ -237,7 +237,7 @@ def upload(income_id):
         )
         db.session.commit()
         current_app.logger.info(f"Upload income file {db_file}")
-        compress_file.queue(db_file.id)
+        compress_file(db_file.id)
 
     elif file is not None:
         flash(
@@ -263,7 +263,7 @@ def revenue_upload(date_str):
         )
         db.session.commit()
         current_app.logger.info(f"Upload revenue file {db_file}")
-        compress_file.queue(db_file.id)
+        compress_file(db_file.id)
 
     elif file is not None:
         flash(
