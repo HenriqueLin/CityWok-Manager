@@ -3,7 +3,15 @@
 <div class="row justify-content-center align-items-center">
     <div class="mb-5">
         <div class="py-5"></div>
-        <h1 class="text-center my-4 pb-3">CityWok Manager</h1>
+        <h1 class="text-center my-4">CityWok Manager</h1>
+        <div class="text-center my-3">
+            <a {% if app_name=="porto" %} class="link-dark fw-bold" {% else %} class="link-secondary fw-bold" {% endif
+                %} href="https://porto.citywokmanager.xyz/">Porto</a>
+            <b>|</b>
+            <a {% if app_name=="saojoao" %} class="link-dark fw-bold" {% else %} class="link-secondary fw-bold" {% endif
+                %} href="https://saojoao.citywokmanager.xyz/">
+                São João</a>
+        </div>
         <form action="" method="post" novalidate autocomplete="off">
             {{ form.hidden_tag() }}
             <div class="row gy-3 overflow-hidden justify-content-center">
