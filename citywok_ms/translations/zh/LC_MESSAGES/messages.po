@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-08-08 14:57+0100\n"
+"POT-Creation-Date: 2021-09-26 13:24+0100\n"
 "PO-Revision-Date: 2021-06-19 22:05+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -30,7 +30,7 @@ msgstr "用户名"
 msgid "Password"
 msgstr "密码"
 
-#: citywok_ms/auth/forms.py:22 citywok_ms/auth/routes.py:54
+#: citywok_ms/auth/forms.py:22 citywok_ms/auth/routes.py:56
 msgid "Login"
 msgstr "登录"
 
@@ -42,7 +42,7 @@ msgstr "受邀人邮箱"
 msgid "Role"
 msgstr "权限"
 
-#: citywok_ms/auth/forms.py:37 citywok_ms/auth/routes.py:82
+#: citywok_ms/auth/forms.py:37 citywok_ms/auth/routes.py:87
 #: citywok_ms/templates/layout.html:63
 msgid "Invite"
 msgstr "邀请"
@@ -75,7 +75,7 @@ msgstr "重复密码"
 msgid "Reset"
 msgstr "重置"
 
-#: citywok_ms/auth/forms.py:81 citywok_ms/auth/routes.py:113
+#: citywok_ms/auth/forms.py:81 citywok_ms/auth/routes.py:118
 msgid "Register"
 msgstr "注册"
 
@@ -112,48 +112,48 @@ msgstr "您好 %(name)s，你已成功登录."
 msgid "Please check your username/password."
 msgstr "请检查您的账号/密码是否正确."
 
-#: citywok_ms/auth/routes.py:64
+#: citywok_ms/auth/routes.py:69
 msgid "You have been logged out."
 msgstr "您已成功登出."
 
-#: citywok_ms/auth/routes.py:76
+#: citywok_ms/auth/routes.py:81
 msgid "A invite e-mail has been sent to the envitee."
 msgstr "邀请已发送至受邀人的邮箱."
 
-#: citywok_ms/auth/routes.py:90
+#: citywok_ms/auth/routes.py:95
 msgid "You are already logged in."
 msgstr "您已经登录过了"
 
-#: citywok_ms/auth/routes.py:94
+#: citywok_ms/auth/routes.py:99
 msgid "Invite link is invalid."
 msgstr "邀请链接无效."
 
-#: citywok_ms/auth/routes.py:97
+#: citywok_ms/auth/routes.py:102
 msgid "This email has already been registed."
 msgstr "此邮箱已被注册."
 
-#: citywok_ms/auth/routes.py:104
+#: citywok_ms/auth/routes.py:109
 msgid "You are now registed."
 msgstr "注册成功."
 
-#: citywok_ms/auth/routes.py:128
+#: citywok_ms/auth/routes.py:133
 #, python-format
 msgid "A e-mail to reset the password has been sent to %(email)s."
 msgstr "重置密码的邮件已发送至%(email)s."
 
-#: citywok_ms/auth/routes.py:137
+#: citywok_ms/auth/routes.py:142
 msgid "Forget Password"
 msgstr "忘记密码"
 
-#: citywok_ms/auth/routes.py:150
+#: citywok_ms/auth/routes.py:155
 msgid "Your password has been reset."
 msgstr "您的密码已被重置."
 
-#: citywok_ms/auth/routes.py:155
+#: citywok_ms/auth/routes.py:160
 msgid "Reset link is invalid."
 msgstr "重置链接无效."
 
-#: citywok_ms/auth/routes.py:158
+#: citywok_ms/auth/routes.py:163
 msgid "Reset Password"
 msgstr "重置密码"
 
@@ -457,17 +457,17 @@ msgid "Category"
 msgstr "分类"
 
 #: citywok_ms/expense/forms.py:94 citywok_ms/expense/forms.py:158
-#: citywok_ms/expense/models.py:53
+#: citywok_ms/expense/models.py:54
 msgid "Operation"
 msgstr "运营"
 
 #: citywok_ms/expense/forms.py:95 citywok_ms/expense/forms.py:159
-#: citywok_ms/expense/models.py:52
+#: citywok_ms/expense/models.py:53
 msgid "Material"
 msgstr "物料"
 
 #: citywok_ms/expense/forms.py:96 citywok_ms/expense/forms.py:160
-#: citywok_ms/expense/models.py:54
+#: citywok_ms/expense/models.py:55
 msgid "Tax"
 msgstr "税务"
 
@@ -555,7 +555,7 @@ msgid "Labor - Bonus"
 msgstr "人工 - 加薪"
 
 #: citywok_ms/expense/models.py:19 citywok_ms/expense/models.py:30
-#: citywok_ms/expense/models.py:41 citywok_ms/expense/models.py:48
+#: citywok_ms/expense/models.py:42 citywok_ms/expense/models.py:49
 #: citywok_ms/utils/__init__.py:10
 msgid "Other"
 msgstr "其他"
@@ -697,46 +697,54 @@ msgid "Material - Stationery"
 msgstr "物料 - 文具"
 
 #: citywok_ms/expense/models.py:41
+msgid "Groceries"
+msgstr "杂货"
+
+#: citywok_ms/expense/models.py:41
+msgid "Material - Groceries"
+msgstr "物料 - 杂货"
+
+#: citywok_ms/expense/models.py:42
 msgid "Material - Others"
 msgstr "物料 - 其他"
 
-#: citywok_ms/expense/models.py:44
+#: citywok_ms/expense/models.py:45
 msgid "IRS"
 msgstr "IRS"
 
-#: citywok_ms/expense/models.py:44
+#: citywok_ms/expense/models.py:45
 msgid "Tax - IRS"
 msgstr "税务 - IRS"
 
-#: citywok_ms/expense/models.py:45
+#: citywok_ms/expense/models.py:46
 msgid "IVA"
 msgstr "IVA"
 
-#: citywok_ms/expense/models.py:45
+#: citywok_ms/expense/models.py:46
 msgid "Tax - IVA"
 msgstr "税务 - IVA"
 
-#: citywok_ms/expense/models.py:46
+#: citywok_ms/expense/models.py:47
 msgid "Social Security"
 msgstr "社会保险"
 
-#: citywok_ms/expense/models.py:46
+#: citywok_ms/expense/models.py:47
 msgid "Tax - Social Security"
 msgstr "税务 - 社会保险"
 
-#: citywok_ms/expense/models.py:47
+#: citywok_ms/expense/models.py:48
 msgid "IUC"
 msgstr "IUC"
 
-#: citywok_ms/expense/models.py:47
+#: citywok_ms/expense/models.py:48
 msgid "Tax - IUC"
 msgstr "税务 - IUC"
 
-#: citywok_ms/expense/models.py:48
+#: citywok_ms/expense/models.py:49
 msgid "Tax - Other"
 msgstr "税务 - Other"
 
-#: citywok_ms/expense/models.py:51 citywok_ms/templates/employee/detail.html:86
+#: citywok_ms/expense/models.py:52 citywok_ms/templates/employee/detail.html:86
 #: citywok_ms/templates/expense/index.html:82
 msgid "Labor"
 msgstr "人工"
@@ -1097,7 +1105,7 @@ msgstr "登出"
 msgid "Cancel"
 msgstr "取消"
 
-#: citywok_ms/templates/auth/login.html:42
+#: citywok_ms/templates/auth/login.html:50
 msgid "Forgot Your Password?"
 msgstr "忘记密码"
 
