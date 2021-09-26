@@ -36,6 +36,10 @@ def create():
     db.session.commit()
     click.echo("Created admin user.")
 
+    db.session.add(Supplier(name="Bank", is_bank=True))
+    db.session.commit()
+    click.echo("Created Bank.")
+
 
 @dev.command("drop")
 @click.confirmation_option(prompt="Are you sure you want to drop the db?")

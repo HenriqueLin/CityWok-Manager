@@ -38,6 +38,7 @@ MATERIAL = (
     ("material:chinese_goods", _l("Chinese Goods"), _l("Material - Chinese Goods")),
     ("material:sanitary", _l("Sanitary"), _l("Material - Sanitary")),
     ("material:stationery", _l("Stationery"), _l("Material - Stationery")),
+    ("material:groceries", _l("Groceries"), _l("Material - Groceries")),
     ("material:other", _l("Other"), _l("Material - Others")),
 )
 TAX = (
