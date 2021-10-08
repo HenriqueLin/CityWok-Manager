@@ -29,7 +29,7 @@ Flask-RQ2==18.3
 Flask-SQLAlchemy==2.5.1
 Flask-WTF==0.15.1
 greenlet==1.1.1
-humanize==3.11.0
+humanize==3.12.0
 idna==2.10
 infinity==1.5
 iniconfig==1.1.1
