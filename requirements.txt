@@ -73,7 +73,7 @@ SQLAlchemy==1.4.25
 SQLAlchemy-Utils==0.37.8
 toml==0.10.2
 tornado==6.1
-urllib3==1.26.6
+urllib3==1.26.7
 validators==0.18.2
 Werkzeug==2.0.2
 wrapt==1.12.1
