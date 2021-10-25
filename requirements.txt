@@ -1,6 +1,6 @@
 alembic==1.7.4
 appdirs==1.4.4
-astroid==2.8.3
+astroid==2.8.4
 attrs==21.2.0
 autopep8==1.5.7
 Babel==2.9.1
