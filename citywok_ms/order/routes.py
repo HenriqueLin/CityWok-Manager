@@ -5,6 +5,7 @@ from citywok_ms.file.forms import FileForm
 from citywok_ms.file.models import File, OrderFile
 from citywok_ms.order.forms import OrderForm, OrderUpdateForm
 from citywok_ms.order.models import Order
+from citywok_ms.expense.models import Expense
 from citywok_ms.task import compress_file
 from flask import (
     Blueprint,
@@ -39,7 +40,8 @@ def index():
         title=_("Order"),
         payed=db.session.query(Order)
         .filter(Order.expense_id.isnot(None))
-        .order_by(Order.delivery_date.desc())
+        .join(Order.expense)
+        .order_by(Expense.date.desc())
         .paginate(page=payed_page, per_page=10),
         unpayed=unpayed_query.order_by(Order.delivery_date.desc()).paginate(
             page=unpayed_page, per_page=10
