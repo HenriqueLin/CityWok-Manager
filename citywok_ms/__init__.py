@@ -110,7 +110,7 @@ def create_app(config_class=Config):
         if not app.testing:  # test: no cover
             if app.debug:
                 log = logging.getLogger("werkzeug")
-                log.setLevel(logging.ERROR)
+                # log.setLevel(logging.ERROR)
 
                 stream_handler = logging.StreamHandler()
                 stream_handler.setFormatter(formatter)
@@ -146,6 +146,7 @@ def create_app(config_class=Config):
             from citywok_ms.employee.models import Employee
             from citywok_ms.file.models import EmployeeFile, File, SupplierFile
             from citywok_ms.supplier.models import Supplier
+            from citywok_ms.income.models import Income, Revenue
 
             return {
                 "app": app,
@@ -155,6 +156,8 @@ def create_app(config_class=Config):
                 "File": File,
                 "EmployeeFile": EmployeeFile,
                 "SupplierFile": SupplierFile,
+                "Income": Income,
+                "Revenue": Revenue,
             }
 
         return app
