@@ -58,6 +58,7 @@
                 <tr>
                     <th scope="col">{{_('Order Number')}}</th>
                     <th scope="col">{{_('Delivery Date')}}</th>
+                    <th scope="col">{{_('Payment Date')}}</th>
                     <th scope="col">{{_('Value')}}</th>
                     <th scope="col">{{_('Supplier')}}</th>
                     <th scope="col">{{_('Detail')}}</th>
@@ -72,6 +73,7 @@
                         </strong>
                     </th>
                     <td>{{ moment(order.delivery_date).format('ll') }}</td>
+                    <td>{{ moment(order.expense.date).format('ll') }}</td>
                     <td>{{ order.value }}</td>
                     <td>
                         <a href="{{url_for('supplier.detail',supplier_id=order.supplier.id)}}">

@@ -109,10 +109,13 @@ def test_new_post_valid(client, user, image, supplier):
 
 
 @pytest.mark.role("admin")
-def test_new_post_invalid(client, user):
+def test_new_post_invalid(client, user, order):
     response = client.post(
         url_for("order.new"),
-        data={},
+        data={
+            "order_number": "ORDER-1",
+            "supplier": 1,
+        },
         follow_redirects=True,
     )
     data = response.data.decode()
@@ -123,9 +126,10 @@ def test_new_post_invalid(client, user):
     assert request.url.endswith(url_for("order.new"))
 
     # database data
-    assert db.session.query(Order).count() == 0
+    assert db.session.query(Order).count() == 1
 
     assert "This field is required." in data
+    assert "Order Number already exists." in data
 
 
 @pytest.mark.role("admin")
