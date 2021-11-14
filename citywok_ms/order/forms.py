@@ -1,14 +1,21 @@
 import datetime
 
+from citywok_ms import db
+from citywok_ms.order.models import Order
 from citywok_ms.supplier.models import Supplier
 from citywok_ms.utils import FILEALLOWED
-from citywok_ms.utils.fields import FilesAllowed, FilesRequired, MultipleFileField
+from citywok_ms.utils.fields import FilesAllowed, MultipleFileField
 from flask_babel import lazy_gettext as _l
 from flask_wtf import FlaskForm
 from wtforms import HiddenField, StringField, SubmitField, TextAreaField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.fields.html5 import DateField, DecimalField
-from wtforms.validators import DataRequired, InputRequired, NumberRange, Optional
+from wtforms.validators import (
+    DataRequired,
+    InputRequired,
+    Optional,
+    ValidationError,
+)
 
 
 class OrderForm(FlaskForm):
@@ -47,6 +54,18 @@ class OrderForm(FlaskForm):
     )
 
     submit = SubmitField(label=_l("Add"))
+
+    def validate_order_number(self, order_number):
+        exist = (
+            db.session.query(Order)
+            .filter(
+                Order.order_number == self.order_number.data,
+                Order.supplier_id == self.supplier.data.id,
+            )
+            .first()
+        )
+        if exist:
+            raise ValidationError(_l("Order Number already exists."))
 
 
 class OrderUpdateForm(FlaskForm):
