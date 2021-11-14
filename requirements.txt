@@ -77,6 +77,6 @@ urllib3==1.26.7
 validators==0.18.2
 Werkzeug==2.0.2
 wrapt==1.13.3
-WTForms==2.3.3
+WTForms==3.0.0
 WTForms-Alchemy==0.17.0
 WTForms-Components==0.10.5
