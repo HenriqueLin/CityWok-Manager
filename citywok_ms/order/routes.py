@@ -35,18 +35,25 @@ def index():
         .filter(not_(Order.expense.has()))
         .first()[0]
     )
+    payed_query = (
+        db.session.query(Order).filter(Order.expense_id.isnot(None)).join(Order.expense)
+    )
+    payed_value = (
+        payed_query.with_entities(func.coalesce(func.sum(Order.value), 0))
+        .filter(Order.expense.has())
+        .first()[0]
+    )
     return render_template(
         "order/index.html",
         title=_("Order"),
-        payed=db.session.query(Order)
-        .filter(Order.expense_id.isnot(None))
-        .join(Order.expense)
-        .order_by(Expense.date.desc())
-        .paginate(page=payed_page, per_page=10),
+        payed=payed_query.order_by(Expense.date.desc()).paginate(
+            page=payed_page, per_page=10
+        ),
         unpayed=unpayed_query.order_by(Order.delivery_date.desc()).paginate(
             page=unpayed_page, per_page=10
         ),
         unpay_value=unpay_value,
+        payed_value=payed_value,
     )
 
 
