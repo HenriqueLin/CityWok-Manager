@@ -10,6 +10,7 @@ from citywok_ms.order.models import Order
 from citywok_ms.supplier.forms import SupplierForm
 from citywok_ms.supplier.models import Supplier
 from citywok_ms.task import compress_file
+from citywok_ms.expense.models import Expense
 from flask import (
     Blueprint,
     flash,
@@ -72,11 +73,24 @@ def new():
 @shareholder.require(403)
 def detail(supplier_id):
     expense_page = request.args.get("expense_page", 1, type=int)
-    order_page = request.args.get("order_page", 1, type=int)
-    order_query = db.session.query(Order).filter(Order.supplier_id == supplier_id)
+    payed_page = request.args.get("payed_page", 1, type=int)
+    unpayed_page = request.args.get("unpayed_page", 1, type=int)
+    unpayed_query = db.session.query(Order).filter(
+        Order.expense_id.is_(None), Order.supplier_id == supplier_id
+    )
     unpay_value = (
-        order_query.with_entities(func.coalesce(func.sum(Order.value), 0))
-        .filter(not_(Order.expense.has()))
+        unpayed_query.with_entities(func.coalesce(func.sum(Order.value), 0))
+        .filter(not_(Order.expense.has()), Order.supplier_id == supplier_id)
+        .first()[0]
+    )
+    payed_query = (
+        db.session.query(Order)
+        .filter(Order.expense_id.isnot(None), Order.supplier_id == supplier_id)
+        .join(Order.expense)
+    )
+    payed_value = (
+        payed_query.with_entities(func.coalesce(func.sum(Order.value), 0))
+        .filter(Order.expense.has(), Order.supplier_id == supplier_id)
         .first()[0]
     )
     return render_template(
@@ -87,11 +101,15 @@ def detail(supplier_id):
         .filter(NonLaborExpense.supplier_id == supplier_id)
         .order_by(NonLaborExpense.date.desc())
         .paginate(page=expense_page, per_page=10),
-        orders=order_query.order_by(Order.delivery_date.desc()).paginate(
-            page=order_page, per_page=10
+        payed=payed_query.order_by(Expense.date.desc()).paginate(
+            page=payed_page, per_page=10
+        ),
+        unpayed=unpayed_query.order_by(Order.delivery_date.desc()).paginate(
+            page=unpayed_page, per_page=10
         ),
         file_form=FileForm(),
         unpay_value=unpay_value,
+        payed_value=payed_value,
     )
 
 
