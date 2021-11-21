@@ -2,6 +2,20 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
+
+## [0.3.11] - 2021-11-21
+### Added
+- Show total payed value of payed orders
+- Seperate payed and unpayed order is supplier page
+
+## [0.3.10] - 2021-11-14
+### Added
+- Paymente Date Column of payed Orders in `order.index`
+
+### Changed
+- Prevent duplicate `order_number` in the same supplier
+- Improve flask shell
+
 ## [0.3.9] - 2021-09-26
 ### Added
 - `groceries` type of expense
