@@ -70,7 +70,7 @@ sentry-sdk==1.4.3
 six==1.16.0
 sortedcontainers==2.4.0
 SQLAlchemy==1.4.27
-SQLAlchemy-Utils==0.37.8
+SQLAlchemy-Utils==0.38.2
 toml==0.10.2
 tornado==6.1
 urllib3==1.26.7
