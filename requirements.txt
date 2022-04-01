@@ -1,4 +1,4 @@
-alembic==1.7.4
+alembic==1.7.7
 appdirs==1.4.4
 astroid==2.8.3
 attrs==21.2.0
