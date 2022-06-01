@@ -20,7 +20,7 @@ flake8==4.0.1
 Flask==2.0.2
 Flask-Admin==1.5.8
 Flask-Babel==2.0.0
-Flask-Login==0.5.0
+Flask-Login==0.6.1
 Flask-Mail==0.9.1
 Flask-Migrate==3.1.0
 Flask-Moment==1.0.2
