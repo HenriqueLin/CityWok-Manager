@@ -74,7 +74,7 @@ SQLAlchemy-Utils==0.37.8
 toml==0.10.2
 tornado==6.1
 urllib3==1.26.7
-validators==0.18.2
+validators==0.20.0
 Werkzeug==2.0.2
 wrapt==1.13.3
 WTForms==2.3.3
